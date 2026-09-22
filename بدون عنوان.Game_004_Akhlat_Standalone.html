@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی اخلاط اربعه</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background-color: #f0f4f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
+        h1 { color: #2e7d32; font-size: 1.5rem; }
+        .score { font-size: 1.2rem; color: #333; margin-bottom: 20px; }
+        .question { font-size: 1.1rem; margin-bottom: 25px; line-height: 1.6; min-height: 80px; }
+        button { width: 45%; padding: 15px; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem; transition: 0.3s; }
+        .btn-true { background: #4caf50; color: white; }
+        .btn-false { background: #f44336; color: white; }
+        button:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="score" id="score">امتیاز: ۰</div>
+    <div class="progress" id="progress">سوال ۱ از ۱۰۰</div>
+    <div class="question" id="question">در حال بارگذاری...</div>
+    <button class="btn-true" onclick="checkAnswer(true)">صحیح</button>
+    <button class="btn-false" onclick="checkAnswer(false)">غلط</button>
+</div>
+
+<script>
+    const questions = [
+        {q: "دم، گرم و تر است.", a: true},
+        {q: "صفرا، گرم و خشک است.", a: true},
+        {q: "بلغم، سرد و تر است.", a: true},
+        {q: "سودا، سرد و خشک است.", a: true},
+        {q: "دم با فصل بهار مرتبط است.", a: true},
+        {q: "صفرا با فصل تابستان مرتبط است.", a: true},
+        {q: "بلغم با فصل زمستان مرتبط است.", a: true},
+        {q: "سودا با فصل پاییز مرتبط است.", a: true},
+        {q: "خون (دم) موجب نشاط و سرزندگی است.", a: true},
+        {q: "غلیظ‌ترین خلط، سودا است.", a: true},
+        {q: "لطیف‌ترین خلط، صفرا است.", a: true},
+        {q: "بلغم خلط سرد و تر است.", a: true},
+        {q: "سودا مسئول انتقال مواد زائد در بدن است.", a: false},
+        {q: "صفرا باعث ایجاد التهاب در بدن می‌شود.", a: true},
+        {q: "خون برای تغذیه بافت‌های بدن ضروری است.", a: true},
+        {q: "بلغم انرژی‌بخش فوری است.", a: false},
+        {q: "سودا با پیری و کهولت مرتبط است.", a: true},
+        {q: "صفرا به هضم چربی‌ها کمک می‌کند.", a: true},
+        {q: "دم با هوای تازه و زندگی مرتبط است.", a: true},
+        {q: "بلغم می‌تواند باعث افزایش وزن شود.", a: true},
+        {q: "سودا سرد و تر است.", a: false},
+        {q: "دم گرم و خشک است.", a: false},
+        {q: "صفرا سرد و تر است.", a: false},
+        {q: "بلغم سرد و خشک است.", a: false},
+        {q: "خون از کبد تولید می‌شود.", a: true},
+        {q: "صفرا از کبد به کیسه صفرا می‌رود.", a: true},
+        {q: "سودا از رسوب خون ایجاد می‌شود.", a: true},
+        {q: "بلغم از کبد تولید می‌شود.", a: true},
+        {q: "افزایش سودا باعث وسواس می‌شود.", a: true},
+        {q: "افزایش صفرا باعث عصبانیت می‌شود.", a: true},
+        {q: "افزایش دم باعث پرخونی می‌شود.", a: true},
+        {q: "افزایش بلغم باعث کندی ذهن می‌شود.", a: true},
+        {q: "مزاج دم، شباب (جوانی) است.", a: true},
+        {q: "مزاج صفرا، جوانی است.", a: false},
+        {q: "مزاج بلغم، کودکی است.", a: true},
+        {q: "مزاج سودا، پیری است.", a: true},
+        {q: "طعم صفرا تلخ است.", a: true},
+        {q: "طعم دم شیرین است.", a: true},
+        {q: "طعم بلغم بی‌مزه است.", a: true},
+        {q: "طعم سودا ترش یا گس است.", a: true},
+        {q: "صفرا خلطی صفراوی است.", a: true},
+        {q: "دم همان خون است.", a: true},
+        {q: "بلغم خلطی سرد است.", a: true},
+        {q: "سودا خلطی خشک است.", a: true},
+        {q: "سودا باعث استحکام استخوان می‌شود.", a: true},
+        {q: "بلغم باعث نرمی پوست می‌شود.", a: true},
+        {q: "صفرا باعث تیزبینی می‌شود.", a: true},
+        {q: "دم باعث قرمزی چهره می‌شود.", a: true},
+        {q: "بلغم زیاد باعث خواب‌آلودگی می‌شود.", a: true},
+        {q: "سودا زیاد باعث لاغری می‌شود.", a: true},
+        {q: "صفرا زیاد باعث بی‌خوابی می‌شود.", a: true},
+        {q: "دم زیاد باعث سرخی چشم می‌شود.", a: true},
+        {q: "سودا با شب مرتبط است.", a: true},
+        {q: "صفرا با روز مرتبط است.", a: true},
+        {q: "بلغم با شب مرتبط است.", a: true},
+        {q: "دم با روز مرتبط است.", a: true},
+        {q: "سودا از سوختن صفرا پدید می‌آید.", a: true},
+        {q: "بلغم از تغذیه سرد پدید می‌آید.", a: true},
+        {q: "دم از هضم غذا پدید می‌آید.", a: true},
+        {q: "صفرا از هضم مواد گرم پدید می‌آید.", a: true},
+        {q: "سودا رنگ سیاه دارد.", a: true},
+        {q: "صفرا رنگ زرد دارد.", a: true},
+        {q: "دم رنگ قرمز دارد.", a: true},
+        {q: "بلغم رنگ سفید دارد.", a: true},
+        {q: "طب سنتی بر تعادل اخلاط تأکید دارد.", a: true},
+        {q: "غلبه خلط یعنی بیماری.", a: true},
+        {q: "حجامت به تنظیم اخلاط کمک می‌کند.", a: true},
+        {q: "فصد به تنظیم اخلاط کمک می‌کند.", a: true},
+        {q: "زالو به تنظیم اخلاط کمک می‌کند.", a: true},
+        {q: "ورزش به تعادل اخلاط کمک می‌کند.", a: true},
+        {q: "تغذیه ناسالم اخلاط را فاسد می‌کند.", a: true},
+        {q: "سودا باعث یبوست می‌شود.", a: true},
+        {q: "بلغم باعث سستی مفاصل می‌شود.", a: true},
+        {q: "صفرا باعث اسهال می‌شود.", a: true},
+        {q: "دم باعث گرمای بدن می‌شود.", a: true},
+        {q: "سودا مسئول موهای بدن است.", a: true},
+        {q: "صفرا مسئول رنگ پوست است.", a: true},
+        {q: "بلغم مسئول رطوبت چشم است.", a: true},
+        {q: "دم مسئول گرمای خون است.", a: true},
+        {q: "سودا خلط سنگین است.", a: true},
+        {q: "صفرا خلط سبک است.", a: true},
+        {q: "بلغم خلط لزج است.", a: true},
+        {q: "دم خلط حیاتی است.", a: true},
+        {q: "تعادل اخلاط یعنی سلامتی.", a: true},
+        {q: "اخلاط چهارگانه در کبد ساخته می‌شوند.", a: true},
+        {q: "سودا در طحال ذخیره می‌شود.", a: true},
+        {q: "صفرا در کیسه صفرا ذخیره می‌شود.", a: true},
+        {q: "بلغم در سراسر بدن پخش است.", a: true},
+        {q: "خون در عروق جاری است.", a: true},
+        {q: "سودا باعث تفکر می‌شود.", a: true},
+        {q: "صفرا باعث حرکت می‌شود.", a: true},
+        {q: "بلغم باعث آرامش می‌شود.", a: true},
+        {q: "دم باعث زندگی می‌شود.", a: true},
+        {q: "سودا خلطی پایدار است.", a: true},
+        {q: "صفرا خلطی سریع‌اثر است.", a: true},
+        {q: "بلغم خلطی کند‌اثر است.", a: true},
+        {q: "دم خلطی معتدل است.", a: true},
+        {q: "خداوند اخلاط را برای بقا آفرید.", a: true},
+        {q: "شناخت اخلاط، کلید سلامتی است.", a: true},
+        {q: "اخلاط اربعه همان ارکان اربعه هستند.", a: false}
+    ];
+
+    let currentQ = parseInt(localStorage.getItem('g4_idx')) || 0;
+    let score = parseInt(localStorage.getItem('g4_score')) || 0;
+
+    function updateUI() {
+        document.getElementById('question').innerText = questions[currentQ].q;
+        document.getElementById('score').innerText = 'امتیاز: ' + score;
+        document.getElementById('progress').innerText = 'سوال ' + (currentQ + 1) + ' از ۱۰۰';
+    }
+
+    function checkAnswer(userAns) {
+        if (userAns === questions[currentQ].a) {
+            score++;
+            localStorage.setItem('g4_score', score);
+        }
+        currentQ++;
+        if (currentQ >= questions.length) {
+            alert('بازی تمام شد! امتیاز نهایی شما: ' + score);
+            currentQ = 0;
+            score = 0;
+            localStorage.setItem('g4_score', 0);
+        }
+        localStorage.setItem('g4_idx', currentQ);
+        updateUI();
+    }
+
+    updateUI();
+</script>
+
+</body>
+</html>
