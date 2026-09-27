@@ -2,209 +2,234 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>حکمت‌سنج مزاج، ارکان و اخلاط</title>
   <style>
     :root {
-      --p: #15803d;
-      --pd: #14532d;
+      --primary: #15803d;
+      --primary-dark: #14532d;
       --bg: #f3fbf6;
-      --card: #ffffff;
-      --c: #16a34a;
-      --w: #dc2626;
+      --card-bg: #ffffff;
+      --correct: #16a34a;
+      --wrong: #dc2626;
     }
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
       font-family: system-ui, -apple-system, Tahoma, sans-serif;
     }
-    html, body {
-      width: 100%;
-      min-height: 100vh;
-      background: var(--bg);
+    body {
+      width: 100vw;
+      min-height: 100dvh;
+      background-color: var(--bg);
       color: #1f2937;
       display: flex;
       justify-content: center;
-      align-items: center;
-      padding: 10px;
+      align-items: flex-start;
+      padding: 12px;
     }
     .container {
-      background: var(--card);
-      border-radius: 18px;
-      padding: clamp(14px, 4vw, 24px);
-      width: min(96vw, 650px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.07);
-      border: 1.5px solid #dcfce7;
-      display: flex;
-      flex-direction: column;
+      width: 100%;
+      max-width: 500px;
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      border: 1px solid #dcfce7;
+      margin: auto 0;
     }
     .header {
       text-align: center;
       margin-bottom: 12px;
     }
     .header h1 {
-      font-size: clamp(1.15rem, 4vw, 1.45rem);
-      color: var(--pd);
+      font-size: 1.2rem;
+      color: var(--primary-dark);
     }
     .stats {
       display: flex;
       justify-content: space-between;
-      font-size: clamp(0.95rem, 3.2vw, 1.1rem);
+      font-size: 0.95rem;
       font-weight: bold;
       margin-bottom: 10px;
       background: #ecfdf5;
-      padding: 8px 14px;
+      padding: 8px 12px;
       border-radius: 10px;
       color: #166534;
       border: 1px solid #bbf7d0;
     }
-    .prog {
+    .prog-track {
       background: #e5e7eb;
       height: 8px;
-      border-radius: 99px;
+      border-radius: 999px;
       overflow: hidden;
       margin-bottom: 14px;
     }
-    .bar {
+    .prog-bar {
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, #22c55e, #15803d);
       transition: width 0.3s ease;
     }
     .qbox {
-      font-size: clamp(1.05rem, 3.8vw, 1.25rem);
+      font-size: 1.1rem;
       font-weight: 800;
       line-height: 1.6;
       margin-bottom: 14px;
       color: #111827;
-      min-height: 48px;
+      min-height: 52px;
     }
-    .grid {
+    .options-grid {
       display: flex;
       flex-direction: column;
       gap: 10px;
       margin-bottom: 14px;
     }
     .btn-opt {
+      width: 100%;
       background: #ffffff;
       border: 1.5px solid #d1d5db;
-      border-radius: 10px;
-      padding: clamp(10px, 3vw, 14px) 14px;
-      font-size: clamp(0.95rem, 3.4vw, 1.05rem);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 1rem;
       text-align: right;
       cursor: pointer;
       font-weight: 600;
       color: #374151;
       line-height: 1.4;
-      transition: all 0.2s ease;
+      transition: background 0.2s, border-color 0.2s;
     }
-    .btn-opt:hover:not([disabled]) {
-      border-color: var(--p);
+    .btn-opt:active:not([disabled]) {
       background: #f0fdf4;
+      border-color: var(--primary);
     }
     .btn-opt.correct {
       background: #dcfce7 !important;
-      border-color: var(--c) !important;
+      border-color: var(--correct) !important;
       color: #14532d !important;
       font-weight: bold;
     }
     .btn-opt.wrong {
       background: #fee2e2 !important;
-      border-color: var(--w) !important;
+      border-color: var(--wrong) !important;
       color: #7f1d1d !important;
       font-weight: bold;
     }
-    .fb {
+    .feedback {
       display: none;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: clamp(0.9rem, 3vw, 1rem);
-      margin-bottom: 12px;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      margin-bottom: 14px;
       line-height: 1.5;
     }
-    .fb.correct {
+    .feedback.correct {
       display: block;
       background: #ecfdf5;
       color: #065f46;
       border: 1px solid #a7f3d0;
     }
-    .fb.wrong {
+    .feedback.wrong {
       display: block;
       background: #fef2f2;
       color: #991b1b;
       border: 1px solid #fecaca;
     }
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
     .btn-next {
-      background: var(--p);
-      color: white;
+      background: var(--primary);
+      color: #ffffff;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 10px 20px;
-      font-size: clamp(0.95rem, 3.2vw, 1.05rem);
+      font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
       display: none;
-      float: left;
+      margin-right: auto;
     }
-    .result {
+    .btn-reset {
+      background: transparent;
+      border: none;
+      color: #6b7280;
+      font-size: 0.85rem;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .result-screen {
       display: none;
       text-align: center;
       padding: 16px 8px;
     }
-    .r-score {
-      font-size: clamp(2rem, 7vw, 2.5rem);
+    .result-score {
+      font-size: 2.2rem;
       font-weight: 800;
-      color: var(--p);
-      margin: 12px 0;
+      color: var(--primary);
+      margin: 14px 0;
     }
     .btn-act {
-      background: var(--p);
+      background: var(--primary);
       color: white;
       border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
+      padding: 12px 20px;
+      border-radius: 10px;
       font-weight: bold;
-      font-size: clamp(0.9rem, 3vw, 1rem);
+      font-size: 1rem;
       cursor: pointer;
       text-decoration: none;
-      margin: 4px;
-      display: inline-block;
+      display: block;
+      width: 100%;
+      margin: 8px 0;
     }
     .btn-out {
       background: white;
-      color: var(--pd);
-      border: 1.5px solid var(--p);
-      padding: 8px 16px;
-      border-radius: 8px;
+      color: var(--primary-dark);
+      border: 1.5px solid var(--primary);
+      padding: 10px 20px;
+      border-radius: 10px;
       font-weight: bold;
-      font-size: clamp(0.9rem, 3vw, 1rem);
+      font-size: 1rem;
       text-decoration: none;
-      margin: 4px;
-      display: inline-block;
+      display: block;
+      width: 100%;
+      margin: 8px 0;
     }
   </style>
 </head>
 <body>
+
 <div class="container">
   <div id="quiz-screen">
-    <div class="header"><h1>حکمت‌سنج مزاج، ارکان و اخلاط</h1></div>
+    <div class="header">
+      <h1>حکمت‌سنج مزاج، ارکان و اخلاط</h1>
+    </div>
     <div class="stats">
       <span id="qc">پرسش ۱</span>
       <span id="sc">امتیاز: ۰</span>
     </div>
-    <div class="prog"><div class="bar" id="pb"></div></div>
-    <div class="qbox" id="qt">در حال بارگذاری...</div>
-    <div class="grid" id="og"></div>
-    <div class="fb" id="fb"></div>
-    <div style="overflow:hidden;"><button class="btn-next" id="bn" onclick="nextQ()">پرسش بعدی</button></div>
+    <div class="prog-track"><div class="prog-bar" id="pb"></div></div>
+    <div class="qbox" id="qt">در حال بارگذاری پرسش‌ها...</div>
+    <div class="options-grid" id="og"></div>
+    <div class="feedback" id="fb"></div>
+    <div class="action-row">
+      <button class="btn-reset" onclick="confirmReset()">شروع مجدد از ابتدا</button>
+      <button class="btn-next" id="bn" onclick="nextQ()">پرسش بعدی</button>
+    </div>
   </div>
 
-  <div class="result" id="res-screen">
+  <div class="result-screen" id="res-screen">
     <h2>پایان آزمون حکمت‌سنجی</h2>
-    <div class="r-score" id="fs">۰ / ۱۰۰</div>
-    <p id="fe" style="color:#374151; font-size:1.05rem; line-height:1.6;"></p>
-    <div style="margin-top:18px;">
+    <div class="result-score" id="fs">۰ / ۱۰۰</div>
+    <p id="fe" style="color:#374151; font-size:1rem; line-height:1.6;"></p>
+    <div style="margin-top:20px;">
       <button class="btn-act" onclick="restart()">آزمون مجدد</button>
       <a href="index.html" class="btn-out">بازگشت به پورتال</a>
     </div>
@@ -222,16 +247,17 @@ const rawQuestions = [
   {q:"خلط بلغم چه کیفیتی دارد؟", c:"سرد و تر", w:["گرم و تر","سرد و خشک","گرم و خشک"], f:"بلغم سرد و تر و مایع مفاصل و ذخیره غذایی است."},
   {q:"خلط سودا دارای کدام کیفیت است؟", c:"سرد و خشک", w:["سرد و تر","گرم و خشک","گرم و تر"], f:"سودا سرد و خشک و رسوب دهنده و مایه استحکام استخوان است."},
   {q:"مزاج فصل بهار چیست؟", c:"معتدل مایل به گرم و تر", w:["گرم و خشک","سرد و خشک","سرد و تر"], f:"بهار معتدل و شبیه مزاج خلط دم است."},
-  {q:"مزاج فصل تابستان چیست؟", c:"گرم و خشک", w:["گرم و تر","سرد و تر","سرد و خشک"], f:"تابستان گرم و خشک (صفراوی) است."},
-  {q:"مزاج فصل پاییز چیست؟", c:"سرد و خشک", w:["سرد و تر","گرم و خشک","گرم و تر"], f:"پاییز سرد و خشک (سوداوی) است."},
-  {q:"مزاج فصل زمستان چیست؟", c:"سرد و تر", w:["سرد و خشک","گرم و تر","گرم و خشک"], f:"زمستان سرد و تر (بلغم‌زا) است."},
-  {q:"مزاج دوران جوانی چیست؟", c:"گرم و خشک", w:["گرم و تر","سرد و تر","سرد و خشک"], f:"جوانی دوره غلبه حرارت و خشکی (صفرا) است."},
-  {q:"مزاج سن رشد و کودکی چیست؟", c:"گرم و تر", w:["گرم و خشک","سرد و خشک","سرد و تر"], f:"کودکی اوج رطوبت و حرارت غریزی است."},
-  {q:"سن کهولت و پیری به کدام سمت می‌رود؟", c:"سرد و خشک", w:["گرم و تر","گرم و خشک","سرد و تر"], f:"پیری دوران افول حرارت غریزی و غلبه سردی و خشکی است."},
-  {q:"مزه ترش چه طبعی دارد؟", c:"سرد و خشک", w:["گرم و خشک","سرد و تر","گرم و تر"], f:"ترشی قابض و سرد و خشک است."},
-  {q:"مزه تند (حریف) نشانه چیست؟", c:"گرم و خشک شدید", w:["سرد و خشک","سرد و تر","گرم و تر"], f:"تندی اوج حرارت و خشکی است."},
-  {q:"مزه شیرین عموماً دلالت بر چیست؟", c:"گرم و تر", w:["سرد و خشک","سرد و تر","گرم و خشک"], f:"شیرینی متمایل به اعتدال و گرمی و تری است."},
-  {q:"طعم تلخ چه کیفیتی دارد؟", c:"گرم و خشک", w:["سرد و تر","سرد و خشک","گرم و تر"], f:"تلخی گرم و خشک و زداینده فضولات است."},
+  {q:"مزاج فصل تابستان چیست؟", c:"گرم و خشک", [
+  {q:"رکن آتش دارای کدام کیفیت است؟", c:"گرم و خشک", w:["گرم و تر","سرد و خشک","سرد و تر"], f:"آتش گرم و خشک و در بالاترین مرتبه لطافت است."},
+  {q:"رکن هوا دارای چه کیفیتی است؟", c:"گرم و تر", w:["گرم و خشک","سرد و تر","سرد و خشک"], f:"هوا گرم و تر و دارای نفوذ و انتشار است."},
+  {q:"کیفیت اصلی رکن آب چیست؟", c:"سرد و تر", w:["سرد و خشک","گرم و تر","گرم و خشک"], f:"آب سرد و تر و مایه انعطاف است."},
+  {q:"سنگین‌ترین رکن پایدارکننده شکل چیست؟", c:"خاک (ارض)", w:["آب","هوا","آتش"], f:"خاک سرد و خشک و مایه ثبات و حفظ صورت است."},
+  {q:"خلط دم (خون) معادل کدام کیفیت است؟", c:"گرم و تر", w:["گرم و خشک","سرد و خشک","سرد و تر"], f:"دم گرم و تر و مایه‌بخش تغذیه اندام‌هاست."},
+  {q:"خلط صفرا چه کیفیتی دارد؟", c:"گرم و خشک", w:["گرم و تر","سرد و تر","سرد و خشک"], f:"صفرا گرم و خشک و لطیف‌کننده خون برای عروق باریک است."},
+  {q:"خلط بلغم چه کیفیتی دارد؟", c:"سرد و تر", w:["گرم و تر","سرد و خشک","گرم و خشک"], f:"بلغم سرد و تر و مایع مفاصل و ذخیره غذایی است."},
+  {q:"خلط سودا دارای کدام کیفیت است؟", c:"سرد و خشک", w:["سرد و تر","گرم و خشک","گرم و تر"], f:"سودا سرد و خشک و رسوب دهنده و مایه استحکام استخوان است."},
+  {q:"مزاج فصل بهار چیست؟", c:"معتدل مایل به گرم و تر", w:["گرم و خشک","سرد و خشک","سرد و تر"], f:"بهار معتدل و شبیه مزاج خلط دم است."},
+  {q:"مزاج فصل تابستان چیست؟", c:"گرم و خشک",["سرد و تر","سرد و خشک","گرم و تر"], f:"تلخی گرم و خشک و زداینده فضولات است."},
   {q:"مزه بی‌مزه (تفه) علامت چیست؟", c:"سرد و تر", w:["گرم و خشک","سرد و خشک","گرم و تر"], f:"بی‌مزگی ناشی از غلبه بلغم و رطوبت است."},
   {q:"منشأ اصلی حرارت غریزی و روح حیوانی کدام عضو است؟", c:"قلب", w:["کبد","مغز","معده"], f:"قلب گرم‌ترین عضو و معدن روح حیوانی است."},
   {q:"محل تولید اخلاط چهارگانه کجاست؟", c:"کبد", w:["قلب","معده","طحال"], f:"کبد محل تبدیل کیموس معدی به اخلاط چهارگانه است."},
@@ -315,10 +341,30 @@ const rawQuestions = [
   {q:"حکمت طبیعی چه رابطه‌ای با سلامت دارد؟", c:"انسان را جزئی هماهنگ با عالم آفرینش می‌داند", w:["علمی بی‌ارتباط به جهان","تنها متکی بر داروهای شیمیایی","محدود به تجربیات فردی"], f:"قوانین حاکم بر طبیعت بدن با ارکان عالم پیوند دارد."}
 ];
 
+const STORAGE_KEY = "healthgame_temperament_state";
 let questions = [];
 let idx = 0, score = 0, ans = false;
 
-function buildQuestions() {
+function initApp() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      const data = JSON.parse(saved);
+      if (data && data.questions && data.questions.length === rawQuestions.length && data.idx < rawQuestions.length) {
+        questions = data.questions;
+        idx = data.idx;
+        score = data.score;
+        render();
+        return;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
+  buildNewGame();
+}
+
+function buildNewGame() {
   questions = rawQuestions.map(item => {
     let opts = [item.c, ...item.w];
     for (let i = opts.length - 1; i > 0; i--) {
@@ -332,10 +378,31 @@ function buildQuestions() {
       f: item.f
     };
   });
+  idx = 0;
+  score = 0;
+  saveProgress();
+  render();
+}
+
+function saveProgress() {
+  const state = {
+    questions: questions,
+    idx: idx,
+    score: score
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
 function render() {
   ans = false;
+  if (idx >= questions.length) {
+    showEnd();
+    return;
+  }
+  
+  document.getElementById("quiz-screen").style.display = "block";
+  document.getElementById("res-screen").style.display = "none";
+  
   const cur = questions[idx];
   document.getElementById("qc").innerText = "پرسش " + (idx + 1) + " از " + questions.length;
   document.getElementById("sc").innerText = "امتیاز: " + score;
@@ -345,7 +412,7 @@ function render() {
   const og = document.getElementById("og");
   og.innerHTML = "";
   const fb = document.getElementById("fb");
-  fb.className = "fb";
+  fb.className = "feedback";
   fb.style.display = "none";
   document.getElementById("bn").style.display = "none";
 
@@ -372,25 +439,31 @@ function select(sel) {
 
   if (sel === cur.a) {
     score++;
-    fb.className = "fb correct";
+    fb.className = "feedback correct";
     fb.innerText = "✓ پاسخ صحیح است! " + cur.f;
   } else {
     btns[sel].classList.add("wrong");
-    fb.className = "fb wrong";
+    fb.className = "feedback wrong";
     fb.innerText = "✗ نادرست! " + cur.f;
   }
   fb.style.display = "block";
   document.getElementById("sc").innerText = "امتیاز: " + score;
   document.getElementById("bn").style.display = "inline-block";
+  saveProgress();
 }
 
 function nextQ() {
   idx++;
-  if (idx < questions.length) render();
-  else showEnd();
+  saveProgress();
+  if (idx < questions.length) {
+    render();
+  } else {
+    showEnd();
+  }
 }
 
 function showEnd() {
+  localStorage.removeItem(STORAGE_KEY);
   document.getElementById("quiz-screen").style.display = "none";
   document.getElementById("res-screen").style.display = "block";
   document.getElementById("fs").innerText = score + " / " + questions.length;
@@ -399,17 +472,21 @@ function showEnd() {
   document.getElementById("fe").innerText = desc;
 }
 
-function restart() {
-  idx = 0; score = 0;
-  buildQuestions();
-  document.getElementById("res-screen").style.display = "none";
-  document.getElementById("quiz-screen").style.display = "block";
-  render();
+function confirmReset() {
+  if (confirm("آیا مایلید آزمون از ابتدا شروع شود؟ پیشرفت فعلی پاک خواهد شد.")) {
+    restart();
+  }
 }
 
-buildQuestions();
-window.onload = render;
-if (document.readyState === "complete" || document.readyState === "interactive") render();
+function restart() {
+  localStorage.removeItem(STORAGE_KEY);
+  buildNewGame();
+}
+
+window.onload = initApp;
+if (document.readyState === "complete" || document.readyState === "interactive") {
+  initApp();
+}
 </script>
 </body>
 </html>
