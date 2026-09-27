@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>حکمت‌سنج مزاج، ارکان و اخلاط</title>
   <style>
     :root {
       --primary: #15803d;
       --primary-dark: #14532d;
-      --bg: #f3fbf6;
+      --bg: #f8fafc;
       --card-bg: #ffffff;
       --correct: #16a34a;
       --wrong: #dc2626;
@@ -23,42 +21,44 @@
       font-family: system-ui, -apple-system, Tahoma, sans-serif;
     }
     body {
-      width: 100vw;
-      min-height: 100dvh;
+      width: 100%;
+      min-height: 100vh;
       background-color: var(--bg);
       color: #1f2937;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
       padding: 12px;
     }
     .container {
       width: 100%;
-      max-width: 500px;
+      max-width: 580px;
       background: var(--card-bg);
-      border-radius: 16px;
-      padding: 16px;
+      border-radius: 18px;
+      padding: 18px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-      border: 1px solid #dcfce7;
-      margin: auto 0;
+      border: 1.5px solid #dcfce7;
+      display: flex;
+      flex-direction: column;
+      height: fit-content;
     }
     .header {
       text-align: center;
       margin-bottom: 12px;
     }
     .header h1 {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       color: var(--primary-dark);
+      font-weight: 800;
     }
     .stats {
       display: flex;
       justify-content: space-between;
-      font-size: 0.95rem;
+      font-size: 1rem;
       font-weight: bold;
       margin-bottom: 10px;
       background: #ecfdf5;
-      padding: 8px 12px;
-      border-radius: 10px;
+      padding: 10px 14px;
+      border-radius: 12px;
       color: #166534;
       border: 1px solid #bbf7d0;
     }
@@ -67,7 +67,7 @@
       height: 8px;
       border-radius: 999px;
       overflow: hidden;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
     .prog-bar {
       height: 100%;
@@ -76,10 +76,10 @@
       transition: width 0.3s ease;
     }
     .qbox {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 800;
-      line-height: 1.6;
-      margin-bottom: 14px;
+      line-height: 1.7;
+      margin-bottom: 16px;
       color: #111827;
       min-height: 52px;
     }
@@ -87,21 +87,21 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
     .btn-opt {
       width: 100%;
       background: #ffffff;
-      border: 1.5px solid #d1d5db;
+      border: 1.5px solid #cbd5e1;
       border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 1rem;
+      padding: 14px 16px;
+      font-size: 1.05rem;
       text-align: right;
       cursor: pointer;
       font-weight: 600;
-      color: #374151;
+      color: #334155;
       line-height: 1.4;
-      transition: background 0.2s, border-color 0.2s;
+      transition: all 0.2s ease;
     }
     .btn-opt:active:not([disabled]) {
       background: #f0fdf4;
@@ -121,11 +121,11 @@
     }
     .feedback {
       display: none;
-      padding: 12px;
+      padding: 12px 14px;
       border-radius: 10px;
-      font-size: 0.95rem;
+      font-size: 1rem;
       margin-bottom: 14px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
     .feedback.correct {
       display: block;
@@ -143,13 +143,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-top: 4px;
     }
     .btn-next {
       background: var(--primary);
       color: #ffffff;
       border: none;
       border-radius: 10px;
-      padding: 10px 20px;
+      padding: 12px 22px;
       font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
@@ -159,8 +160,8 @@
     .btn-reset {
       background: transparent;
       border: none;
-      color: #6b7280;
-      font-size: 0.85rem;
+      color: #64748b;
+      font-size: 0.9rem;
       text-decoration: underline;
       cursor: pointer;
     }
@@ -170,7 +171,7 @@
       padding: 16px 8px;
     }
     .result-score {
-      font-size: 2.2rem;
+      font-size: 2.4rem;
       font-weight: 800;
       color: var(--primary);
       margin: 14px 0;
@@ -220,7 +221,7 @@
     <div class="options-grid" id="og"></div>
     <div class="feedback" id="fb"></div>
     <div class="action-row">
-      <button class="btn-reset" onclick="confirmReset()">شروع مجدد از ابتدا</button>
+      <button class="btn-reset" onclick="confirmReset()">شروع از ابتدا</button>
       <button class="btn-next" id="bn" onclick="nextQ()">پرسش بعدی</button>
     </div>
   </div>
@@ -228,7 +229,7 @@
   <div class="result-screen" id="res-screen">
     <h2>پایان آزمون حکمت‌سنجی</h2>
     <div class="result-score" id="fs">۰ / ۱۰۰</div>
-    <p id="fe" style="color:#374151; font-size:1rem; line-height:1.6;"></p>
+    <p id="fe" style="color:#374151; font-size:1.05rem; line-height:1.6;"></p>
     <div style="margin-top:20px;">
       <button class="btn-act" onclick="restart()">آزمون مجدد</button>
       <a href="index.html" class="btn-out">بازگشت به پورتال</a>
@@ -247,17 +248,16 @@ const rawQuestions = [
   {q:"خلط بلغم چه کیفیتی دارد؟", c:"سرد و تر", w:["گرم و تر","سرد و خشک","گرم و خشک"], f:"بلغم سرد و تر و مایع مفاصل و ذخیره غذایی است."},
   {q:"خلط سودا دارای کدام کیفیت است؟", c:"سرد و خشک", w:["سرد و تر","گرم و خشک","گرم و تر"], f:"سودا سرد و خشک و رسوب دهنده و مایه استحکام استخوان است."},
   {q:"مزاج فصل بهار چیست؟", c:"معتدل مایل به گرم و تر", w:["گرم و خشک","سرد و خشک","سرد و تر"], f:"بهار معتدل و شبیه مزاج خلط دم است."},
-  {q:"مزاج فصل تابستان چیست؟", c:"گرم و خشک", [
-  {q:"رکن آتش دارای کدام کیفیت است؟", c:"گرم و خشک", w:["گرم و تر","سرد و خشک","سرد و تر"], f:"آتش گرم و خشک و در بالاترین مرتبه لطافت است."},
-  {q:"رکن هوا دارای چه کیفیتی است؟", c:"گرم و تر", w:["گرم و خشک","سرد و تر","سرد و خشک"], f:"هوا گرم و تر و دارای نفوذ و انتشار است."},
-  {q:"کیفیت اصلی رکن آب چیست؟", c:"سرد و تر", w:["سرد و خشک","گرم و تر","گرم و خشک"], f:"آب سرد و تر و مایه انعطاف است."},
-  {q:"سنگین‌ترین رکن پایدارکننده شکل چیست؟", c:"خاک (ارض)", w:["آب","هوا","آتش"], f:"خاک سرد و خشک و مایه ثبات و حفظ صورت است."},
-  {q:"خلط دم (خون) معادل کدام کیفیت است؟", c:"گرم و تر", w:["گرم و خشک","سرد و خشک","سرد و تر"], f:"دم گرم و تر و مایه‌بخش تغذیه اندام‌هاست."},
-  {q:"خلط صفرا چه کیفیتی دارد؟", c:"گرم و خشک", w:["گرم و تر","سرد و تر","سرد و خشک"], f:"صفرا گرم و خشک و لطیف‌کننده خون برای عروق باریک است."},
-  {q:"خلط بلغم چه کیفیتی دارد؟", c:"سرد و تر", w:["گرم و تر","سرد و خشک","گرم و خشک"], f:"بلغم سرد و تر و مایع مفاصل و ذخیره غذایی است."},
-  {q:"خلط سودا دارای کدام کیفیت است؟", c:"سرد و خشک", w:["سرد و تر","گرم و خشک","گرم و تر"], f:"سودا سرد و خشک و رسوب دهنده و مایه استحکام استخوان است."},
-  {q:"مزاج فصل بهار چیست؟", c:"معتدل مایل به گرم و تر", w:["گرم و خشک","سرد و خشک","سرد و تر"], f:"بهار معتدل و شبیه مزاج خلط دم است."},
-  {q:"مزاج فصل تابستان چیست؟", c:"گرم و خشک",["سرد و تر","سرد و خشک","گرم و تر"], f:"تلخی گرم و خشک و زداینده فضولات است."},
+  {q:"مزاج فصل تابستان چیست؟", c:"گرم و خشک", w:["گرم و تر","سرد و تر","سرد و خشک"], f:"تابستان گرم و خشک (صفراوی) است."},
+  {q:"مزاج فصل پاییز چیست؟", c:"سرد و خشک", w:["سرد و تر","گرم و خشک","گرم و تر"], f:"پاییز سرد و خشک (سوداوی) است."},
+  {q:"مزاج فصل زمستان چیست؟", c:"سرد و تر", w:["سرد و خشک","گرم و تر","گرم و خشک"], f:"زمستان سرد و تر (بلغم‌زا) است."},
+  {q:"مزاج دوران جوانی چیست؟", c:"گرم و خشک", w:["گرم و تر","سرد و تر","سرد و خشک"], f:"جوانی دوره غلبه حرارت و خشکی (صفرا) است."},
+  {q:"مزاج سن رشد و کودکی چیست؟", c:"گرم و تر", w:["گرم و خشک","سرد و خشک","سرد و تر"], f:"کودکی اوج رطوبت و حرارت غریزی است."},
+  {q:"سن کهولت و پیری به کدام سمت می‌رود؟", c:"سرد و خشک", w:["گرم و تر","گرم و خشک","سرد و تر"], f:"پیری دوران افول حرارت غریزی و غلبه سردی و خشکی است."},
+  {q:"مزه ترش چه طبعی دارد؟", c:"سرد و خشک", w:["گرم و خشک","سرد و تر","گرم و تر"], f:"ترشی قابض و سرد و خشک است."},
+  {q:"مزه تند (حریف) نشانه چیست؟", c:"گرم و خشک شدید", w:["سرد و خشک","سرد و تر","گرم و تر"], f:"تندی اوج حرارت و خشکی است."},
+  {q:"مزه شیرین عموماً دلالت بر چیست؟", c:"گرم و تر", w:["سرد و خشک","سرد و تر","گرم و خشک"], f:"شیرینی متمایل به اعتدال و گرمی و تری است."},
+  {q:"طعم تلخ چه کیفیتی دارد؟", c:"گرم و خشک", w:["سرد و تر","سرد و خشک","گرم و تر"], f:"تلخی گرم و خشک و زداینده فضولات است."},
   {q:"مزه بی‌مزه (تفه) علامت چیست؟", c:"سرد و تر", w:["گرم و خشک","سرد و خشک","گرم و تر"], f:"بی‌مزگی ناشی از غلبه بلغم و رطوبت است."},
   {q:"منشأ اصلی حرارت غریزی و روح حیوانی کدام عضو است؟", c:"قلب", w:["کبد","مغز","معده"], f:"قلب گرم‌ترین عضو و معدن روح حیوانی است."},
   {q:"محل تولید اخلاط چهارگانه کجاست؟", c:"کبد", w:["قلب","معده","طحال"], f:"کبد محل تبدیل کیموس معدی به اخلاط چهارگانه است."},
@@ -483,10 +483,7 @@ function restart() {
   buildNewGame();
 }
 
-window.onload = initApp;
-if (document.readyState === "complete" || document.readyState === "interactive") {
-  initApp();
-}
+initApp();
 </script>
 </body>
 </html>
