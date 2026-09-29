@@ -7,33 +7,22 @@
     <style>
         body { font-family: Tahoma, sans-serif; background: #f4f7f6; padding: 20px; text-align: center; }
         h1 { color: #2c3e50; font-size: 1.5rem; }
-        .btn { display: block; background: #27ae60; color: white; padding: 15px; margin: 10px auto; text-decoration: none; border-radius: 10px; width: 90%; max-width: 400px; font-weight: bold; } نام‌گذاری می‌کنید).
-
-### برنامه عملیاتی:
-۱. **استاندارد نام‌گذاری:** تمام فایل‌های بازی باید با الگوی `Game_XXX_Title.html` باشند (مثلاً `Game_001_Arkan_Arba.html`).
-۲. **فایل `index.html` واحد:** من کد کامل و استاندارد برای لیست کردن هر ۱۰۰ بازی را آماده کرده‌ام.
-۳. **مدیریت وضعیت:** چون همه ۱۰۰ بازی را هنوز ندارید، بازی‌هایی که آماده نیستند را به صورت **کامنت (غیرفعال)** قرار داده‌ام تا کاربران با خطای ۴۰۴ مواجه نشوند. هروقت بازی جدیدی ساختید، فقط کافیست علامت `<!--` و `-->` را از دور آن لینک در `index.html` بردارید.
-
-این کدی است که باید جایگزین `index.html` فعلی کنید:
-```html
-<!DOCTYPE html>
-<html dir="rtl" lang="fa">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>پورتال بازی‌های سلامت</title>
-<style>
-body { font-family: Tahoma, sans-serif; background: #f4f7f6; padding: 20px; text-align: center; }
-h1 { color: #2c3e50; font-size: 1.5rem; }
-.btn { display: block; background: #27ae60; color: white; padding: 15px; margin: 10px auto; text-decoration: none; border-radius: 10px; width: 90%; max-width: 400px; font-weight: bold; }
-.btn:hover { background: #2ecc71; }
-/* استایل برای لینک‌های غیرفعال (اختیاری) */
-.btn.disabled { background: #95a5a6; cursor: not-allowed; }
-</style>
+        .btn { display: block; background: #27ae60; color: white; padding: 15px; margin: 10px auto; text-decoration: none; border-radius: 10px; width: 90%; max-width: 400px; font-weight: bold; }
+        .btn:hover { background: #2ecc71; }
+        .btn.disabled { background: #95a5a6; cursor: not-allowed; }
+    </style>
 </head>
 <body>
-<h1>پورتال بازی‌های سلامت پورتال:** هر زمان که بازی شماره ۵ (مثلاً `Game_005_...`) را ساختید و در گیت‌هاب آپلود کردید، فقط کافیست فایل `index.html` را در گیت‌هاب ویرایش کنید و آن یک خط را از حالت کامنت خارج کنید.
+    <h1>پورتال بازی‌های سلامت</h1>
+    
+    <!-- بازی‌های فعال -->
+    <a href="Game_001_Arkan_Arba_Standalone.html" class="btn">بازی ۱: ارکان اربعه</a>
+    <a href=".game002_Sitteh_Zaroorieh.html" class="btn">بازی ۲: سته ضروریه</a>
 
-این ساختار باعث می‌شود دیگر هرگز با خطای ۴۰۴ غافلگیر نشوید.
+    <!-- بازی‌های غیرفعال (هر زمان آماده شد، کامنت را بردارید) -->
+    <!--
+    <a href="Game_003_Temperament_Quiz.html" class="btn disabled">بازی ۳: تست مزاج‌شناسی</a>
+    -->
 
-تمام شد.
+</body>
+</html>
