@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>بازی ارکان اربعه</title>
     <style>
-        body { font-family: Tahoma, Arial, sans-serif; background: #f4f7f6; display: flex; justify-content: center; padding: 10px; margin: 0; }
-        #game-container { width: 100%; max-width: 500px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        h2 { color: #2c3e50; text-align: center; }
+        body { font-family: Tahoma, Arial, sans-serif; background: #f4f7f6; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; padding: 10px; margin: 0; }
+        #game-container { width: 100%; max-width: 500px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); box-sizing: border-box; }
+        h2 { color: #2c3e50; text-align: center; margin-top: 0; }
         .q-info { text-align: center; color: #7f8c8d; margin-bottom: 10px; font-size: 14px; }
-        .question { font-size: 18px; margin-bottom: 20px; color: #34495e; font-weight: bold; }
-        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; text-align: right; background: #fff; touch-action: manipulation; transition: 0.2s; }
+        .question { font-size: 18px; margin-bottom: 20px; color: #34495e; font-weight: bold; text-align: center; }
+        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; text-align: right; background: #fff; touch-action: manipulation; transition: 0.2s; font-size: 16px; }
         .option:hover { background: #f0f0f0; }
         .option.correct { background: #2ecc71 !important; color: white; border-color: #27ae60; }
         .option.wrong { background: #e74c3c !important; color: white; border-color: #c0392b; }
-        #feedback { margin-top: 15px; padding: 15px; border-radius: 8px; display: none; background: #ecf0f1; color: #2c3e50; font-size: 14px; line-height: 1.6; }
-        #next-btn, #portal-btn { display: block; width: 100%; padding: 15px; border: none; border-radius: 8px; margin-top: 10px; cursor: pointer; font-size: 16px; text-align: center; text-decoration: none; }
+        #feedback { margin-top: 15px; padding: 15px; border-radius: 8px; display: none; background: #ecf0f1; color: #2c3e50; font-size: 14px; line-height: 1.6; text-align: center; }
+        #next-btn, #portal-btn { display: block; width: 100%; padding: 15px; border: none; border-radius: 8px; margin-top: 10px; cursor: pointer; font-size: 16px; text-align: center; text-decoration: none; font-weight: bold; }
         #next-btn { background: #3498db; color: white; display: none; }
         #portal-btn { background: #95a5a6; color: white; margin-top: 20px; }
     </style>
@@ -42,7 +42,7 @@
         { w: "کدام خلط مربوط به عنصر هواست؟", options: ["دم", "صفرا", "بلغم", "سودا"], answer: "دم", h: "مزاج دم گرم و تر است" },
         { w: "کدام خلط مربوط به عنصر آب است؟", options: ["بلغم", "دم", "صفرا", "سودا"], answer: "بلغم", h: "مزاج بلغم سرد و تر است" },
         { w: "کدام خلط مربوط به عنصر خاک است؟", options: ["سودا", "صفرا", "دم", "بلغم"], answer: "سودا", h: "مزاج سودا سرد و خشک است" },
-        { w: "به معنای چهار رکن بنیادین چیست؟", options: ["ارکان اربعه", "اخلاط اربعه", "مزاج", "کیفیات اربعه"], answer: "ارکان اربعه", h: "آتش، هوا، آب، خاک" },
+        { w: "معنای چهار رکن بنیادین چیست؟", options: ["ارکان اربعه", "اخلاط اربعه", "مزاج", "کیفیات اربعه"], answer: "ارکان اربعه", h: "آتش، هوا، آب، خاک" },
         { w: "کدام کیفیت مقابل گرما است؟", options: ["سردی", "خشکی", "تری", "اعتدال"], answer: "سردی", h: "گرما و سردی متضادند" },
         { w: "کدام کیفیت مقابل تری است؟", options: ["خشکی", "سردی", "گرما", "اعتدال"], answer: "خشکی", h: "تری و خشکی متضادند" },
         { w: "مزاجِ صفراوی در کدام فصل غلبه دارد؟", options: ["تابستان", "بهار", "پاییز", "زمستان"], answer: "تابستان", h: "گرما غلبه دارد" },
@@ -110,16 +110,17 @@
         { w: "آیا عصبانیت صفرا را زیاد می‌کند؟", options: ["بله", "خیر", "فقط در تابستان", "فقط در مردان"], answer: "بله", h: "غلبه گرما" },
         { w: "آیا ترس سودا را زیاد می‌کند؟", options: ["بله", "خیر", "فقط در زنان", "فقط در کودکان"], answer: "بله", h: "غلبه سردی و خشکی" },
         { w: "کدام رکن در تنفس نقش دارد؟", options: ["هوا", "آب", "آتش", "خاک"], answer: "هوا", h: "حیات" },
+        { w: "کدام خلط تپش قلب می‌آورد؟", options:", h: "تولید انرژی" },
+        { w: "عنصرِ حیات چیست؟", options: ["حرارت غریزی", "اخلاط", "اعضا", "بیماری"], answer: "حرارت غریزی", h: "قلب" },
+        { w: "آیا سودا ضرر دارد؟", options: ["بستگی به مقدار دارد", "همیشه بد است", "همیشه خوب است", "مفید مطلق است"], answer: "بستگی به مقدار دارد", h: "تعادل لازم است" },
+        { w: "بهترین حالت بدن چیست؟", options: ["اعتدال", "افراط", "تفریط", "غلبه خلط"], answer: "اعتدال", h: "میانه" },
+        { w: "آیا خواب زیاد سودازاست؟", options: ["خیر", "بله", "بستگی دارد", "فقط در شب"], answer: "خیر", h: "بلغم‌زاست" },
+        { w: "آیا عصبانیت صفرا را زیاد می‌کند؟", options: ["بله", "خیر", "فقط در تابستان", "فقط در مردان"], answer: "بله", h: "غلبه گرما" },
+        { w: "آیا ترس سودا را زیاد می‌کند؟", options: ["بله", "خیر", "فقط در زنان", "فقط در کودکان"], answer: "بله", h: "غلبه سردی و خشکی" },
+        { w: "کدام رکن در تنفس نقش دارد؟", options: ["هوا", "آب", "آتش", "خاک"], answer: "هوا", h: "حیات" },
         { w: "کدام خلط تپش قلب می‌آورد؟", options: ["صفرا", "بلغم", "دم", "سودا"], answer: "صفرا", h: "گرمی بیش از حد" },
         { w: "کدام خلط باعث آرامش است؟", options: ["بلغم", "صفرا", "سودا", "دم"], answer: "بلغم", h: "سردی" },
-        { w: "کدام عضو با سودا ارتباط دارد؟", options: ["طحال", "کبد", "قلب", "ریه"], answer: "طحال", h: "محل ذخیره" },
-        { w: "کدام خلط برای رشد کودکان لازم است؟", options: ["دم", "سودا", "صفرا", "سودا"], answer: "دم", h: "گرم و تر" },
-        { w: "کدام خلط برای تقویت استخوان است؟", options: ["سودا", "دم", "صفرا", "بلغم"], answer: "سودا", h: "سرد و خشک" },
-        { w: "کدام رکن در هضم غذا نقش دارد؟", options: ["آتش", "آب", "هوا", "خاک"], answer: "آتش", h: "حرارت معده" },
-        { w: "آیا همه ارکان در هر فرد وجود دارند؟", options: ["بله", "خیر", "بستگی دارد", "فقط در سالمندان"], answer: "بله", h: "ساختار بدن" },
-        { w: "بهترین مزاج کدام است؟", options: ["مزاج معتدل", "صفراوی", "بلغمی", "سوداوی"], answer: "مزاج معتدل", h: "سالم‌ترین حالت" },
-        { w: "آیا صفراوی‌ها زود عصبانی می‌شوند؟", options: ["بله", "خیر", "کمتر", "هرگز"], answer: "بله", h: "آتش درونی" },
-        { w: "آیا بلغمی‌ها صبورترند؟", options: ["بله", "خیر", "عصبانی‌ترند", "میانه"], answer: "بله", h: "آرامش رطوبت" },
+        رامش رطوبت" },
         { w: "کدام خلط به خون کمک می‌کند؟", options: ["دم", "صفرا", "سودا", "بلغم"], answer: "دم", h: "هم‌جنس" },
         { w: "کدام رکن در کبد فعال است؟", options: ["آتش", "هوا", "آب", "خاک"], answer: "آتش", h: "حرارت تولید خون" },
         { w: "کدام رکن در طحال فعال است؟", options: ["خاک", "آب", "آتش", "هوا"], answer: "خاک", h: "جذب سودا" },
@@ -145,7 +146,6 @@
         const optDiv = document.getElementById('options');
         optDiv.innerHTML = '';
         
-        // ایجاد کپی از گزینه‌ها و درهم‌ریزی آن‌ها
         let opts = [...q.options];
         opts.sort(() => Math.random() - 0.5);
 
