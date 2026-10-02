@@ -1,23 +1,115 @@
-<!DOCTYPE html>
+your-email@example.com<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پورتال بازی‌های سلامت</title>
+    <title>بازی سلامت - احتباس</title>
     <style>
-        body { font-family: Tahoma, sans-serif; text-align: center; padding: 20px; background-color: #f4f4f9; }
-        .btn { display: block; margin: 10px auto; padding: 15px 25px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; width: 80%; max-width: 300px; font-size: 1.1em; }
-        h1 { color: #333; }
+        body { font-family: Tahoma, sans-serif; text-align: center; background: #f4f9f4; padding: 20px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .score-board { font-weight: bold; color: #2e7d32; margin-bottom: 15px; }
+        .question { font-size: 1.2em; margin-bottom: 20px; }
+        button { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 8px; cursor: pointer; background: #e0e0e0; font-size: 1em; transition: 0.3s; }
+        button.correct { background: #4caf50; color: white; }
+        button.wrong { background: #f44336; color: white; }
+        .nav-btn { background: #2196f3; color: white; margin-top: 20px; }
+        .reset-btn { background: #ff9800; color: white; font-size: 0.8em; padding: 5px; }
     </style>
 </head>
 <body>
-    <h1>پورتال بازی‌های سلامت</h1>
-    
-    <a href="game1.html" class="btn">بازی ۱</a>
-    <a href="game2.html" class="btn">بازی ۲</a>
-    <a href="game3.html" class="btn">بازی ۳</a>
-    <a href="game4.html" class="btn">بازی ۴</a>
-    <a href="game_23.html" class="btn">بازی ۲۳</a>
-    <a href="game_temperament.html" class="btn">بازی مزاج‌شناسی</a>
+
+<div class="container">
+    <div id="game-ui">
+        <div class="score-board">امتیاز طلایی: <span id="score">0</span></div>
+        <div id="question" class="question">در حال بارگذاری...</div>
+        <div id="options"></div>
+        <div style="margin-top:20px;">
+            <button onclick="prevQuestion()">قبلی</button>
+            <button class="nav-btn" onclick="nextQuestion()">بعدی</button>
+            <button onclick="location.href='mailto:your-email@example.com?subject=گزارش خطای بازی'">ارسال گزارش/ارتباط با ما</button>
+            <button class="reset-btn" onclick="resetGame()">شروع مجدد بازی</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // داده‌های سوالات (همان ساختار قدیمی شما)
+    const questions = [
+        { q: "سوال ۱: تعریف احتباس چیست؟", a: "نگهداشتن مواد لازم", options: ["خروج مواد", "نگهداشتن مواد لازم", "تولید خون"] },
+        // ... (سایر سوالات خود را اینجا بگذارید)
+    ];
+
+    let currentIdx = parseInt(localStorage.getItem('g23_idx')) || 0;
+    let score = parseInt(localStorage.getItem('g23_score')) || 0;
+
+    function saveProgress() {
+        localStorage.setItem('g23_idx', currentIdx);
+        localStorage.setItem('g23_score', score);
+    }
+
+    function resetGame() {
+        if(confirm("آیا مطمئنید بازی از اول شروع شود؟")) {
+            localStorage.clear();
+            location.reload();
+        }
+    }
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function loadQuestion() {
+        const qData = questions[currentIdx];
+        document.getElementById('question').innerText = qData.q;
+        document.getElementById('score').innerText = score;
+        const optionsDiv = document.getElementById('options');
+        optionsDiv.innerHTML = '';
+
+        // درهم‌ریزی گزینه‌ها
+        let shuffled = shuffle([...qData.options]);
+        
+        shuffled.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(opt, qData.a, btn);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selected, correct, btn) {
+        if (selected === correct) {
+            btn.className = 'correct';
+            score += 10;
+        } else {
+            btn.className = 'wrong';
+        }
+        document.getElementById('score').innerText = score;
+        saveProgress();
+        setTimeout(nextQuestion, 700);
+    }
+
+    function nextQuestion() {
+        if (currentIdx < questions.length - 1) {
+            currentIdx++;
+            saveProgress();
+            loadQuestion();
+        }
+    }
+
+    function prevQuestion() {
+        if (currentIdx > 0) {
+            currentIdx--;
+            saveProgress();
+            loadQuestion();
+        }
+    }
+
+    loadQuestion();
+</script>
+
 </body>
 </html>
