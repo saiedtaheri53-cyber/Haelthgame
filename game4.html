@@ -3,160 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی اخلاط اربعه</title>
+    <title>بازی ارکان و اخلاط اربعه</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background-color: #f0f4f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 90%; max-width: 400px; text-align: center; }
-        h1 { color: #2e7d32; font-size: 1.5rem; }
-        .score { font-size: 1.2rem; color: #333; margin-bottom: 20px; }
-        .question { font-size: 1.1rem; margin-bottom: 25px; line-height: 1.6; min-height: 80px; }
-        button { width: 45%; padding: 15px; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem; transition: 0.3s; }
-        .btn-true { background: #4caf50; color: white; }
-        .btn-false { background: #f44336; color: white; }
-        button:active { transform: scale(0.95); }
+        :root { --primary: #2c3e50; --accent: #e67e22; --bg: #f4f7f6; --text: #333; }
+        body { font-family: 'Tahoma', sans-serif; background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        #game-container { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 600px; text-align: center; }
+        .question { font-size: 1.4rem; margin-bottom: 1.5rem; font-weight: bold; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        button { padding: 15px; font-size: 1rem; border: 2px solid var(--primary); background: white; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        button:hover { background: var(--primary); color: white; }
+        .stats { margin-top: 2rem; display: flex; justify-content: space-around; font-size: 0.9rem; color: #666; }
+        .feedback { margin-top: 1rem; height: 1.5rem; font-weight: bold; }
+        .correct { color: #27ae60; } .wrong { color: #c0392b; }
+        .hint { font-style: italic; color: #7f8c8d; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <div class="score" id="score">امتیاز: ۰</div>
-    <div class="progress" id="progress">سوال ۱ از ۱۰۰</div>
-    <div class="question" id="question">در حال بارگذاری...</div>
-    <button class="btn-true" onclick="checkAnswer(true)">صحیح</button>
-    <button class="btn-false" onclick="checkAnswer(false)">غلط</button>
+<div id="game-container">
+    <div id="score-board" class="stats">
+        <span>امتیاز: <span id="score">0</span></span>
+        <span>سوال: <span id="q-count">0</span>/98</span>
+    </div>
+    <div id="game-area">
+        <div class="question" id="question-text">در حال بارگذاری...</div>
+        <div class="options-grid" id="options-container"></div>
+        <div class="feedback" id="feedback-text"></div>
+        <div class="hint" id="hint-text"></div>
+    </div>
 </div>
 
 <script>
-    const questions = [
-        {q: "دم، گرم و تر است.", a: true},
-        {q: "صفرا، گرم و خشک است.", a: true},
-        {q: "بلغم، سرد و تر است.", a: true},
-        {q: "سودا، سرد و خشک است.", a: true},
-        {q: "دم با فصل بهار مرتبط است.", a: true},
-        {q: "صفرا با فصل تابستان مرتبط است.", a: true},
-        {q: "بلغم با فصل زمستان مرتبط است.", a: true},
-        {q: "سودا با فصل پاییز مرتبط است.", a: true},
-        {q: "خون (دم) موجب نشاط و سرزندگی است.", a: true},
-        {q: "غلیظ‌ترین خلط، سودا است.", a: true},
-        {q: "لطیف‌ترین خلط، صفرا است.", a: true},
-        {q: "بلغم خلط سرد و تر است.", a: true},
-        {q: "سودا مسئول انتقال مواد زائد در بدن است.", a: false},
-        {q: "صفرا باعث ایجاد التهاب در بدن می‌شود.", a: true},
-        {q: "خون برای تغذیه بافت‌های بدن ضروری است.", a: true},
-        {q: "بلغم انرژی‌بخش فوری است.", a: false},
-        {q: "سودا با پیری و کهولت مرتبط است.", a: true},
-        {q: "صفرا به هضم چربی‌ها کمک می‌کند.", a: true},
-        {q: "دم با هوای تازه و زندگی مرتبط است.", a: true},
-        {q: "بلغم می‌تواند باعث افزایش وزن شود.", a: true},
-        {q: "سودا سرد و تر است.", a: false},
-        {q: "دم گرم و خشک است.", a: false},
-        {q: "صفرا سرد و تر است.", a: false},
-        {q: "بلغم سرد و خشک است.", a: false},
-        {q: "خون از کبد تولید می‌شود.", a: true},
-        {q: "صفرا از کبد به کیسه صفرا می‌رود.", a: true},
-        {q: "سودا از رسوب خون ایجاد می‌شود.", a: true},
-        {q: "بلغم از کبد تولید می‌شود.", a: true},
-        {q: "افزایش سودا باعث وسواس می‌شود.", a: true},
-        {q: "افزایش صفرا باعث عصبانیت می‌شود.", a: true},
-        {q: "افزایش دم باعث پرخونی می‌شود.", a: true},
-        {q: "افزایش بلغم باعث کندی ذهن می‌شود.", a: true},
-        {q: "مزاج دم، شباب (جوانی) است.", a: true},
-        {q: "مزاج صفرا، جوانی است.", a: false},
-        {q: "مزاج بلغم، کودکی است.", a: true},
-        {q: "مزاج سودا، پیری است.", a: true},
-        {q: "طعم صفرا تلخ است.", a: true},
-        {q: "طعم دم شیرین است.", a: true},
-        {q: "طعم بلغم بی‌مزه است.", a: true},
-        {q: "طعم سودا ترش یا گس است.", a: true},
-        {q: "صفرا خلطی صفراوی است.", a: true},
-        {q: "دم همان خون است.", a: true},
-        {q: "بلغم خلطی سرد است.", a: true},
-        {q: "سودا خلطی خشک است.", a: true},
-        {q: "سودا باعث استحکام استخوان می‌شود.", a: true},
-        {q: "بلغم باعث نرمی پوست می‌شود.", a: true},
-        {q: "صفرا باعث تیزبینی می‌شود.", a: true},
-        {q: "دم باعث قرمزی چهره می‌شود.", a: true},
-        {q: "بلغم زیاد باعث خواب‌آلودگی می‌شود.", a: true},
-        {q: "سودا زیاد باعث لاغری می‌شود.", a: true},
-        {q: "صفرا زیاد باعث بی‌خوابی می‌شود.", a: true},
-        {q: "دم زیاد باعث سرخی چشم می‌شود.", a: true},
-        {q: "سودا با شب مرتبط است.", a: true},
-        {q: "صفرا با روز مرتبط است.", a: true},
-        {q: "بلغم با شب مرتبط است.", a: true},
-        {q: "دم با روز مرتبط است.", a: true},
-        {q: "سودا از سوختن صفرا پدید می‌آید.", a: true},
-        {q: "بلغم از تغذیه سرد پدید می‌آید.", a: true},
-        {q: "دم از هضم غذا پدید می‌آید.", a: true},
-        {q: "صفرا از هضم مواد گرم پدید می‌آید.", a: true},
-        {q: "سودا رنگ سیاه دارد.", a: true},
-        {q: "صفرا رنگ زرد دارد.", a: true},
-        {q: "دم رنگ قرمز دارد.", a: true},
-        {q: "بلغم رنگ سفید دارد.", a: true},
-        {q: "طب سنتی بر تعادل اخلاط تأکید دارد.", a: true},
-        {q: "غلبه خلط یعنی بیماری.", a: true},
-        {q: "حجامت به تنظیم اخلاط کمک می‌کند.", a: true},
-        {q: "فصد به تنظیم اخلاط کمک می‌کند.", a: true},
-        {q: "زالو به تنظیم اخلاط کمک می‌کند.", a: true},
-        {q: "ورزش به تعادل اخلاط کمک می‌کند.", a: true},
-        {q: "تغذیه ناسالم اخلاط را فاسد می‌کند.", a: true},
-        {q: "سودا باعث یبوست می‌شود.", a: true},
-        {q: "بلغم باعث سستی مفاصل می‌شود.", a: true},
-        {q: "صفرا باعث اسهال می‌شود.", a: true},
-        {q: "دم باعث گرمای بدن می‌شود.", a: true},
-        {q: "سودا مسئول موهای بدن است.", a: true},
-        {q: "صفرا مسئول رنگ پوست است.", a: true},
-        {q: "بلغم مسئول رطوبت چشم است.", a: true},
-        {q: "دم مسئول گرمای خون است.", a: true},
-        {q: "سودا خلط سنگین است.", a: true},
-        {q: "صفرا خلط سبک است.", a: true},
-        {q: "بلغم خلط لزج است.", a: true},
-        {q: "دم خلط حیاتی است.", a: true},
-        {q: "تعادل اخلاط یعنی سلامتی.", a: true},
-        {q: "اخلاط چهارگانه در کبد ساخته می‌شوند.", a: true},
-        {q: "سودا در طحال ذخیره می‌شود.", a: true},
-        {q: "صفرا در کیسه صفرا ذخیره می‌شود.", a: true},
-        {q: "بلغم در سراسر بدن پخش است.", a: true},
-        {q: "خون در عروق جاری است.", a: true},
-        {q: "سودا باعث تفکر می‌شود.", a: true},
-        {q: "صفرا باعث حرکت می‌شود.", a: true},
-        {q: "بلغم باعث آرامش می‌شود.", a: true},
-        {q: "دم باعث زندگی می‌شود.", a: true},
-        {q: "سودا خلطی پایدار است.", a: true},
-        {q: "صفرا خلطی سریع‌اثر است.", a: true},
-        {q: "بلغم خلطی کند‌اثر است.", a: true},
-        {q: "دم خلطی معتدل است.", a: true},
-        {q: "خداوند اخلاط را برای بقا آفرید.", a: true},
-        {q: "شناخت اخلاط، کلید سلامتی است.", a: true},
-        {q: "اخلاط اربعه همان ارکان اربعه هستند.", a: false}
-    ];
+const rawQuestions = [
+    { w: "عنصر آتش چه مزاجی دارد؟", a: "گرم و خشک", h: "مزاج صفراوی است" },
+    { w: "کدام عنصر سرد و تر است؟", a: "آب", h: "مزاج بلغمی است" },
+    { w: "عنصر خاک چه مزاجی دارد؟", a: "سرد و خشک", h: "مزاج سوداوی است" },
+    { w: "کدام عنصر گرم و تر است؟", a: "هوا", h: "مزاج دموی است" },
+    { w: "کدام خلط مربوط به عنصر آتش است؟", a: "صفرا", h: "مزاج صفرا گرم و خشک است" },
+    { w: "کدام خلط مربوط به عنصر هواست؟", a: "دم", h: "مزاج دم گرم و تر است" },
+    { w: "کدام خلط مربوط به عنصر آب است؟", a: "بلغم", h: "مزاج بلغم سرد و تر است" },
+    { w: "کدام خلط مربوط به عنصر خاک است؟", a: "سودا", h: "مزاج سودا سرد و خشک است" },
+    { w: "به معنای چهار رکن بنیادین چیست؟", a: "ارکان اربعه", h: "آتش، هوا، آب، خاک" },
+    { w: "کدام کیفیت مقابل گرما است؟", a: "سردی", h: "گرما و سردی متضادند" },
+    { w: "کدام کیفیت مقابل تری است؟", a: "خشکی", h: "تری و خشکی متضادند" },
+    { w: "مزاجِ صفراوی در کدام فصل غلبه دارد؟", a: "تابستان", h: "گرما غلبه دارد" },
+    { w: "مزاجِ دموی در کدام فصل غلبه دارد؟", a: "بهار", h: "گرما و تری" },
+    { w: "مزاجِ سوداوی در کدام فصل غلبه دارد؟", a: "پاییز", h: "سردی و خشکی" },
+    { w: "مزاجِ بلغمی در کدام فصل غلبه دارد؟", a: "زمستان", h: "سردی و تری" },
+    { w: "کدام رکن سبک‌ترین است؟", a: "آتش", h: "حرکت طبیعی آن رو به بالاست" },
+    { w: "کدام رکن سنگین‌ترین است؟", a: "خاک", h: "حرکت طبیعی آن رو به مرکز است" },
+    { w: "جایگاه طبیعی عنصر هوا کجاست؟", a: "بالای آب", h: "سبک‌تر از آب" },
+    { w: "کدام عنصر واسطه بین آتش و آب است؟", a: "هوا", h: "مرطوب است" },
+    { w: "آیا بدن انسان از ارکان تشکیل شده است؟", a: "بله", h: "بدن ماحصل ترکیب ارکان است" },
+    { w: "مفهوم اعتدال یعنی چه؟", a: "تعادل کیفیت‌ها", h: "حالت سلامت" },
+    { w: "کدام خلط لزج‌تر است؟", a: "بلغم", h: "طبیعت آب" },
+    { w: "کدام خلط تند و تیز است؟", a: "صفرا", h: "طبیعت آتش" },
+    { w: "سیاهی و خشکی صفت کدام خلط است؟", a: "سودا", h: "سرد و خشک" },
+    { w: "قرمزی و شیرینی صفت کدام خلط است؟", a: "دم", h: "خون" },
+    { w: "کدام خلط سریع‌تر تغییر می‌کند؟", a: "صفرا", h: "به دلیل گرمی" },
+    { w: "سودا شبیه کدام رکن است؟", a: "خاک", h: "سرد و خشک" },
+    { w: "بلغم شبیه کدام رکن است؟", a: "آب", h: "سرد و تر" },
+    { w: "دم شبیه کدام رکن است؟", a: "هوا", h: "گرم و تر" },
+    { w: "صفرا شبیه کدام رکن است؟", a: "آتش", h: "گرم و خشک" },
+    { w: "در چه سنی غلبه صفرا بیشتر است؟", a: "جوانی", h: "سن گرمی" },
+    { w: "در چه سنی غلبه بلغم بیشتر است؟", a: "کودکی", h: "سن تری و رشد" },
+    { w: "در چه سنی غلبه سودا بیشتر است؟", a: "پیری", h: "سن سردی و خشکی" },
+    { w: "کدام خلط برای حرکات بدن لازم است؟", a: "دم", h: "حامل مواد مغذی" },
+    { w: "بیماری نتیجه چیست؟", a: "سوءمزاج", h: "خروج از تعادل" },
+    { w: "تغذیه بر کدام رکن تأثیر دارد؟", a: "همه ارکان", h: "تغییر کیفیت خلط" },
+    { w: "آیا مزاج ارثی است؟", a: "بله", h: "مزاج ذاتی" },
+    { w: "کدام رنگ پوست نشانه صفراست؟", a: "زرد", h: "غلبه گرما" },
+    { w: "کدام رنگ پوست نشانه بلغم است؟", a: "سفید", h: "غلبه سردی و رطوبت" },
+    { w: "کدام رنگ پوست نشانه سودا است؟", a: "تیره", h: "غلبه سردی و خشکی" },
+    { w: "خواب زیاد نشانه چیست؟", a: "غلبه بلغم", h: "طبیعت سرد و تر" },
+    { w: "کم‌خوابی نشانه چیست؟", a: "غلبه صفرا", h: "خشکی و گرما" },
+    { w: "آیا ارکان همیشه در حال تغییرند؟", a: "بله", h: "تبادل مستمر" },
+    { w: "هدف علم طب چیست؟", a: "حفظ سلامت", h: "تدبیر بدن" },
+    { w: "کدام خلط سرد و تر است؟", a: "بلغم", h: "مشابه آب" },
+    { w: "کدام خلط گرم و تر است؟", a: "دم", h: "مشابه هوا" },
+    { w: "کدام خلط گرم و خشک است؟", a: "صفرا", h: "مشابه آتش" },
+    { w: "کدام خلط سرد و خشک است؟", a: "سودا", h: "مشابه خاک" },
+    { w: "عنصر آتش در بدن کجاست؟", a: "کبد", h: "منبع حرارت" },
+    { w: "عنصر آب در بدن کجاست؟", a: "مغز", h: "مرطوب" },
+    { w: "طبیعت گرم و خشک چیست؟", a: "آتش", h: "صفرا" },
+    { w: "طبیعت سرد و تر چیست؟", a: "آب", h: "بلغم" },
+    { w: "طبیعت گرم و تر چیست؟", a: "هوا", h: "دم" },
+    { w: "طبیعت سرد و خشک چیست؟", a: "خاک", h: "سودا" },
+    { w: "آیا اخلاط در تمام اعضا وجود دارند؟", a: "بله", h: "انتشار در بدن" },
+    { w: "تعادل یعنی چه؟", a: "سلامتی", h: "میانه بودن" },
+    { w: "کدام خلط وزن بدن را افزایش می‌دهد؟", a: "بلغم", h: "آب زیاد" },
+    { w: "کدام خلط باعث لاغری می‌شود؟", a: "صفرا", h: "خشکی و سوختن" },
+    { w: "نشانه غلبه دم چیست؟", a: "سرخی صورت", h: "گرمی و خون زیاد" },
+    { w: "نشانه غلبه سودا چیست؟", a: "تیرگی", h: "سردی و خشکی" },
+    { w: "آیا اخلاط با سن تغییر می‌کنند؟", a: "بله", h: "تحول عمر" },
+    { w: "کدام عضو سرد است؟", a: "استخوان", h: "سوداوی" },
+    { w: "کدام عضو گرم است؟", a: "قلب", h: "منبع اصلی حرارت" },
+    { w: "کدام غذا صفرازا است؟", a: "گردو", h: "گرم و خشک" },
+    { w: "کدام غذا بلغم‌زاست؟", a: "ماست", h: "سرد و تر" },
+    { w: "کدام غذا سودازاست؟", a: "عدس", h: "سرد و خشک" },
+    { w: "کدام غذا دم‌زاست؟", a: "گوشت گوسفند", h: "گرم و تر" },
+    { w: "در هنگام عطش چه بنوشیم؟", a: "آب", h: "خنک" },
+    { w: "آیا ورزش حرارت بدن را زیاد می‌کند؟", a: "بله", h: "تولید انرژی" },
+    { w: "عنصرِ حیات چیست؟", a: "حرارت غریزی", h: "قلب" },
+    { w: "آیا سودا ضرر دارد؟", a: "بستگی به مقدار دارد", h: "تعادل لازم است" },
+    { w: "بهترین حالت بدن چیست؟", a: "اعتدال", h: "میانه" },
+    { w: "آیا خواب زیاد سودازاست؟", a: "خیر", h: "بلغم‌زاست" },
+    { w: "آیا عصبانیت صفرا را زیاد می‌کند؟", a: "بله", h: "غلبه گرما" },
+    { w: "آیا ترس سودا را زیاد می‌کند؟", a: "بله", h: "غلبه سردی و خشکی" },
+    { w: "کدام رکن در تنفس نقش دارد؟", a: "هوا", h: "حیات" },
+    { w: "کدام خلط تپش قلب می‌آورد؟", a: "صفرا", h: "گرمی بیش از حد" },
+    { w: "کدام خلط باعث آرامش است؟", a: "بلغم", h: "سردی" },
+    { w: "کدام عضو با سودا ارتباط دارد؟", a: "طحال", h: "محل ذخیره" },
+    { w: "کدام خلط برای رشد کودکان لازم است؟", a: "دم", h: "گرم و تر" },
+    { w: "کدام خلط برای تقویت استخوان است؟", a: "سودا", h: "سرد و خشک" },
+    { w: "کدام رکن در هضم غذا نقش دارد؟", a: "آتش", h: "حرارت معده" },
+    { w: "آیا همه ارکان در هر فرد وجود دارند؟", a: "بله", h: "ساختار بدن" },
+    { w: "بهترین مزاج کدام است؟", a: "مزاج معتدل", h: "سالم‌ترین حالت" },
+    { w: "آیا صفراوی‌ها زود عصبانی می‌شوند؟", a: "بله", h: "آتش درونی" },
+    { w: "آیا بلغمی‌ها صبورترند؟", a: "بله", h: "آرامش رطوبت" },
+    { w: "کدام خلط به خون کمک می‌کند؟", a: "دم", h: "هم‌جنس" },
+    { w: "کدام رکن در کبد فعال است؟", a: "آتش", h: "حرارت تولید خون" },
+    { w: "کدام رکن در طحال فعال است؟", a: "خاک", h: "جذب سودا" },
+    { w: "عنصر خاک عامل چیست؟", a: "پایداری", h: "ثبات" },
+    { w: "عنصر آتش عامل چیست؟", a: "تغییر", h: "انرژی" },
+    { w: "آیا بدن از ترکیب ارکان تشکیل شده؟", a: "بله", h: "قانون طبیعت" },
+    { w: "کدام خلط برای مو و ناخن مفید است؟", a: "سودا", h: "خشکی و ساختار" },
+    { w: "آیا هوای پاک برای ارکان مفید است؟", a: "بله", h: "نیاز اولیه" },
+    { w: "کدام خلط با طحال مرتبط است؟", a: "سودا", h: "جذب و دفع" },
+    { w: "کدام خلط با کبد مرتبط است؟", a: "دم", h: "تولید خون" },
+    { w: "کدام رکن باعث لطافت پوست است؟", a: "آب", h: "رطوبت" },
+    { w: "جمع‌بندی: «ارکان اربعه» کدام‌اند؟", a: "آتش، هوا، آب، خاک", h: "چهار عنصر بنیادین" }
+];
 
-    let currentQ = parseInt(localStorage.getItem('g4_idx')) || 0;
-    let score = parseInt(localStorage.getItem('g4_score')) || 0;
+let currentQuestionIndex = 0; let score = 0;
+let allCorrectAnswers = rawQuestions.map(q => q.a);
 
-    function updateUI() {
-        document.getElementById('question').innerText = questions[currentQ].q;
-        document.getElementById('score').innerText = 'امتیاز: ' + score;
-        document.getElementById('progress').innerText = 'سوال ' + (currentQ + 1) + ' از ۱۰۰';
-    }
+function initGame() { rawQuestions.sort(() => Math.random() - 0.5); showQuestion(); }
 
-    function checkAnswer(userAns) {
-        if (userAns === questions[currentQ].a) {
-            score++;
-            localStorage.setItem('g4_score', score);
-        }
-        currentQ++;
-        if (currentQ >= questions.length) {
-            alert('بازی تمام شد! امتیاز نهایی شما: ' + score);
-            currentQ = 0;
-            score = 0;
-            localStorage.setItem('g4_score', 0);
-        }
-        localStorage.setItem('g4_idx', currentQ);
-        updateUI();
-    }
+function showQuestion() {
+    const qData = rawQuestions[currentQuestionIndex];
+    document.getElementById('question-text').textContent = qData.w;
+    document.getElementById('q-count').textContent = currentQuestionIndex + 1;
+    const options = generateSmartOptions(qData.a);
+    const container = document.getElementById('options-container'); container.innerHTML = '';
+    options.forEach(opt => {
+        const btn = document.createElement('button'); btn.textContent = opt;
+        btn.onclick = () => checkAnswer(opt, qData); container.appendChild(btn);
+    });
+}
 
-    updateUI();
+function generateSmartOptions(correctAnswer) {
+    let options = [correctAnswer];
+    let pool = allCorrectAnswers.filter(a => a !== correctAnswer);
+    pool.sort(() => Math.random() - 0.5);
+    for(let i = 0; i < 3; i++) { if(pool[i]) options.push(pool[i]); }
+    while(options.length < 4) { options.push("گزینه نامعتبر"); }
+    return options.sort(() => Math.random() - 0.5);
+}
+
+function checkAnswer(selected, qData) {
+    const feedback = document.getElementById('feedback-text');
+    const hint = document.getElementById('hint-text');
+    document.querySelectorAll('#options-container button').forEach(b => b.disabled = true);
+    if (selected === qData.a) { score += 10; feedback.textContent = "صحیح!"; feedback.className = "feedback correct"; document.getElementById('score').textContent = score; }
+    else { feedback.textContent = "خطا!"; feedback.className = "feedback wrong"; }
+    hint.textContent = "راهنما: " + qData.h; hint.style.display = "block";
+    setTimeout(() => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < rawQuestions.length) showQuestion(); else endGame();
+    }, 2500);
+}
+
+function endGame() {
+    document.getElementById('game-area').innerHTML = `<h2>پایان بازی!</h2><p>امتیاز نهایی شما: ${score}</p><button onclick="location.reload()">شروع مجدد</button>`;
+}
+
+initGame();
 </script>
-
 </body>
 </html>
