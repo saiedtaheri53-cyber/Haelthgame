@@ -3,261 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی شماره ۲: سته ضروریه</title>
+    <title>دانش‌نامه سته ضروریه</title>
     <style>
-        :root {
-            --primary-color: #2e7d32;
-            --secondary-color: #4caf50;
-            --bg-color: #f4f6f5;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-            --border-radius: 12px;
-        }
-        body {
-            font-family: Tahoma, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            width: 100%;
-            max-width: 600px;
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        .header h2 {
-            margin: 0;
-            color: var(--primary-color);
-            font-size: 1.2rem;
-        }
-        .nav-buttons a {
-            text-decoration: none;
-            background: #eee;
-            color: #333;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-        }
-        .question-box {
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        .options-list {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 20px 0;
-        }
-        .options-list li {
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .options-list li:hover {
-            background: #e8f5e9;
-            border-color: var(--secondary-color);
-        }
-        .options-list li.selected {
-            background: #c8e6c9;
-            border-color: var(--primary-color);
-            font-weight: bold;
-        }
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-        button.btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            background: var(--primary-color);
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        button.btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        button.btn:hover:not(:disabled) {
-            background: #1b5e20;
-        }
-        .score-board {
-            text-align: center;
-            font-size: 1.1rem;
-            margin-top: 15px;
-            color: var(--primary-color);
-        }
+        :root { --main: #2e7d32; --gold: #ffd700; --white: #ffffff; --wrong: #ef5350; }
+        body { font-family: Tahoma, sans-serif; background: #f0f4f0; margin: 0; padding: 15px; }
+        .app { max-width: 500px; margin: auto; background: var(--white); padding: 20px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .badge { display: flex; align-items: center; justify-content: center; background: var(--gold); padding: 10px; border-radius: 50px; font-weight: bold; margin-bottom: 15px; }
+        .score-box { text-align: center; font-size: 1.5rem; color: var(--main); margin-bottom: 20px; }
+        .q-text { font-size: 1.1rem; margin-bottom: 20px; font-weight: bold; }
+        .opt { border: 2px solid #ddd; padding: 12px; margin: 10px 0; border-radius: 12px; cursor: pointer; }
+        .correct { background: var(--main); color: white; border-color: var(--main); }
+        .wrong { background: var(--wrong); color: white; border-color: var(--wrong); }
+        .exp { background: #fffde7; padding: 15px; border-radius: 10px; margin-top: 15px; display: none; line-height: 1.6; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h2>سته ضروریه (سنجش دانشنامه)</h2>
-        <div class="nav-buttons">
-            <a href="index.html">🏠 پورتال</a>
-        </div>
-    </div>
-
+<div class="app">
+    <div id="badge-display" class="badge">نشان: شاگرد مبتدی</div>
+    <div class="score-box">امتیاز طلایی: <span id="score">0</span></div>
     <div id="quiz-container">
-        <div id="question-counter" style="font-size: 0.9rem; color: #666; margin-bottom: 8px;"></div>
-        <div class="question-box" id="question-text">در حال بارگذاری سوالات...</div>
-        <ul class="options-list" id="options-list"></ul>
-        
-        <div class="controls">
-            <button class="btn" id="prev-btn" onclick="prevQuestion()" disabled>قبلی</button>
-            <button class="btn" id="next-btn" onclick="nextQuestion()">بعدی</button>
-        </div>
+        <div class="q-text" id="question"></div>
+        <div id="options"></div>
+        <div id="exp" class="exp"></div>
     </div>
-
-    <div class="score-board" id="score-board"></div>
 </div>
 
 <script>
-    // نمونه سوالات استاندارد سته ضروریه (تا ۱۰۰ سوال قابل توسعه است)
-    const questions = [
-        {
-            question: "۱. هوای محیط چه تأثیری بر سلامتی انسان از دیدگاه طب ایرانی دارد؟",
-            options: [
-                "الف) نقش حیاتی و مستقیم در روح و ارواح طبیعی دارد.",
-                "ب) تأثیری بر مزاج ندارد.",
-                "ج) تنها عامل بیماری‌های عفونی است.",
-                "د) هیچ‌کدام"
-            ],
-            answer: 0
-        },
-        {
-            question: "۲. کدام مورد جزء «سته ضروریه» (اصول شش‌گانه حفظ سلامتی) محسوب می‌شود؟",
-            options: [
-                "الف) ورزش مداوم",
-                "ب) هوا (حفص و تنفس)",
-                "ج) خوردنی‌ها و نوشیدنی‌ها",
-                "د) هر سه مورد درست است"
-            ],
-            answer: 3
-        },
-        {
-            question: "۳. تعادل در «حس و حرکت» (خواب و بیداری) از دیدگاه سته ضروریه چگونه تعریف می‌شود؟",
-            options: [
-                "الف) خواب زیاد باعث تقویت حرارت غریزی می‌شود.",
-                "ب) بیداری بیش از حد موجب تحلیل رطوبت اصلی و سردی تن می‌گردد.",
-                "ج) خواب و بیداری تأثیری بر اعصاب ندارند.",
-                "د) خواب روز بهترین حالت برای سلامتی است."
-            ],
-            answer: 1
-        },
-        {
-            question: "۴. احتباس و استفراغ (خروج مواد زائد و حبس مواد مفید) در بدن چه قاعده‌ای دارد؟",
-            options: [
-                "الف) دفع کامل تمام مواد بدن الزامی است.",
-                "ب) حبس کامل مواد زائد باعث بروز بیماری‌های بحرانی می‌شود.",
-                "ج) بدن نباید هیچ‌گونه دفعی داشته باشد.",
-                "د) احتباس مواد مغذی و دفع سموم به تناسب نیاز بدن."
-            ],
-            answer: 3
-        },
-        {
-            question: "۵. عارض نفسانی (استرس، شادی، غم) چه تأثیری بر ارکان و اخلاط دارد؟",
-            options: [
-                "الف) شادی‌های ناگهانی حرارت غریزی را به سطح بدن می‌کشاند.",
-                "ب) غم و اندوه شدید باعث سردی و انقباض عروق می‌شود.",
-                "ج) حالات روحی مستقیماً بر عملکرد ارگان‌های اصلی اثر می‌گذارند.",
-                "د) همه موارد صحیح است."
-            ],
-            answer: 3
-        }
-        // برای رسیدن به ۱۰۰ سوال، می‌توانید مابقی سوالات را با همین الگو اضافه کنید.
+    const data = [
+        { q: "۱. هوای محیط چه تأثیری بر قلب دارد؟", options: ["تأثیری ندارد", "تغییر مزاجِ ارواح و قلب", "فقط تنفس را سخت می‌کند", "افزایش اشتها"], ans: 1, exp: "هوا اولین چیزی است که بر قلب و ارواح ما اثر می‌گذارد و کیفیت آن مستقیماً در مزاج ما تغییر ایجاد می‌کند." },
+        { q: "۲. «استفراغ» در طب به چه معناست؟", options: ["خروج مواد زائد", "فقط بالا آوردن", "نوعی ورزش", "خواب عمیق"], ans: 0, exp: "استفراغ یعنی دفع مواد زائد از بدن که اگر حبس شوند، ایجاد بیماری می‌کنند." },
+        { q: "۳. زمان مناسب ورزش از نظر سته ضروریه؟", options: ["بعد از غذا", "قبل از غذا", "هنگام هضم کامل غذا", "در خواب"], ans: 2, exp: "ورزش هنگام هضم کامل غذا (وقتی معده سبک است) بهترین زمان برای تعدیل مزاج است." },
+        { q: "۴. آب یخ در طب سنتی چه حکمی دارد؟", options: ["بسیار مفید", "مضر برای حرارت غریزی", "محرک اشتها", "بدون اثر"], ans: 1, exp: "آب یخ حرارت ذاتی معده را که برای هضم ضروری است، سرکوب می‌کند." },
+        { q: "۵. خواب روز چه عارضه‌ای دارد؟", options: ["کاهش بلغم", "افزایش رطوبت زائد و کسالت", "تقویت حافظه", "گرمی‌بخش است"], ans: 1, exp: "خواب روز موجب تجمع رطوبات غیرطبیعی و کدورت ذهن می‌شود." },
+        { q: "۶. کدام‌یک از اعراض نفسانی برای قلب مفید است؟", options: ["خشم", "شادی معتدل", "ترس مفرط", "غم طولانی"], ans: 1, exp: "شادی معتدل باعث انبساط روح و قوت بخشیدن به حرارت غریزی قلب می‌شود." },
+        { q: "۷. اهمیت جویدن غذا چیست؟", options: ["هضم اول در دهان", "سریع خوردن", "افزایش حجم معده", "کاهش طعم غذا"], ans: 0, exp: "هضم اول باید در دهان آغاز شود تا فشار از روی معده (هضم دوم) برداشته شود." },
+        { q: "۸. پیاده‌روی معتدل جزء کدام اصل است؟", options: ["خوردنی‌ها", "حرکت و سکون", "هوا", "خواب"], ans: 1, exp: "پیاده‌روی بهترین ورزش معتدل در دسته حرکت و سکون است." },
+        { q: "۹. زیاده‌روی در خواب چه پیامدی دارد؟", options: ["تقویت قوا", "سرد شدن مزاج و تجمع بلغم", "لاغری", "خشکی بدن"], ans: 1, exp: "خواب زیاد، حرارت غریزی را خاموش و رطوبت را افزایش می‌دهد." },
+        { q: "۱۰. اعراض نفسانی سریعاً چه چیزی را تغییر می‌دهد؟", options: ["مزاج", "فقط تنفس", "رنگ چشم", "قد"], ans: 0, exp: "حالات روحی به دلیل اتصال به ارواح، مستقیماً مزاجِ ارواح را دگرگون می‌کنند." },
+        { q: "۱۱. برای دفع سموم، کدام اصل یاری‌رسان است؟", options: ["خواب", "احتباس و استفراغ", "هوا", "حرکت"], ans: 1, exp: "تنظیم احتباس و استفراغ باعث تخلیه به موقع فضولات سمی از بدن می‌شود." },
+        { q: "۱۲. بهترین نوع خواب کدام است؟", options: ["خواب روز", "خواب شب هنگام هضم غذا", "خواب شب هنگام تخلیه معده", "خواب بعد از ورزش"], ans: 2, exp: "خواب شب هنگام که معده تخلیه شده، بهترین زمان برای ترمیم قواست." },
+        { q: "۱۳. ورزش سنگین در هوای گرم چه می‌کند؟", options: ["تولید صفرا", "کاهش حرارت", "تعدیل بلغم", "مفید است"], ans: 0, exp: "ورزش سنگین در گرما، حرارت را بیش از حد بالا برده و صفرا را می‌سوزاند." },
+        { q: "۱۴. کدام خوراکی از نظر طب برای صبحانه توصیه می‌شود؟", options: ["غذاهای سرد", "غذاهای معتدل و مقوی", "آب سرد", "غذای سنگین"], ans: 1, exp: "صبحانه باید معتدل باشد تا انرژی روزانه را تأمین کند بدون آنکه هضم را مختل کند." },
+        { q: "۱۵. اضطراب چه اثری بر هضم دارد؟", options: ["بهبود هضم", "اختلال در هضم (سوء هضم)", "تأثیری ندارد", "کاهش اشتها"], ans: 1, exp: "اضطراب روح را منقبض کرده و حرارت لازم برای هضم را از معده دور می‌کند." },
+        { q: "۱۶. چرا حمام معتدل توصیه شده؟", options: ["تنظیم حرارت بدن", "شستشوی بدن", "افزایش رطوبت", "کاهش وزن"], ans: 0, exp: "حمام معتدل باعث باز شدن منافذ و خروج فضولات از طریق تعریق می‌شود." },
+        { q: "۱۷. کدام حرکت از سته ضروریه است؟", options: ["پیاده‌روی", "نشستن طولانی", "خواب طولانی", "پرخوری"], ans: 0, exp: "پیاده‌روی (حرکت) بخشی از سته ضروریه است که به تعدیل مزاج کمک می‌کند." },
+        { q: "۱۸. اثر سکونِ مفرط چیست؟", options: ["تجمع فضولات", "دفع سموم", "تقویت قلب", "تعدیل مزاج"], ans: 0, exp: "سکون طولانی مانع از دفع فضولات توسط حرکت می‌شود و بدن را مستعد بیماری می‌کند." },
+        { q: "۱۹. چرا نباید بلافاصله بعد از غذا خوابید؟", options: ["باعث سوء هضم می‌شود", "مفید است", "معده کوچک می‌شود", "وزن کم می‌شود"], ans: 0, exp: "خواب بعد از غذا هضم را ناقص کرده و باعث تولید خلط فاسد می‌شود." },
+        { q: "۲۰. سته ضروریه برای چه کسی است؟", options: ["فقط بیماران", "فقط سالمندان", "همه انسان‌ها (سالم و بیمار)", "فقط ورزشکاران"], ans: 2, exp: "این شش اصل اصول حفظ سلامتی (حفظ الصحه) برای هر انسانی است." }
     ];
 
-    let currentQuestion = parseInt(localStorage.getItem('game002_current')) || 0;
-    let userAnswers = JSON.parse(localStorage.getItem('game002_answers')) || {};
+    let cur = parseInt(localStorage.getItem('g2_cur')) || 0;
+    let score = parseInt(localStorage.getItem('g2_score')) || 0;
 
-    function loadQuestion() {
-        const q = questions[currentQuestion];
-        document.getElementById('question-counter').innerText = `سوال ${currentQuestion + 1} از ${questions.length}`;
-        document.getElementById('question-text').innerText = q.question;
+    function updateBadge() {
+        let b = "شاگرد";
+        if(score > 150) b = "حکیم‌زاده";
+        if(score > 300) b = "استادِ سته";
+        document.getElementById('badge-display').innerText = "نشان: " + b;
+    }
+
+    function render() {
+        const d = data[cur];
+        document.getElementById('score').innerText = score;
+        document.getElementById('question').innerText = d.q;
+        document.getElementById('exp').style.display = 'none';
+        updateBadge();
         
-        const optionsList = document.getElementById('options-list');
-        optionsList.innerHTML = '';
-        
-        q.options.forEach((opt, index) => {
-            const li = document.createElement('li');
-            li.innerText = opt;
-            if (userAnswers[currentQuestion] === index) {
-                li.classList.add('selected');
-            }
-            li.onclick = () => selectOption(index);
-            optionsList.appendChild(li);
+        const optCont = document.getElementById('options');
+        optCont.innerHTML = '';
+        d.options.forEach((o, i) => {
+            const div = document.createElement('div');
+            div.className = 'opt';
+            div.innerText = o;
+            div.onclick = () => {
+                if(i === d.ans) { div.className = 'opt correct'; score += 20; }
+                else { div.className = 'opt wrong'; }
+                document.getElementById('exp').innerText = "شرح علمی: " + d.exp;
+                document.getElementById('exp').style.display = 'block';
+                localStorage.setItem('g2_score', score);
+                setTimeout(() => { cur = (cur + 1) % data.length; render(); }, 3000);
+            };
+            optCont.appendChild(div);
         });
-
-        document.getElementById('prev-btn').disabled = currentQuestion === 0;
-        document.getElementById('next-btn').innerText = (currentQuestion === questions.length - 1) ? 'پایان آزمون' : 'بعدی';
-        
-        updateScoreBoard();
     }
-
-    function selectOption(index) {
-        userAnswers[currentQuestion] = index;
-        localStorage.setItem('game002_answers', JSON.stringify(userAnswers));
-        
-        // به‌روزرسانی ظاهر گزینه‌ها
-        const items = document.getElementById('options-list').children;
-        for (let i = 0; i < items.length; i++) {
-            items[i].classList.toggle('selected', i === index);
-        }
-        updateScoreBoard();
-    }
-
-    function nextQuestion() {
-        if (currentQuestion < questions.length - 1) {
-            currentQuestion++;
-            localStorage.setItem('game002_current', currentQuestion);
-            loadQuestion();
-        } else {
-            alert('آزمون این بخش به پایان رسید. از همراهی شما سپاسگزاریم!');
-        }
-    }
-
-    function prevQuestion() {
-        if (currentQuestion > 0) {
-            currentQuestion--;
-            localStorage.setItem('game002_current', currentQuestion);
-            loadQuestion();
-        }
-    }
-
-    function updateScoreBoard() {
-        let answeredCount = Object.keys(userAnswers).length;
-        document.getElementById('score-board').innerText = `سوالات پاسخ‌داده‌شده: ${answeredCount} از ${questions.length}`;
-    }
-
-    // بارگذاری اولیه هنگام لود صفحه
-    window.onload = loadQuestion;
+    render();
 </script>
-
 </body>
 </html>
