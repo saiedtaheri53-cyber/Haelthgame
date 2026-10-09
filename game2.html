@@ -3,107 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی سته ضروریه</title>
+    <title>بازی سته ضروریه - طب علم سلامتی</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 10px; margin: 0; }
-        .container { background: white; width: 100%; max-width: 450px; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        h1 { color: #2e7d32; text-align: center; font-size: 1.2rem; }
-        .stats { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; color: #1b5e20; background: #e8f5e9; padding: 10px; border-radius: 10px; }
-        .question { font-size: 1.1rem; margin-bottom: 20px; text-align: center; min-height: 80px; }
-        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; background: white; transition: 0.3s; }
-        .btn:hover:not(:disabled) { background: #f1f8e9; border-color: #a5d6a7; }
-        .btn.correct { background: #81c784 !important; border-color: #2e7d32 !important; color: white; }
-        .btn.wrong { background: #e57373 !important; border-color: #c62828 !important; color: white; }
-        .nav { display: flex; justify-content: space-between; gap: 5px; margin-top: 20px; }
-        .btn-nav { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; color: white; }
-        .btn-prev { background: #757575; }
-        .btn-hint { background: #ff9800; }
-        .btn-next { background: #2e7d32; }
+        :root { --primary-color: #27ae60; --dark-color: #2c3e50; --light-bg: #f4f7f6; }
+        body { font-family: Tahoma, Arial, sans-serif; background-color: var(--light-bg); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        #game-container { width: 100%; max-width: 500px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .nav-bar { width: 100%; max-width: 540px; display: flex; justify-content: space-between; margin-bottom: 15px; }
+        button { cursor: pointer; padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold; }
+        .btn-nav { background-color: var(--dark-color); color: white; }
+        .option-btn { display: block; width: 100%; margin: 10px 0; padding: 15px; background: #ecf0f1; border: 2px solid #bdc3c7; border-radius: 10px; text-align: right; transition: 0.3s; }
+        .option-btn:hover { background: #dcdde1; }
+        .correct { background-color: #2ecc71 !important; color: white; border-color: #27ae60; }
+        .wrong { background-color: #e74c3c !important; color: white; border-color: #c0392b; }
+        #score-board { font-size: 1.2em; font-weight: bold; color: var(--primary-color); margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>سته ضروریه</h1>
-    <div class="stats">
-        <span>مرحله: <span id="level">1</span>/100</span>
-        <span>سکه: <span id="coins">0</span></span>
-    </div>
-    <div class="question" id="question">در حال بارگذاری...</div>
-    <div id="options"></div>
-    <div class="nav">
-        <button class="btn-nav btn-prev" onclick="changeLevel(-1)">قبلی</button>
-        <button class="btn-nav btn-hint" onclick="showHint()">راهنما</button>
-        <button class="btn-nav btn-next" onclick="changeLevel(1)">بعدی</button>
-    </div>
+<div class="nav-bar">
+    <button class="btn-nav" onclick="window.location.href='index.html'">خانه</button>
+    <button class="btn-nav" onclick="alert('ارتباط با سازنده: ایتا - ...')">تماس</button>
+</div>
+
+<div id="game-container">
+    <div id="score-board">امتیاز: <span id="score">0</span></div>
+    <h3 id="question-text">در حال بارگذاری سوال...</h3>
+    <div id="options-container"></div>
 </div>
 
 <script>
-    // بانک سوالات هوشمند (بدون تکرار)
-    const getQuizData = (idx) => {
-        const baseQuestions = [
-            {q: "سته ضروریه چند اصل اصلی برای حفظ سلامت است؟", a: "۶ اصل", o: ["۴ اصل", "۶ اصل", "۸ اصل", "۱۲ اصل"]},
-            {q: "کدام اصل از سته ضروریه در اولویت اول قرار دارد؟", a: "هوا", o: ["خواب", "هوا", "ورزش", "غذا"]},
-            {q: "تأثیر هوای آلوده طبق طب سنتی چیست؟", a: "تغیر روح و فساد اخلاط", o: ["تقویت بدن", "آرامش اعصاب", "تغیر روح و فساد اخلاط", "افزایش اشتها"]},
-            {q: "بهترین زمان برای ورزش از نظر طب سنتی چه زمانی است؟", a: "هنگام گرسنگی و سبکی معده", o: ["بلافاصله بعد غذا", "هنگام گرسنگی و سبکی معده", "قبل از خواب", "در حال سیری"]},
-            {q: "خواب زیاد باعث چه تغییری در اخلاط می‌شود؟", a: "افزایش بلغم", o: ["افزایش صفرا", "افزایش سودا", "افزایش بلغم", "افزایش دم"]},
-            {q: "اعراض نفسانی در سته ضروریه به چه معناست؟", a: "حالات روحی و هیجانات", o: ["خوراک و نوشیدنی", "حالات روحی و هیجانات", "دفع و احتباس", "نوع هوا"]},
-            {q: "استفراغ در طب سنتی به چه معناست؟", a: "دفع مواد زائد", o: ["استفراغ معده", "دفع مواد زائد", "نوعی غذا", "نوعی خواب"]},
-            {q: "کدام عامل در سته ضروریه می‌تواند به تنهایی باعث بیماری شود؟", a: "احتباس فضولات", o: ["نور خورشید", "احتباس فضولات", "پیاده‌روی", "آب سالم"]}
-        ];
-        // تولید ۱۰۰ سوال با ترکیب الگوها برای جلوگیری از تکرار
-        const topics = ["هوا", "غذا", "خواب", "ورزش", "دفع مواد زائد", "اعراض نفسانی"];
-        const base = baseQuestions[idx % baseQuestions.length];
-        return {
-            q: `(سوال ${idx + 1}) در مورد ${topics[idx % 6]}، کدام گزینه صحیح است؟ ${base.q.replace(/\(.*\)/, '')}`,
-            a: base.a,
-            o: base.o
-        };
-    };
+    const questions = [
+        { q: "سته ضروریه شامل چند اصل اساسی برای حفظ سلامتی است؟", o: ["۴", "۶", "۸", "۱۲"], a: 1 },
+        { q: "اولین اصل از سته ضروریه چیست؟", o: ["غذا و نوشیدنی", "خواب و بیداری", "هوای محیط", "حرکت و سکون"], a: 2 },
+        { q: "کدام عامل در سته ضروریه به احتباس و دفع مربوط می‌شود؟", o: ["خواب", "غذا", "استفراغ و احتباس", "هوای محیط"], a: 2 },
+        { q: "هوای محیط چه تاثیری بر روح و بدن دارد؟", o: ["تاثیری ندارد", "فقط بر پوست", "تغییر کیفیت مزاجی", "تنها در تابستان مهم است"], a: 2 },
+        { q: "خواب معتدل چه تاثیری بر بدن دارد؟", o: ["هضم غذا را مختل می‌کند", "رطوبت بدن را زیاد می‌کند", "پخت غذا و آرامش اعصاب", "باعث لاغری می‌شود"], a: 2 },
+        // ... اینجا می‌توانید تا ۱۰۰ سوال را ادامه دهید
+        { q: "آیا ورزش شدید بعد از صرف غذای سنگین توصیه می‌شود؟", o: ["بله", "خیر", "بستگی دارد", "فقط در زمستان"], a: 1 }
+    ];
 
-    let state = JSON.parse(localStorage.getItem('game002_data')) || { level: 0, coins: 0, answered: false };
+    let currentIdx = parseInt(localStorage.getItem('game002_idx')) || 0;
+    let score = parseInt(localStorage.getItem('game002_score')) || 0;
 
     function render() {
-        const data = getQuizData(state.level);
-        document.getElementById('level').innerText = state.level + 1;
-        document.getElementById('coins').innerText = state.coins;
-        document.getElementById('question').innerText = data.q;
-        
-        const optionsDiv = document.getElementById('options');
-        optionsDiv.innerHTML = '';
-        data.o.forEach(opt => {
+        if(currentIdx >= questions.length) {
+            document.getElementById('question-text').innerText = "پایان بازی! امتیاز نهایی: " + score;
+            document.getElementById('options-container').innerHTML = '<button class="btn-nav" onclick="resetGame()">شروع مجدد</button>';
+            return;
+        }
+        const q = questions[currentIdx];
+        document.getElementById('score').innerText = score;
+        document.getElementById('question-text').innerText = (currentIdx + 1) + ". " + q.q;
+        const cont = document.getElementById('options-container');
+        cont.innerHTML = '';
+        q.o.forEach((opt, i) => {
             const btn = document.createElement('button');
-            btn.className = 'btn';
+            btn.className = 'option-btn';
             btn.innerText = opt;
-            btn.onclick = () => checkAnswer(opt, btn, data.a);
-            optionsDiv.appendChild(btn);
+            btn.onclick = () => check(i, btn);
+            cont.appendChild(btn);
         });
     }
 
-    function checkAnswer(choice, btn, correct) {
-        if (state.answered) return;
-        state.answered = true;
-        if (choice === correct) {
+    function check(idx, btn) {
+        if(idx === questions[currentIdx].a) {
+            score++;
             btn.classList.add('correct');
-            state.coins += 10;
         } else {
             btn.classList.add('wrong');
-            // نمایش گزینه صحیح
-            Array.from(document.querySelectorAll('.btn')).forEach(b => {
-                if(b.innerText === correct) b.classList.add('correct');
-            });
         }
-        localStorage.setItem('game002_data', JSON.stringify(state));
+        setTimeout(() => {
+            currentIdx++;
+            localStorage.setItem('game002_idx', currentIdx);
+            localStorage.setItem('game002_score', score);
+            render();
+        }, 800);
     }
 
-    function showHint() {
-        alert("پاسخ صحیح: " + getQuizData(state.level).a);
-    }
-
-    function changeLevel(dir) {
-        state.level = Math.max(0, Math.min(99, state.level + dir));
-        state.answered = false;
-        localStorage.setItem('game002_data', JSON.stringify(state));
+    function resetGame() {
+        localStorage.removeItem('game002_idx');
+        localStorage.removeItem('game002_score');
+        currentIdx = 0; score = 0;
         render();
     }
 
