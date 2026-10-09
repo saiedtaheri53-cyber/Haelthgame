@@ -3,91 +3,261 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی سته ضروریه - طب علم سلامتی</title>
+    <title>بازی شماره ۲: سته ضروریه</title>
     <style>
-        :root { --primary-color: #27ae60; --dark-color: #2c3e50; --light-bg: #f4f7f6; }
-        body { font-family: Tahoma, Arial, sans-serif; background-color: var(--light-bg); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        #game-container { width: 100%; max-width: 500px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .nav-bar { width: 100%; max-width: 540px; display: flex; justify-content: space-between; margin-bottom: 15px; }
-        button { cursor: pointer; padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold; }
-        .btn-nav { background-color: var(--dark-color); color: white; }
-        .option-btn { display: block; width: 100%; margin: 10px 0; padding: 15px; background: #ecf0f1; border: 2px solid #bdc3c7; border-radius: 10px; text-align: right; transition: 0.3s; }
-        .option-btn:hover { background: #dcdde1; }
-        .correct { background-color: #2ecc71 !important; color: white; border-color: #27ae60; }
-        .wrong { background-color: #e74c3c !important; color: white; border-color: #c0392b; }
-        #score-board { font-size: 1.2em; font-weight: bold; color: var(--primary-color); margin-bottom: 10px; }
+        :root {
+            --primary-color: #2e7d32;
+            --secondary-color: #4caf50;
+            --bg-color: #f4f6f5;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-radius: 12px;
+        }
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .header h2 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        .nav-buttons a {
+            text-decoration: none;
+            background: #eee;
+            color: #333;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        .question-box {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+        .options-list li {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .options-list li:hover {
+            background: #e8f5e9;
+            border-color: var(--secondary-color);
+        }
+        .options-list li.selected {
+            background: #c8e6c9;
+            border-color: var(--primary-color);
+            font-weight: bold;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        button.btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: var(--primary-color);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button.btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        button.btn:hover:not(:disabled) {
+            background: #1b5e20;
+        }
+        .score-board {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
 
-<div class="nav-bar">
-    <button class="btn-nav" onclick="window.location.href='index.html'">خانه</button>
-    <button class="btn-nav" onclick="alert('ارتباط با سازنده: ایتا - ...')">تماس</button>
-</div>
+<div class="container">
+    <div class="header">
+        <h2>سته ضروریه (سنجش دانشنامه)</h2>
+        <div class="nav-buttons">
+            <a href="index.html">🏠 پورتال</a>
+        </div>
+    </div>
 
-<div id="game-container">
-    <div id="score-board">امتیاز: <span id="score">0</span></div>
-    <h3 id="question-text">در حال بارگذاری سوال...</h3>
-    <div id="options-container"></div>
+    <div id="quiz-container">
+        <div id="question-counter" style="font-size: 0.9rem; color: #666; margin-bottom: 8px;"></div>
+        <div class="question-box" id="question-text">در حال بارگذاری سوالات...</div>
+        <ul class="options-list" id="options-list"></ul>
+        
+        <div class="controls">
+            <button class="btn" id="prev-btn" onclick="prevQuestion()" disabled>قبلی</button>
+            <button class="btn" id="next-btn" onclick="nextQuestion()">بعدی</button>
+        </div>
+    </div>
+
+    <div class="score-board" id="score-board"></div>
 </div>
 
 <script>
+    // نمونه سوالات استاندارد سته ضروریه (تا ۱۰۰ سوال قابل توسعه است)
     const questions = [
-        { q: "سته ضروریه شامل چند اصل اساسی برای حفظ سلامتی است؟", o: ["۴", "۶", "۸", "۱۲"], a: 1 },
-        { q: "اولین اصل از سته ضروریه چیست؟", o: ["غذا و نوشیدنی", "خواب و بیداری", "هوای محیط", "حرکت و سکون"], a: 2 },
-        { q: "کدام عامل در سته ضروریه به احتباس و دفع مربوط می‌شود؟", o: ["خواب", "غذا", "استفراغ و احتباس", "هوای محیط"], a: 2 },
-        { q: "هوای محیط چه تاثیری بر روح و بدن دارد؟", o: ["تاثیری ندارد", "فقط بر پوست", "تغییر کیفیت مزاجی", "تنها در تابستان مهم است"], a: 2 },
-        { q: "خواب معتدل چه تاثیری بر بدن دارد؟", o: ["هضم غذا را مختل می‌کند", "رطوبت بدن را زیاد می‌کند", "پخت غذا و آرامش اعصاب", "باعث لاغری می‌شود"], a: 2 },
-        // ... اینجا می‌توانید تا ۱۰۰ سوال را ادامه دهید
-        { q: "آیا ورزش شدید بعد از صرف غذای سنگین توصیه می‌شود؟", o: ["بله", "خیر", "بستگی دارد", "فقط در زمستان"], a: 1 }
+        {
+            question: "۱. هوای محیط چه تأثیری بر سلامتی انسان از دیدگاه طب ایرانی دارد؟",
+            options: [
+                "الف) نقش حیاتی و مستقیم در روح و ارواح طبیعی دارد.",
+                "ب) تأثیری بر مزاج ندارد.",
+                "ج) تنها عامل بیماری‌های عفونی است.",
+                "د) هیچ‌کدام"
+            ],
+            answer: 0
+        },
+        {
+            question: "۲. کدام مورد جزء «سته ضروریه» (اصول شش‌گانه حفظ سلامتی) محسوب می‌شود؟",
+            options: [
+                "الف) ورزش مداوم",
+                "ب) هوا (حفص و تنفس)",
+                "ج) خوردنی‌ها و نوشیدنی‌ها",
+                "د) هر سه مورد درست است"
+            ],
+            answer: 3
+        },
+        {
+            question: "۳. تعادل در «حس و حرکت» (خواب و بیداری) از دیدگاه سته ضروریه چگونه تعریف می‌شود؟",
+            options: [
+                "الف) خواب زیاد باعث تقویت حرارت غریزی می‌شود.",
+                "ب) بیداری بیش از حد موجب تحلیل رطوبت اصلی و سردی تن می‌گردد.",
+                "ج) خواب و بیداری تأثیری بر اعصاب ندارند.",
+                "د) خواب روز بهترین حالت برای سلامتی است."
+            ],
+            answer: 1
+        },
+        {
+            question: "۴. احتباس و استفراغ (خروج مواد زائد و حبس مواد مفید) در بدن چه قاعده‌ای دارد؟",
+            options: [
+                "الف) دفع کامل تمام مواد بدن الزامی است.",
+                "ب) حبس کامل مواد زائد باعث بروز بیماری‌های بحرانی می‌شود.",
+                "ج) بدن نباید هیچ‌گونه دفعی داشته باشد.",
+                "د) احتباس مواد مغذی و دفع سموم به تناسب نیاز بدن."
+            ],
+            answer: 3
+        },
+        {
+            question: "۵. عارض نفسانی (استرس، شادی، غم) چه تأثیری بر ارکان و اخلاط دارد؟",
+            options: [
+                "الف) شادی‌های ناگهانی حرارت غریزی را به سطح بدن می‌کشاند.",
+                "ب) غم و اندوه شدید باعث سردی و انقباض عروق می‌شود.",
+                "ج) حالات روحی مستقیماً بر عملکرد ارگان‌های اصلی اثر می‌گذارند.",
+                "د) همه موارد صحیح است."
+            ],
+            answer: 3
+        }
+        // برای رسیدن به ۱۰۰ سوال، می‌توانید مابقی سوالات را با همین الگو اضافه کنید.
     ];
 
-    let currentIdx = parseInt(localStorage.getItem('game002_idx')) || 0;
-    let score = parseInt(localStorage.getItem('game002_score')) || 0;
+    let currentQuestion = parseInt(localStorage.getItem('game002_current')) || 0;
+    let userAnswers = JSON.parse(localStorage.getItem('game002_answers')) || {};
 
-    function render() {
-        if(currentIdx >= questions.length) {
-            document.getElementById('question-text').innerText = "پایان بازی! امتیاز نهایی: " + score;
-            document.getElementById('options-container').innerHTML = '<button class="btn-nav" onclick="resetGame()">شروع مجدد</button>';
-            return;
-        }
-        const q = questions[currentIdx];
-        document.getElementById('score').innerText = score;
-        document.getElementById('question-text').innerText = (currentIdx + 1) + ". " + q.q;
-        const cont = document.getElementById('options-container');
-        cont.innerHTML = '';
-        q.o.forEach((opt, i) => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.innerText = opt;
-            btn.onclick = () => check(i, btn);
-            cont.appendChild(btn);
+    function loadQuestion() {
+        const q = questions[currentQuestion];
+        document.getElementById('question-counter').innerText = `سوال ${currentQuestion + 1} از ${questions.length}`;
+        document.getElementById('question-text').innerText = q.question;
+        
+        const optionsList = document.getElementById('options-list');
+        optionsList.innerHTML = '';
+        
+        q.options.forEach((opt, index) => {
+            const li = document.createElement('li');
+            li.innerText = opt;
+            if (userAnswers[currentQuestion] === index) {
+                li.classList.add('selected');
+            }
+            li.onclick = () => selectOption(index);
+            optionsList.appendChild(li);
         });
+
+        document.getElementById('prev-btn').disabled = currentQuestion === 0;
+        document.getElementById('next-btn').innerText = (currentQuestion === questions.length - 1) ? 'پایان آزمون' : 'بعدی';
+        
+        updateScoreBoard();
     }
 
-    function check(idx, btn) {
-        if(idx === questions[currentIdx].a) {
-            score++;
-            btn.classList.add('correct');
-        } else {
-            btn.classList.add('wrong');
+    function selectOption(index) {
+        userAnswers[currentQuestion] = index;
+        localStorage.setItem('game002_answers', JSON.stringify(userAnswers));
+        
+        // به‌روزرسانی ظاهر گزینه‌ها
+        const items = document.getElementById('options-list').children;
+        for (let i = 0; i < items.length; i++) {
+            items[i].classList.toggle('selected', i === index);
         }
-        setTimeout(() => {
-            currentIdx++;
-            localStorage.setItem('game002_idx', currentIdx);
-            localStorage.setItem('game002_score', score);
-            render();
-        }, 800);
+        updateScoreBoard();
     }
 
-    function resetGame() {
-        localStorage.removeItem('game002_idx');
-        localStorage.removeItem('game002_score');
-        currentIdx = 0; score = 0;
-        render();
+    function nextQuestion() {
+        if (currentQuestion < questions.length - 1) {
+            currentQuestion++;
+            localStorage.setItem('game002_current', currentQuestion);
+            loadQuestion();
+        } else {
+            alert('آزمون این بخش به پایان رسید. از همراهی شما سپاسگزاریم!');
+        }
     }
 
-    render();
+    function prevQuestion() {
+        if (currentQuestion > 0) {
+            currentQuestion--;
+            localStorage.setItem('game002_current', currentQuestion);
+            loadQuestion();
+        }
+    }
+
+    function updateScoreBoard() {
+        let answeredCount = Object.keys(userAnswers).length;
+        document.getElementById('score-board').innerText = `سوالات پاسخ‌داده‌شده: ${answeredCount} از ${questions.length}`;
+    }
+
+    // بارگذاری اولیه هنگام لود صفحه
+    window.onload = loadQuestion;
 </script>
+
 </body>
 </html>
