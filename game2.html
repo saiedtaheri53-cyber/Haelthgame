@@ -5,79 +5,89 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بازی سته ضروریه</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #e8f5e9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background: white; width: 90%; max-width: 500px; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: center; }
-        .score { font-size: 1.2rem; font-weight: bold; color: #2e7d32; margin-bottom: 20px; }
-        .question { font-size: 1.2rem; margin-bottom: 25px; min-height: 60px; }
-        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #81c784; border-radius: 10px; cursor: pointer; background: white; font-size: 1rem; transition: 0.3s; }
-        .btn:hover { background: #c8e6c9; }
-        #golden-badge { display: none; margin-top: 20px; padding: 20px; background: gold; color: #000; border-radius: 15px; font-weight: bold; font-size: 1.3rem; border: 3px solid #fbc02d; }
+        body { font-family: Tahoma, sans-serif; background: #f1f8e9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .game-card { background: white; width: 90%; max-width: 450px; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
+        .header { margin-bottom: 20px; color: #2e7d32; font-weight: bold; }
+        #question-box { font-size: 1.3rem; margin-bottom: 25px; min-height: 80px; }
+        .btn-option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #a5d6a7; border-radius: 12px; cursor: pointer; background: white; font-size: 1rem; transition: 0.3s; }
+        .btn-option:hover { background: #e8f5e9; border-color: #2e7d32; }
+        .score-board { font-size: 0.9rem; color: #558b2f; margin-top: 15px; }
+        #badge-area { display: none; margin-top: 20px; padding: 15px; background: #ffd700; border-radius: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="score" id="score-display">امتیاز: ۰</div>
-    <div class="question" id="question-text">در حال بارگذاری...</div>
-    <div id="options"></div>
-    <div id="golden-badge">🏆 نشان طلایی طب را کسب کردید!</div>
+<div class="game-card">
+    <div class="header">سته ضروریه - آزمون جامع</div>
+    <div id="question-box">بارگذاری...</div>
+    <div id="options-container"></div>
+    <div class="score-board" id="score-text">سوال ۱ از ۱۰۰</div>
+    <div id="badge-area">🏆 نشان طلایی طب را کسب کردید!</div>
 </div>
 
 <script>
-    // بانک سوالات واقعی (میتوانید بقیه سوالات را در این لیست اضافه کنید)
-    const questions = [
-        { q: "هوای محیط از کدام دسته سته ضروریه است؟", a: "هوا", options: ["هوا", "غذا", "خواب"] },
-        { q: "آیا خواب زیاد موجب غلبه رطوبت می‌شود؟", a: "بله", options: ["بله", "خیر"] },
-        { q: "کدام ورزش برای تقویت کل بدن توصیه شده؟", a: "اسب‌سواری", options: ["خواب", "اسب‌سواری", "پرخوری"] },
-        { q: "آیا دفع مواد زائد بدن برای سلامتی ضروری است؟", a: "بله", options: ["خیر", "بله"] },
-        { q: "کدام یک از اعراض نفسانی باعث خشکی بدن می‌شود؟", a: "خشم", options: ["خشم", "شادی", "خنده"] },
-        { q: "آیا مصرف آب بلافاصله بعد از غذا توصیه می‌شود؟", a: "خیر", options: ["بله", "خیر"] },
-        { q: "بهترین زمان برای خوابیدن چه زمانی است؟", a: "شب", options: ["روز", "شب"] },
-        { q: "آیا حرکات بدنی شدید بلافاصله بعد غذا مفید است؟", a: "خیر", options: ["بله", "خیر"] },
-        { q: "کدام عامل در سته ضروریه «محرک» نامیده می‌شود؟", a: "حرکت", options: ["غذا", "حرکت", "خواب"] },
-        { q: "آیا غم و اندوهِ طولانی مزاج را سرد می‌کند؟", a: "بله", options: ["بله", "خیر"] }
-        // ... اینجا می‌توانید سوالات ۱۱ تا ۱۰۰ را به همین شکل ادامه دهید
+    // موتور داده‌ها: جداسازی کامل محتوا از منطق
+    const quizData = [
+        { q: "هوای محیط از کدام دسته سته ضروریه است؟", a: "هوا", o: ["هوا", "غذا", "خواب"] },
+        { q: "آیا خواب زیاد موجب غلبه رطوبت می‌شود؟", a: "بله", o: ["بله", "خیر"] },
+        { q: "کدام ورزش برای تقویت کل بدن توصیه شده؟", a: "اسب‌سواری", o: ["خواب", "اسب‌سواری", "پرخوری"] },
+        { q: "آیا دفع مواد زائد بدن برای سلامتی ضروری است؟", a: "بله", o: ["خیر", "بله"] },
+        { q: "کدام یک از اعراض نفسانی باعث خشکی بدن می‌شود؟", a: "خشم", o: ["خشم", "شادی", "خنده"] },
+        { q: "آیا مصرف آب بلافاصله بعد از غذا توصیه می‌شود؟", a: "خیر", o: ["بله", "خیر"] },
+        { q: "بهترین زمان برای خوابیدن چه زمانی است؟", a: "شب", o: ["روز", "شب"] },
+        { q: "آیا حرکات بدنی شدید بلافاصله بعد غذا مفید است؟", a: "خیر", o: ["بله", "خیر"] },
+        { q: "کدام عامل در سته ضروریه «محرک» نامیده می‌شود؟", a: "حرکت", o: ["غذا", "حرکت", "خواب"] },
+        { q: "آیا غم و اندوهِ طولانی مزاج را سرد می‌کند؟", a: "بله", o: ["بله", "خیر"] }
+        // می‌توانید سوالات ۱۱ تا ۱۰۰ را به همین ترتیب در این آرایه اضافه کنید.
     ];
 
-    let currentIndex = 0;
-    let score = 0;
+    let currentIdx = 0;
+    let userScore = 0;
 
-    function loadQuestion() {
-        if(currentIndex >= questions.length) {
-            finishGame();
+    function render() {
+        if(currentIdx >= quizData.length) {
+            endGame();
             return;
         }
-        const q = questions[currentIndex];
-        document.getElementById('question-text').innerText = q.q;
-        const optionsDiv = document.getElementById('options');
-        optionsDiv.innerHTML = '';
-        q.options.forEach(opt => {
+
+        const data = quizData[currentIdx];
+        document.getElementById('question-box').innerText = data.q;
+        document.getElementById('score-text').innerText = `سوال ${currentIdx + 1} از ${quizData.length}`;
+        
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        
+        data.o.forEach(opt => {
             const btn = document.createElement('button');
-            btn.className = 'btn';
+            btn.className = 'btn-option';
             btn.innerText = opt;
-            btn.onclick = () => checkAnswer(opt);
-            optionsDiv.appendChild(btn);
+            btn.onclick = () => select(opt);
+            container.appendChild(btn);
         });
     }
 
-    function checkAnswer(choice) {
-        if(choice === questions[currentIndex].a) {
-            score++;
-            document.getElementById('score-display').innerText = "امتیاز: " + score;
-        }
-        currentIndex++;
-        loadQuestion();
+    function select(choice) {
+        if(choice === quizData[currentIdx].a) userScore++;
+        currentIdx++;
+        render();
     }
 
-    function finishGame() {
-        document.querySelector('.container').innerHTML = `<h2>بازی تمام شد</h2><p>امتیاز نهایی: ${score}</p>`;
-        localStorage.setItem('goldenScore_Game002', score);
-        if(score >= (questions.length * 0.9)) { // حد نصاب ۹۰ درصد برای نشان طلایی
-            document.getElementById('golden-badge').style.display = 'block';
+    function endGame() {
+        const percent = (userScore / quizData.length) * 100;
+        document.querySelector('.game-card').innerHTML = `
+            <h2>پایان آزمون</h2>
+            <p>امتیاز شما: ${userScore} از ${quizData.length}</p>
+        `;
+        
+        localStorage.setItem('goldenScore_Game002', userScore);
+        
+        if(percent >= 90) {
+            document.getElementById('badge-area').style.display = 'block';
+            document.getElementById('badge-area').innerText = "🏆 نشان طلایی طب را کسب کردید!";
         }
     }
 
-    loadQuestion();
+    render();
 </script>
 </body>
 </html>
