@@ -5,49 +5,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>آزمون سته ضروریه</title>
     <style>
-        body { font-family: 'Tahoma', sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .game-card { background: white; width: 95%; max-width: 450px; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); text-align: center; }
-        .header { font-size: 1rem; color: #7f8c8d; margin-bottom: 20px; }
-        #q-text { font-size: 1.2rem; min-height: 100px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; line-height: 1.6; color: #2c3e50; }
+        body { font-family: 'Tahoma', sans-serif; background-color: #f8f9fa; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .game-card { background: white; width: 95%; max-width: 400px; padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
+        
+        #q-text { font-size: 1.1rem; margin: 20px 0; color: #333; height: 80px; display: flex; align-items: center; justify-content: center; }
+        
+        .progress-bar { height: 8px; background: #eee; border-radius: 4px; margin-bottom: 20px; overflow: hidden; }
+        #progress-fill { height: 100%; background: #27ae60; width: 0%; transition: width 0.3s; }
+
         .btn-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .btn { padding: 15px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn { padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; }
         .btn-yes { background: #27ae60; color: white; }
         .btn-no { background: #c0392b; color: white; }
-        .btn-hint { background: #f39c12; color: white; grid-column: span 2; margin-top: 10px; }
-        #feedback { font-weight: bold; margin: 15px 0; height: 25px; font-size: 1.1rem; }
-        .hidden { display: none; }
+        .btn-hint { background: #f39c12; color: white; grid-column: span 2; }
         
-        /* Golden Score Style */
+        #feedback { font-weight: bold; margin: 10px 0; height: 20px; color: #555; }
+        
+        .hidden { display: none !important; }
+
+        /* Golden Style */
         .golden-badge {
-            background: linear-gradient(45deg, #ffd700, #f1c40f);
-            color: #5d4037;
-            width: 100px; height: 100px;
-            border-radius: 50%;
+            background: linear-gradient(135deg, #ffd700, #ffb300);
+            color: #fff; border-radius: 50%; width: 120px; height: 120px;
             display: flex; align-items: center; justify-content: center;
             font-size: 3rem; margin: 20px auto;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
             animation: pulse 1.5s infinite;
         }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
 <div class="game-card" id="game-ui">
-    <div class="header" id="progress">سوال ۱ از ۱۰۰</div>
+    <div class="progress-bar"><div id="progress-fill"></div></div>
     <div id="q-text">در حال بارگذاری...</div>
     <div id="feedback"></div>
     <div class="btn-box">
         <button class="btn btn-yes" onclick="submit(true)">صحیح</button>
         <button class="btn btn-no" onclick="submit(false)">غلط</button>
-        <button class="btn btn-hint" onclick="showHint()">راهنما</button>
+        <button class="btn btn-hint" onclick="showHint()">💡 راهنما</button>
     </div>
 </div>
 
 <div class="game-card hidden" id="result-ui">
     <div id="badge-container"></div>
     <h2 id="final-msg">پایان آزمون</h2>
-    <p>امتیاز نهایی: <span id="final-score">0</span> از ۱۰۰</p>
+    <p>امتیاز شما: <span id="final-score">0</span> از ۱۰۰</p>
     <button class="btn btn-yes" style="width:100%" onclick="location.reload()">شروع مجدد</button>
 </div>
 
@@ -73,9 +77,9 @@ const data = [
     {q: "آیا هوای کوهستان همیشه برای ریه مفید است؟", a: true, h: "هوای کوهستان سبک‌تر است و گرفتگی‌ها را رفع می‌کند."},
     {q: "آیا خوردن میوه‌های نارس هضم را سخت می‌کند؟", a: true, h: "میوه‌های نارس در معده نمی‌پزند و فساد می‌یابند."},
     {q: "آیا ورزشِ شدید برایِ افرادِ سوداوی مفید است؟", a: false, h: "ورزشِ سوداوی‌ها باید معتدل باشد تا بیش از حد خشک نشوند."},
-    {q: "آیا پوشاندن سر در خواب مفید است؟", a: true, h: "پوشاندن سر، بخاراتِ مغز را حفظ می‌کند (مخصوصاً در سرما)."},
+    {q: "آیا پوشاندن سر در خواب مفید است؟", a: true, h: "پوشاندن سر، بخاراتِ مغز را حفظ می‌کند."},
     {q: "آیا یبوست موجب بروزِ لک‌هایِ پوستی می‌شود؟", a: true, h: "وقتی فضولات دفع نشود، به سمت پوست رفته و لک ایجاد می‌کنند."},
-    {q: "آیا تنفسِ عمیق هوای پاک خون را تصفیه می‌کند؟", a: true, h: "اکسیژن‌رسانیِ بهتر از طریق تنفسِ عمیق، خون را روشن می‌کند."},
+    {q: "آیا تنفسِ عمیق هوای پاک خون را تصفیه می‌کند؟", a: true, h: "اکسیژن‌رسانیِ بهتر خون را روشن می‌کند."},
     {q: "آیا خوابیدنِ بعد از غروبِ خورشید مفید است؟", a: false, h: "خوابِ بعد از غروب موجبِ بیماری‌های سرد و سنگینی سر می‌شود."},
     {q: "آیا مصرفِ نمکِ زیاد باعثِ خشکی بدن می‌شود؟", a: true, h: "نمک خاصیتِ گرم‌کنندگی و خشک‌کنندگی دارد."},
     {q: "آیا ورزشِ گروهی برایِ سلامتِ روان مفید است؟", a: true, h: "فعالیتِ اجتماعی، «اعراض نفسانی» را متعادل می‌کند."},
@@ -91,7 +95,7 @@ const data = [
     {q: "آیا تعریقِ ناشی از ورزش مفید است؟", a: true, h: "تعریق، موادِ زائدِ اعماقِ بدن را بیرون می‌کشد."},
     {q: "آیا درهم‌خوری معده را خسته می‌کند؟", a: true, h: "درهم‌خوری موجب فسادِ معده می‌شود."},
     {q: "آیا نوشیدنِ آبِ زیادِ قبل از خواب مفید است؟", a: false, h: "باعثِ پرکاریِ کلیه و ادرارِ زیاد در شب می‌شود."},
-    {q: "آیا خندیدنِ مفرط (قهقهه) برای قلب مفید است؟", a: false, h: "خنده‌ی مفرط روح را ناگهان پراکنده و قلب را ضعیف می‌کند."},
+    {q: "آیا خندیدنِ مفرط برای قلب مفید است؟", a: false, h: "خنده‌ی مفرط روح را ناگهان پراکنده و قلب را ضعیف می‌کند."},
     {q: "آیا سکوت در هنگامِ غذا خوردن به تمرکز کمک می‌کند؟", a: true, h: "تمرکز بر جویدن و هضمِ غذا بسیار مهم است."},
     {q: "آیا استرسِ مزمن سیستمِ عصبی را تخریب می‌کند؟", a: true, h: "استرسِ طولانی، اخلاطِ صالح را فاسد می‌کند."},
     {q: "آیا خوابِ زیادِ شبانه همیشه بهتر است؟", a: false, h: "خوابِ بیش از حد از توانِ بدن می‌کاهد."},
@@ -155,41 +159,44 @@ const data = [
 
 let cur = 0, score = 0;
 
+function update() {
+    document.getElementById('q-text').innerText = data[cur].q;
+    document.getElementById('progress-fill').style.width = ((cur) / data.length * 100) + "%";
+}
+
 function submit(ans) {
-    const isCorrect = (ans === data[cur].a);
-    const feedback = document.getElementById('feedback');
-    feedback.innerText = isCorrect ? "✅ درست بود" : "❌ غلط بود";
-    feedback.style.color = isCorrect ? "#27ae60" : "#c0392b";
-    if (isCorrect) score++;
+    if (ans === data[cur].a) {
+        score++;
+        document.getElementById('feedback').innerText = "✅ صحیح";
+        document.getElementById('feedback').style.color = "#27ae60";
+    } else {
+        document.getElementById('feedback').innerText = "❌ غلط";
+        document.getElementById('feedback').style.color = "#c0392b";
+    }
     
     setTimeout(() => {
         cur++;
         if (cur < data.length) {
             update();
+            document.getElementById('feedback').innerText = "";
         } else {
             finish();
         }
-    }, 800);
+    }, 600);
 }
 
-function update() {
-    document.getElementById('q-text').innerText = data[cur].q;
-    document.getElementById('progress').innerText = `سوال ${cur + 1} از ۱۰۰`;
-    document.getElementById('feedback').innerText = "";
-}
-
-function showHint() {
-    alert(data[cur].h);
-}
+function showHint() { alert(data[cur].h); }
 
 function finish() {
     document.getElementById('game-ui').classList.add('hidden');
     document.getElementById('result-ui').classList.remove('hidden');
     document.getElementById('final-score').innerText = score;
     
-    if (score === 100) {
+    if (score === data.length) {
         document.getElementById('badge-container').innerHTML = '<div class="golden-badge">🌟</div>';
-        document.getElementById('final-msg').innerText = "امتیاز طلایی! استاد طب سنتی";
+        document.getElementById('final-msg').innerText = "تبریک! امتیاز طلایی";
+    } else {
+        document.getElementById('final-msg').innerText = "پایان آزمون";
     }
 }
 
