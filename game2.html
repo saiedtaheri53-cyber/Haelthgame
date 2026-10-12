@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -9,13 +8,13 @@
         .container { background: white; width: 100%; max-width: 500px; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .header { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; }
         #question { font-size: 1.2em; margin-bottom: 20px; line-height: 1.6; min-height: 80px; }
-        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; background: #fff; cursor: pointer; text-align: right; font-size: 1em; }
+        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; background: #fff; cursor: pointer; text-align: right; }
         .option:hover { background: #e9ecef; }
         .correct { background: #d4edda !important; border-color: #28a745 !important; }
         .wrong { background: #f8d7da !important; border-color: #dc3545 !important; }
-        #next-btn { display: none; width: 100%; padding: 15px; background: #007bff; color: white; border: none; border-radius: 8px; margin-top: 20px; cursor: pointer; font-size: 1em; }
+        #next-btn { display: none; width: 100%; padding: 15px; background: #007bff; color: white; border: none; border-radius: 8px; margin-top: 20px; cursor: pointer; }
         .nav-btn { display: block; width: 100%; padding: 10px; margin-top: 20px; background: #6c757d; color: white; border: none; border-radius: 8px; text-align: center; text-decoration: none; }
-        #msg { color: #d63384; font-weight: bold; margin-bottom: 10px; text-align: center; height: 20px; }
+        #msg { color: #d63384; font-weight: bold; margin-bottom: 10px; text-align: center; height: 25px; }
     </style>
 </head>
 <body>
@@ -33,18 +32,21 @@
 </div>
 
 <script>
-    // اینجا تمام سوالات را اضافه کنید. هر تعداد که باشد (تا ۱۰۰ تا) کار می‌کند.
+    // هر چند تا سوال که بخواهید در این آرایه قرار دهید. کد به طور خودکار با تعداد سوالات تنظیم می‌شود.
     const quizData = [
         { q: "مهم‌ترین عامل در سته ضروریه که مستقیماً با حیات در ارتباط است؟", o: ["هوا", "خواب", "غذا", "ورزش"], a: "هوا" },
         { q: "کدام عامل به عنوان 'مادر بیماری‌ها' در طب سنتی شناخته می‌شود؟", o: ["غذا و نوشیدنی", "استرس", "عدم ورزش", "خواب کم"], a: "غذا و نوشیدنی" },
         { q: "مصرف آب یخ بلافاصله بعد از غذا چه اثری دارد؟", o: ["ضعف هضم", "تقویت هضم", "افزایش انرژی", "هیچ اثری ندارد"], a: "ضعف هضم" },
         { q: "خواب معتدل چه تأثیری بر روح حیوانی دارد؟", o: ["بازسازی و آرامش", "تضعیف روح", "توقف فعالیت", "افزایش غضب"], a: "بازسازی و آرامش" },
         { q: "ورزش ملایم چه اثری بر دفع فضولات دارد؟", o: ["تسهیل دفع", "توقف دفع", "نامنظم کردن دفع", "هیچ تأثیری ندارد"], a: "تسهیل دفع" },
-        { q: "تأثیر اعراض نفسانی (خشم، غم) بر عملکرد کبد چیست؟", o: ["اختلال در تولید صفرا", "تقویت کبد", "تصفیه خون", "هیچ تغییری ایجاد نمی‌کند"], a: "اختلال در تولید صفرا" }
-        // برای افزودن سوالات بعدی، همین الگو را اینجا کپی کنید.
+        { q: "تأثیر اعراض نفسانی (خشم، غم) بر عملکرد کبد چیست؟", o: ["اختلال در تولید صفرا", "تقویت کبد", "تصفیه خون", "هیچ تغییری ایجاد نمی‌کند"], a: "اختلال در تولید صفرا" },
+        { q: "کدام نوع غذا برای افراد دارای مزاج سرد مضرتر است؟", o: ["غذاهای سرد", "غذاهای گرم", "غذاهای معتدل", "همه موارد"], a: "غذاهای سرد" },
+        { q: "بهترین زمان برای ورزش کردن در سته ضروریه چه وقتی است؟", o: ["صبح قبل از غذا", "بلافاصله بعد از ناهار", "شب قبل از خواب", "زمان خاصی ندارد"], a: "صبح قبل از غذا" },
+        { q: "حمام کردن با آب بسیار داغ چه اثری بر بدن دارد؟", o: ["تحلیل قوای بدنی", "تقویت بدن", "افزایش ایمنی", "آرامش اعصاب"], a: "تحلیل قوای بدنی" },
+        { q: "نقش سکون و حرکت در سته ضروریه چیست؟", o: ["تنظیم سوخت و ساز", "کاهش اشتها", "افزایش وزن", "بدون نقش"], a: "تنظیم سوخت و ساز" }
     ];
 
-    let curIdx = 0, score = 0, consecutiveCorrect = 0;
+    let curIdx = 0, score = 0, streak = 0;
 
     function loadQ() {
         const q = quizData[curIdx];
@@ -72,17 +74,17 @@
         if (sel === q.a) {
             btn.classList.add('correct');
             score += 10;
-            consecutiveCorrect++;
+            streak++;
             
-            if (consecutiveCorrect === 3) {
+            if (streak === 3) {
                 score += 5;
-                document.getElementById('msg').innerText = "آفرین! امتیاز طلایی (۵+ برای ۳ پاسخ متوالی)";
-                consecutiveCorrect = 0; // بعد از گرفتن جایزه، شمارنده ریست می‌شود
+                document.getElementById('msg').innerText = "امتیاز طلایی! (+۵)";
+                streak = 0; // بعد از پاداش، شمارنده صفر می‌شود
             }
         } else {
             btn.classList.add('wrong');
             opts.forEach(b => { if(b.innerText === q.a) b.classList.add('correct'); });
-            consecutiveCorrect = 0; // با اشتباه، زنجیره می‌شکند
+            streak = 0; // پاسخ اشتباه زنجیره را می‌شکند
         }
         
         document.getElementById('score').innerText = `امتیاز: ${score}`;
