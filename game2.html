@@ -14,16 +14,18 @@
         .wrong { background: #f8d7da !important; border-color: #dc3545 !important; }
         #next-btn { display: none; width: 100%; padding: 15px; background: #007bff; color: white; border: none; border-radius: 8px; margin-top: 20px; cursor: pointer; }
         .nav-btn { display: block; width: 100%; padding: 10px; margin-top: 20px; background: #6c757d; color: white; border: none; border-radius: 8px; text-align: center; text-decoration: none; }
+        #msg { color: #d63384; font-weight: bold; margin-top: 10px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <span id="q-counter">سوال ۱ از ۵</span>
+        <span id="q-counter">سوال ۱</span>
         <span id="score">امتیاز: ۰</span>
     </div>
-    <div id="question">متن سوال اینجا قرار می‌گیرد.</div>
+    <div id="msg"></div>
+    <div id="question"></div>
     <div id="options"></div>
     <button id="next-btn" onclick="nextQuestion()">سوال بعدی</button>
     <a href="index.html" class="nav-btn">بازگشت به فهرست</a>
@@ -31,19 +33,21 @@
 
 <script>
     const quizData = [
-        { q: "اولین اصل از سته ضروریه چیست؟", o: ["هوا", "خواب", "غذا", "حرکت"], a: "هوا" },
-        { q: "خواب و بیداری چه تأثیری بر بدن دارد؟", o: ["تأثیر بر روح حیوانی", "تأثیر بر استخوان", "تأثیر بر مو", "تأثیر بر ناخن"], a: "تأثیر بر روح حیوانی" },
-        { q: "کدام عامل در سته ضروریه «مادر بیماری‌های گوارشی» است؟", o: ["خوردن و آشامیدن", "خواب", "استحمام", "ورزش"], a: "خوردن و آشامیدن" },
-        { q: "مصرف آب یخ بعد از غذا در طب سنتی چه حکمی دارد؟", o: ["مضر و نهی شده", "بسیار مفید", "بی‌اثر", "درمان کننده"], a: "مضر و نهی شده" },
-        { q: "ورزش ملایم چه اثری بر هضم دارد؟", o: ["تقویت هضم", "توقف هضم", "نفخ شدید", "تضعیف دستگاه گوارش"], a: "تقویت هضم" }
+        { q: "مهم‌ترین عامل در سته ضروریه که مستقیماً با حیات در ارتباط است؟", o: ["هوا", "خواب", "غذا", "ورزش"], a: "هوا" },
+        { q: "کدام عامل به عنوان 'مادر بیماری‌ها' در طب سنتی شناخته می‌شود؟", o: ["غذا و نوشیدنی", "استرس", "عدم ورزش", "خواب کم"], a: "غذا و نوشیدنی" },
+        { q: "مصرف آب یخ بلافاصله بعد از غذا چه اثری دارد؟", o: ["ضعف هضم", "تقویت هضم", "افزایش انرژی", "هیچ اثری ندارد"], a: "ضعف هضم" },
+        { q: "خواب معتدل چه تأثیری بر روح حیوانی دارد؟", o: ["بازسازی و آرامش", "تضعیف روح", "توقف فعالیت", "افزایش غضب"], a: "بازسازی و آرامش" },
+        { q: "ورزش ملایم چه اثری بر دفع فضولات دارد؟", o: ["تسهیل دفع", "توقف دفع", "نامنظم کردن دفع", "هیچ تأثیری ندارد"], a: "تسهیل دفع" },
+        { q: "تأثیر اعراض نفسانی (خشم، غم) بر عملکرد کبد چیست؟", o: ["اختلال در تولید صفرا", "تقویت کبد", "تصفیه خون", "هیچ تغییری ایجاد نمی‌کند"], a: "اختلال در تولید صفرا" }
     ];
 
-    let curIdx = 0, score = 0;
+    let curIdx = 0, score = 0, consecutiveCorrect = 0;
 
     function loadQ() {
         const q = quizData[curIdx];
         document.getElementById('q-counter').innerText = `سوال ${curIdx + 1} از ${quizData.length}`;
         document.getElementById('question').innerText = q.q;
+        document.getElementById('msg').innerText = '';
         const optDiv = document.getElementById('options');
         optDiv.innerHTML = '';
         document.getElementById('next-btn').style.display = 'none';
@@ -65,10 +69,19 @@
         if (sel === q.a) {
             btn.classList.add('correct');
             score += 10;
+            consecutiveCorrect++;
+            
+            if (consecutiveCorrect === 3) {
+                score += 5;
+                document.getElementById('msg').innerText = "آفرین! امتیاز طلایی (۵+ برای ۳ پاسخ متوالی)";
+                consecutiveCorrect = 0;
+            }
         } else {
             btn.classList.add('wrong');
             opts.forEach(b => { if(b.innerText === q.a) b.classList.add('correct'); });
+            consecutiveCorrect = 0;
         }
+        
         document.getElementById('score').innerText = `امتیاز: ${score}`;
         document.getElementById('next-btn').style.display = 'block';
     }
@@ -77,7 +90,7 @@
         curIdx++;
         if (curIdx < quizData.length) loadQ();
         else {
-            document.querySelector('.container').innerHTML = `<h2>پایان بازی!</h2><p>امتیاز نهایی: ${score}</p><a href="index.html" class="nav-btn">بازگشت به فهرست</a>`;
+            document.querySelector('.container').innerHTML = `<h2>پایان بازی!</h2><p>امتیاز نهایی شما: ${score}</p><a href="index.html" class="nav-btn">بازگشت به فهرست</a>`;
         }
     }
 
