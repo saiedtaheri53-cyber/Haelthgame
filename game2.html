@@ -2,86 +2,86 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>بازی سته ضروریه - نسخه نهایی</title>
+    <title>بازی سته ضروریه</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #eef2f3; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        #game-container { background: white; width: 90%; max-width: 450px; padding: 25px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); text-align: center; }
-        .score-box { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 1.1em; color: #555; }
-        #question { font-size: 1.2em; margin-bottom: 25px; min-height: 100px; display: flex; align-items: center; justify-content: center; line-height: 1.6; }
-        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #007bff; border-radius: 12px; background: white; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .option:hover { background: #007bff; color: white; }
-        #streak-display { color: #d4af37; font-weight: bold; margin-bottom: 10px; height: 20px; }
-        .nav-btn { width: 100%; padding: 12px; border: none; border-radius: 10px; background: #dc3545; color: white; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        body { font-family: Tahoma, sans-serif; background: #f4f4f9; display: flex; justify-content: center; padding: 20px; }
+        .container { background: white; width: 100%; max-width: 500px; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; }
+        #question { font-size: 1.2em; margin-bottom: 20px; line-height: 1.6; }
+        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; background: #fff; cursor: pointer; text-align: right; }
+        .option:hover { background: #e9ecef; }
+        .correct { background: #d4edda !important; border-color: #28a745 !important; }
+        .wrong { background: #f8d7da !important; border-color: #dc3545 !important; }
+        #next-btn { display: none; width: 100%; padding: 15px; background: #007bff; color: white; border: none; border-radius: 8px; margin-top: 20px; cursor: pointer; }
+        .nav-btn { display: block; width: 100%; padding: 10px; margin-top: 20px; background: #6c757d; color: white; border: none; border-radius: 8px; text-align: center; text-decoration: none; }
     </style>
 </head>
 <body>
 
-<div id="game-container">
-    <div class="score-box">
-        <span id="counter">سوال ۱/۱۰۰</span>
+<div class="container">
+    <div class="header">
+        <span id="q-counter">سوال ۱ از ۵</span>
         <span id="score">امتیاز: ۰</span>
     </div>
-    <div id="streak-display"></div>
-    <div id="question">در حال بارگذاری...</div>
-    <button class="option" id="btn0" onclick="check(0)">-</button>
-    <button class="option" id="btn1" onclick="check(1)">-</button>
-    <button class="nav-btn" onclick="window.location.href='index.html'">بازگشت به فهرست</button>
+    <div id="question">متن سوال اینجا قرار می‌گیرد.</div>
+    <div id="options"></div>
+    <button id="next-btn" onclick="nextQuestion()">سوال بعدی</button>
+    <a href="index.html" class="nav-btn">بازگشت به فهرست</a>
 </div>
 
 <script>
-    // این لیست ۱۰۰ سوالی، دستی و اختصاصی است. هیچ تکراری در آن نیست.
-    const qData = [
-        {q:"آیا هوای آلوده موجب ضعف روح حیوانی می‌شود؟", o:["بله", "خیر"], a:0},
-        {q:"کدام یک از سته ضروریه، «مادر بیماری‌های گوارشی» است؟", o:["مأکول و مشروب", "خواب"], a:0},
-        {q:"خوابیدن بلافاصله بعد از غذا چه عارضه‌ای دارد؟", o:["تولید بخارات غلیظ", "هضم سریع"], a:0},
-        {q:"آیا بهترین زمان ورزش بعد از هضم غذا است؟", o:["بله", "خیر"], a:0},
-        {q:"خشم شدید موجب چه حالتی در قلب می‌شود؟", o:["گرمی و خشکی", "سردی و تری"], a:0},
-        {q:"آیا مصرف مداوم آب یخ در طب سنتی توصیه می‌شود؟", o:["خیر", "بله"], a:0},
-        {q:"ورزشِ ملایم چه اثری بر دستگاه گوارش دارد؟", o:["تقویت هضم", "تضعیف هضم"], a:0},
-        {q:"کدام اصل سته به مدیریت مواد زائد می‌پردازد؟", o:["استفراغ و احتباس", "اعراض نفسانی"], a:0},
-        {q:"آیا استحمام با شکم پر مجاز است؟", o:["خیر", "بله"], a:0},
-        {q:"غم و اندوه طولانی مزاج را به کدام سمت می‌برد؟", o:["سرد و خشک", "گرم و تر"], a:0},
-        // برای جلوگیری از طولانی شدن، ۱۰۰ سوال را اینجا قرار دهید...
+    const quizData = [
+        { q: "اولین اصل از سته ضروریه چیست؟", o: ["هوا", "خواب", "غذا", "حرکت"], a: "هوا" },
+        { q: "خواب و بیداری چه تأثیری بر بدن دارد؟", o: ["تأثیر بر روح حیوانی", "تأثیر بر استخوان", "تأثیر بر مو", "تأثیر بر ناخن"], a: "تأثیر بر روح حیوانی" },
+        { q: "کدام عامل در سته ضروریه «مادر بیماری‌های گوارشی» است؟", o: ["خوردن و آشامیدن", "خواب", "استحمام", "ورزش"], a: "خوردن و آشامیدن" },
+        { q: "مصرف آب یخ بعد از غذا در طب سنتی چه حکمی دارد؟", o: ["مضر و نهی شده", "بسیار مفید", "بی‌اثر", "درمان کننده"], a: "مضر و نهی شده" },
+        { q: "ورزش ملایم چه اثری بر هضم دارد؟", o: ["تقویت هضم", "توقف هضم", "نفخ شدید", "تضعیف دستگاه گوارش"], a: "تقویت هضم" }
     ];
-    
-    // تکمیل ۱۰۰ سوال (شما می‌توانید بقیه سوالات را دقیقاً با این فرمت کپی کنید)
-    for(let i=10; i<100; i++) {
-        qData.push({q: `سوال شماره ${i+1}: آیا اصول سته ضروریه در پیشگیری از بیماری نقش اساسی دارد؟`, o: ["بله", "خیر"], a:0});
+
+    let curIdx = 0, score = 0;
+
+    function loadQ() {
+        const q = quizData[curIdx];
+        document.getElementById('q-counter').innerText = `سوال ${curIdx + 1} از ${quizData.length}`;
+        document.getElementById('question').innerText = q.q;
+        const optDiv = document.getElementById('options');
+        optDiv.innerHTML = '';
+        document.getElementById('next-btn').style.display = 'none';
+
+        q.o.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option';
+            btn.innerText = opt;
+            btn.onclick = () => check(opt, btn);
+            optDiv.appendChild(btn);
+        });
     }
 
-    let cur = 0, score = 0, streak = 0;
-
-    function render() {
-        document.getElementById('counter').innerText = `سوال ${cur+1}/100`;
-        document.getElementById('score').innerText = `امتیاز: ${score}`;
-        document.getElementById('question').innerText = qData[cur].q;
-        document.getElementById('btn0').innerText = qData[cur].o[0];
-        document.getElementById('btn1').innerText = qData[cur].o[1];
-    }
-
-    function check(idx) {
-        if (idx === qData[cur].a) {
-            score += 10;
-            streak++;
-            if (streak >= 3) {
-                score += 5; // امتیاز طلایی
-                document.getElementById('streak-display').innerText = "✨ امتیاز طلایی اضافه شد!";
-            }
-        } else {
-            streak = 0;
-            document.getElementById('streak-display').innerText = "";
-        }
+    function check(sel, btn) {
+        const q = quizData[curIdx];
+        const opts = document.querySelectorAll('.option');
+        opts.forEach(b => b.disabled = true);
         
-        if (cur < 99) {
-            cur++;
-            render();
+        if (sel === q.a) {
+            btn.classList.add('correct');
+            score += 10;
         } else {
-            alert("پایان بازی! امتیاز نهایی: " + score);
-            window.location.href = 'index.html';
+            btn.classList.add('wrong');
+            opts.forEach(b => { if(b.innerText === q.a) b.classList.add('correct'); });
+        }
+        document.getElementById('score').innerText = `امتیاز: ${score}`;
+        document.getElementById('next-btn').style.display = 'block';
+    }
+
+    function nextQuestion() {
+        curIdx++;
+        if (curIdx < quizData.length) loadQ();
+        else {
+            document.querySelector('.container').innerHTML = `<h2>پایان بازی!</h2><p>امتیاز نهایی: ${score}</p><a href="index.html" class="nav-btn">بازگشت به فهرست</a>`;
         }
     }
 
-    render();
+    loadQ();
 </script>
 </body>
 </html>
