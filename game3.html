@@ -3,108 +3,414 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>آزمون هویت مزاجی | پورتال سلامت</title>
+    <title>بازی هویت‌سنجی مزاج - طب علم سلامتی</title>
     <style>
-        :root {
-            --primary-color: #2c5f2d;
-            --secondary-color: #97bc62;
-            --accent-color: #f4a261;
-            --bg-color: #f0f4f0;
-            --text-color: #333;
-        }
-
-        body { font-family: 'Tahoma', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-
-        #quiz-container { background: white; width: 90%; max-width: 500px; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
-
-        .progress-bar { width: 100%; height: 8px; background: #e0e0e0; border-radius: 4px; margin-bottom: 25px; }
-        #progress { width: 0%; height: 100%; background: var(--secondary-color); border-radius: 4px; transition: width 0.4s ease; }
-
-        .option-btn { width: 100%; padding: 15px; margin: 8px 0; border: 2px solid #eee; border-radius: 12px; background: none; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; text-align: right; }
-        .option-btn:hover { border-color: var(--secondary-color); background-color: #f9fff9; }
-
-        #result-area { display: none; }
-        .btn-main { background-color: var(--primary-color); color: white; padding: 15px 30px; border: none; border-radius: 25px; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 20px; }
-        
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Tahoma, sans-serif; }
+        body { background: #f0f4f8; color: #333; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 15px; }
+        .container { width: 100%; max-width: 550px; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-top: 10px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; font-size: 14px; color: #666; }
+        .stats-box { display: flex; gap: 8px; }
+        .score-box { background: #e6fffa; color: #234e52; padding: 5px 10px; border-radius: 6px; font-weight: bold; }
+        .gift-box { background: #feebc8; color: #744210; padding: 5px 10px; border-radius: 6px; font-weight: bold; }
+        .question-box { font-size: 16px; font-weight: bold; margin-bottom: 15px; line-height: 1.6; color: #2d3748; }
+        .options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        .option-btn { width: 100%; padding: 10px 12px; text-align: right; background: #fff; border: 2px solid #cbd5e0; border-radius: 8px; font-size: 13px; cursor: pointer; transition: all 0.2s; touch-action: manipulation; }
+        .option-btn:hover:not(:disabled) { background: #edf2f7; border-color: #a0aec0; }
+        .option-btn:disabled { cursor: default; }
+        .correct { background: #c6f6d5 !important; border-color: #38a169 !important; color: #22543d; font-weight: bold; }
+        .incorrect { background: #fed7d7 !important; border-color: #e53e3e !important; color: #742a2a; font-weight: bold; }
+        .hint-box { background: #fffff0; border: 1px solid #faf089; padding: 10px; border-radius: 6px; font-size: 13px; color: #744210; margin-bottom: 15px; display: none; }
+        .footer-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+        .btn { padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: bold; text-decoration: none; }
+        .btn-next { background: #3182ce; color: white; display: none; }
+        .btn-next:hover { background: #2b6cb0; }
+        .btn-back { background: #e2e8f0; color: #4a5568; }
+        .btn-back:hover { background: #cbd5e0; }
+        .reset-link { text-align: center; margin-top: 10px; font-size: 12px; color: #e53e3e; cursor: pointer; display: block; }
     </style>
 </head>
 <body>
 
-<div id="quiz-container">
-    <div id="quiz-area">
-        <h1>هویت‌سنجی مزاج</h1>
-        <div class="progress-bar"><div id="progress"></div></div>
-        <h3 id="question-text">در حال بارگذاری...</h3>
-        <div id="options-container"></div>
+    <div class="container">
+        <div class="header">
+            <span id="q-counter">سوال ۱ از ۲۰</span>
+            <div class="stats-box">
+                <div class="gift-box">🎁 هدیه: <span id="gift-score">0</span></div>
+                <div class="score-box">امتیاز: <span id="score">0</span></div>
+            </div>
+        </div>
+
+        <div class="question-box" id="question-text">در حال بارگذاری سوالات مزاج‌شناسی...</div>
+        
+        <div class="options" id="options-container"></div>
+
+        <div class="hint-box" id="hint-box"></div>
+
+        <div class="footer-nav">
+            <a href="index.html" class="btn btn-back">بازگشت به پورتال</a>
+            <button class="btn btn-next" id="next-btn" onclick="nextQuestion()">سوال بعد</button>
+        </div>
+        <span class="reset-link" onclick="resetGame()">شروع مجدد آزمون</span>
     </div>
 
-    <div id="result-area" class="fade-in">
-        <h2>مزاج اصلی شما: <span id="result-title" style="color:var(--primary-color)"></span></h2>
-        <p id="result-desc"></p>
-      <a href="index.html" class="btn-main">ورود به کتابخانه بازی‌ها</a>
-  ورود به کتابخانه بازی‌ها</a>
-    </div>
-</div>
+    <script>
+        const questions = [
+            {
+                q: "کدام علامت بالینی و ظاهری از نشانه‌های بارز غلبه مزاج «صفرا» (گرم و خشک) در بدن است؟",
+                options: [
+                    "رنگ پوست و سفیدی چشم متمایل به زردی، تندی زبان و ضایعات گرم",
+                    "پوست سرد، مرطوب، رنگ پریده و کندی حرکات",
+                    "پوست تیره، لاغری مفرط و افکار مالیخولیایی",
+                    "رنگ سرخ چهره، عروق برجسته و پُرخونی عمومی",
+                    "پوست نرم، تعریق زیاد و خواب‌آلودگی مکرر",
+                    "هیچ‌کدام از موارد فوق اختصاصی صفرا نیست"
+                ],
+                answer: 0,
+                hint: "صفرا طبعی گرم و خشک دارد و اثرات آن شامل صفراوی شدن رنگ چشم و پوست و تیزی طبع است."
+            },
+            {
+                q: "کدام ویژگی جسمانی و رفتاری به افراد با مزاج «دموی» (گرم و تر) تعلق دارد؟",
+                options: [
+                    "بدن سرد و تمایل شدید به هوای گرم در زمستان",
+                    "نبض قوی و پر، سرخی چهره، شجاعت و خوش‌رویی",
+                    "کم‌حرفی، انزواطلبی و افسردگی مداوم",
+                    "خستگی زودهنگام و ضعف مفرط گوارشی",
+                    "پوست بسیار خشک و ترک‌خورده در تمام فصول",
+                    "حرکات بسیار کند و تسلط کامل بلغم بر اعضا"
+                ],
+                answer: 1,
+                hint: "دموی‌ها دارای خون صالح، حرارت و رطوبت متناسب، نبض قوی و روحیه‌ای شاداب و دلیر هستند."
+            },
+            {
+                q: "افراد دارای مزاج «بلغم» (سرد و تر) معمولاً چه واکنشی نسبت به فصل سرما و تغذیه سرد دارند؟",
+                options: [
+                    "به شدت از سرما لذت برده و تابش آفتاب را دوست ندارند",
+                    "با خوردن سردیجات به سرعت دچار کندذهنی، رخوت، ترشح آب دهان و سفیدی زبان می‌شوند",
+                    "انرژی فوق‌العاده بالایی در زمستان پیدا می‌کنند",
+                    "دچار خشکی شدید پوست و خارش مداوم می‌شوند",
+                    "حرارت درون آن‌ها به قدری بالا می‌رود که یخ می‌نوشند",
+                    "هیچ‌گونه حساسیتی به سرما ندارند"
+                ],
+                answer: 1,
+                hint: "بلغم سرد و تر است؛ بنابراین سردی و رطوبت محیط یا غذا آثار رکود و کندی را در آن‌ها تشدید می‌کند."
+            },
+            {
+                q: "کدام نشانه روحی و جسمی از مشخصات بارز مزاج «سودا» (سرد و خشک) است؟",
+                options: [
+                    "خنده‌های بلند و بی‌موقع بدون دلیل خاص",
+                    "خیال‌پردازی‌های منفی، نگرانی زیاد، پوست تیره و لاغری",
+                    "عضلات بسیار قطور، پوست سرخ و تعریق فراوان",
+                    "پرخوابی مفرط و تمایل دائمی به استراحت",
+                    "اشتهای بسیار زیاد و هضم سریع غذاهای سنگین",
+                    "نبض بسیار پر و تپش سریع قلب"
+                ],
+                answer: 1,
+                hint: "سودا طبع سرد و خشک دارد و باعث انقباض، خشکی، لاغری و دلواپسی‌های ذهنی می‌شود."
+            },
+            {
+                q: "کدام گروه از مواد غذایی برای تعدیل و کاهش غلبه صفرا مناسب‌تر است؟",
+                options: [
+                    "فلفل سیاه، سیر، پیاز خام و گوشت شکار",
+                    "آب‌انار ترش و شیرین، خیار، کاهو، سکنجبین و سوپ جو",
+                    "موز، گردو، خرما و ارده با شیره",
+                    "نمک فراوان، ماهی دودی و پنیر کهنه",
+                    "روغن‌های حیوانی داغ و ارده کنجد",
+                    "چای پررنگ و قهوه غلیظ"
+                ],
+                answer: 1,
+                hint: "برای تعدیل حرارت و خشکی صفرا، مواد سرد و تر مانند انار، کاهو و سکنجبین تجویز می‌شود."
+            },
+            {
+                q: "در طب سنتی، چه خوابی برای حفظ اعتدال مزاج و تقویت قوای بدنی توصیه شده است؟",
+                options: [
+                    "خوابیدن در طول روز پس از صرف ناهار سنگین",
+                    "خواب اول شب پس از گذشت ۲ تا ۳ ساعت از شام سبک، به پهلوی راست سپس چپ",
+                    "خوابیدن بلافاصله پس از طلوع آفتاب",
+                    "خوابیدن روی شکم برای استراحت ستون فقرات",
+                    "کم کردن خواب به کمتر از ۳ ساعت در شبانه‌روز",
+                    "خواب پی در پی در مکان‌های بسیار گرم و بسته"
+                ],
+                answer: 1,
+                hint: "خواب اول شب بهترین هضم را ایجاد کرده و کبد و مغز را به نحو مطلوب بازسازی می‌کند."
+            },
+            {
+                q: "تأثیر ورزش و حرکت بدنی معتدل بر مزاج‌های سرد (بلغم و سودا) چیست؟",
+                options: [
+                    "باعث افزایش شدید سردی و انجماد اخلاط می‌شود",
+                    "حرارت غریزی را تحریک کرده، مواد زائد را تحلیل برده و سردی را تعدیل می‌کند",
+                    "هیچ تأثیری بر مزاج ندارد",
+                    "فقط موجب تخریب بافت عضلانی می‌گردد",
+                    "سودای بدن را صد برابر افزایش می‌دهد",
+                    "باعث ایجاد خواب‌آلودگی مفرط می‌شود"
+                ],
+                answer: 1,
+                hint: "ورزش معتدل با ایجاد حرارت ذاتی، رطوبت‌های اضافی و سردی‌های راکد را می‌سوزاند."
+            },
+            {
+                q: "کدام فصل سال بیشترین هماهنگی و تشدیدکننده مزاج «سودا» را دارد؟",
+                options: [
+                    "فصل بهار به دلیل شکوفایی طبیعت",
+                    "فصل تابستان به دلیل اوج گرما",
+                    "فصل پاییز به دلیل سردی و خشکی هوا",
+                    "فصل زمستان به دلیل رطوبت بالا",
+                    "تمام فصول سال تأثیر یکسانی دارند",
+                    "فقط ایام خاصی از تابستان"
+                ],
+                answer: 2,
+                hint: "پاییز طبعی سرد و خشک دارد و با سودا هم‌طبع است، لذا سودا را در بدن عود می‌دهد."
+            },
+            {
+                q: "علائم ظاهری موها در افراد گرم‌مزاج (صفراوی و دموی) معمولاً چگونه است؟",
+                options: [
+                    "موی بسیار لخت، سفید زودرس و سرد",
+                    "موی پرپشت، مجعد (فرفری)، ضخیم و با رنگ سیاه یا خرمايي تیره متمایل به سرخی",
+                    "موی کم‌پشت، نازک و کاملاً سفید در سنین پایین",
+                    "ریزش موی شدید ناشی از رطوبت مفرط مغز",
+                    "رشد بسیار کند و شکنندگی مفرط تار مو",
+                    "بدون هیچ‌گونه ویژگی خاص"
+                ],
+                answer: 1,
+                hint: "حرارت بالا در مزاج‌های گرم باعث رشد بهتر، کلفتی و حالت‌دار شدن موها می‌شود."
+            },
+            {
+                q: "کدام نشانه در ادرار، نشان‌دهنده غلبه حرارت و صفرا در بدن است؟",
+                options: [
+                    "ادرار بسیار کم‌رنگ، شفاف و سرد",
+                    "ادرار پررنگ (زرد تیره یا زعفرانی) با سوزش خفیف گرم",
+                    "ادرار کاملاً سفید شیری رنگ",
+                    "کدروت شدید و رسوبات فراوان بلغم",
+                    "بی‌رنگ مانند آب خالص",
+                    "بدون هیچ تغییری در رنگ"
+                ],
+                answer: 1,
+                hint: "صفرا ادرار را به رنگ زرد تیره یا زعفرانی درمی‌آورد که نشانه حرارت کبد و مجاری است."
+            },
+            {
+                q: "مزاج اصلی ارگان‌های حیاتی بدن انسان (مانند قلب) کدام است؟",
+                options: [
+                    "سرد و خشک (سوداوی)",
+                    "گرم و خشک (صفراوی یا متمایل به حرارت)",
+                    "سرد و تر (بلغمی)",
+                    "کاملاً بی‌طبع و خنثی",
+                    "مرطوب مطلق بدون حرارت",
+                    "متغیر در هر ساعت"
+                ],
+                answer: 1,
+                hint: "قلب منبع حرارت غریزی بدن است و مزاج گرم دارد تا بتواند حیات را پمپاژ کند."
+            },
+            {
+                q: "کدام ویژگی گوارشی در افراد بلغمی (سرد و تر) شایع‌تر است؟",
+                options: [
+                    "هضم بسیار سریع و گرسنگی مداوم در طول روز",
+                    "ضعف هضم، ترش کردن معده، نفخ زیاد و احساس سنگینی پس از غذا",
+                    "اشتهای کاذب همراه با صفراآوری",
+                    "احساس سوزش سر دل بعد از هر وعده",
+                    "هضم کامل سنگین‌ترین غذاها بدون زحمت",
+                    "تشنگی مفرط بعد از آب خوردن"
+                ],
+                answer: 1,
+                hint: "سردی معده در بلغم باعث کندی هضم، تولید گاز و نفخ و سنگینی می‌شود."
+            },
+            {
+                q: "تأثیر اعراض نفسانی (مانند خشم و غضب ناگهانی) بر سیستم حرارتی بدن چیست؟",
+                options: [
+                    "حرارت و صفرا را به مرکز و سطح بدن متوجه کرده و خون را به جوش می‌آورد",
+                    "بدن را کاملاً منجمد و سرد می‌کند",
+                    "هیچ تأثیری بر اخلاط چهارگانه ندارد",
+                    "سودای صالح تولید می‌کند",
+                    "رطوبت بدن را به طور پایدار افزایش می‌دهد",
+                    "موجب تقویت ترشح بلغم می‌شود"
+                ],
+                answer: 0,
+                hint: "خشم آتش درون را شعله‌ور کرده و حرارت را با سرعت به گردش درمی‌آورد."
+            },
+            {
+                q: "کدام خوراکی برای تقویت و تعدیل افراد سوداوی (سرد و خشک) بهترین گزینه است؟",
+                options: [
+                    "گوشت گاو پیر و عدس زیاد",
+                    "گوشت گوسفند جوان، گوشت پرندگان فراخ‌منال، انجیر، مویز و عسل",
+                    "ترشیجات تند و سرکه خالص",
+                    "ماست ترش و دوغ گازدار سرد",
+                    "چای پررنگ مانده",
+                    "بادنجان سرخ‌کرده با روغن فراوان"
+                ],
+                answer: 1,
+                hint: "برای رفع سودا، غذاهای گرم و تر و لطیف مانند گوشت گوسفند، انجیر و عسل توصیه می‌شود."
+            },
+            {
+                q: "وضعیت پوست و عروق در افراد «دموی‌مزاج» چگونه است؟",
+                options: [
+                    "پوست سرد، رنگ‌پریده و رگ‌های پوشیده و پنهان",
+                    "پوست سرخ‌وش، گرم، مرطوب، نرم و رگ‌های برجسته و پرخون",
+                    "پوست چروکیده، تیره و خشک",
+                    "پوست رنگ‌پریده همراه با لکه‌های سوداوی",
+                    "پوست بسیار ضخیم، سرد و خشک",
+                    "بدون هیچ‌گونه خاصیت ظاهری مشخص"
+                ],
+                answer: 1,
+                hint: "دموی‌ها خون فراوان و گرم دارند که پوست را سرخ و شاداب و عروق را پرجلوه می‌کند."
+            },
+            {
+                q: "کدام فصل سال به عنوان فصل غلبه و شکوفایی مزاج «دم» شناخته می‌شود؟",
+                options: [
+                    "زمستان به دلیل سرما",
+                    "تابستان به دلیل خشکی",
+                    "بهار به دلیل حرکت اخلاط و تعادل هوا",
+                    "پاییز به دلیل پژمردگی گیاهان",
+                    "تابستان و پاییز باهم",
+                    "هیچ‌کدام"
+                ],
+                answer: 2,
+                hint: "فصل بهار زمان به جوش آمدن خون و تعادل طبیعی ارکان است و با دم تناسب دارد."
+            },
+            {
+                q: "کدام علامت در خواب و رؤیا با غلبه مزاج «صفرا» بیشتر دیده می‌شود؟",
+                options: [
+                    "دیدن آب فراوان، دریا، برف و باران و سرما در خواب",
+                    "دیدن آتش، نورهای درخشان، جنگ، دعوا، رنگ‌های زرد و سرخ",
+                    "دیدن تاریکی، گورستان، اشیاء سیاه و سقوط از ارتفاع",
+                    "دیدن پرواز و فضاهای باز و سرسبز",
+                    "خواب‌های کاملاً آرام و بدون هیچ رؤیایی",
+                    "دیدن خوراکی‌های سرد و تر مثل خیار"
+                ],
+                answer: 1,
+                hint: "صفرا به دلیل آتشین بودن، رؤیاهای مربوط به آتش، نور، جنگ و رنگ زرد را ایجاد می‌کند."
+            },
+            {
+                q: "کدام ویژگی رفتاری و روان‌شناختی در افراد با مزاج «سوداوی» برجسته‌تر است؟",
+                options: [
+                    "بی‌خیالی مفرط، خنده‌روی دائمی و بی‌توجهی به آینده",
+                    "دقت فوق‌العاده بالا به جزئیات، نظم و انضباط شدید، اهل تفکر عمیق و گاه بدگمانی",
+                    "پرخاشگری سریع و آرامش‌ناپذیری آنی",
+                    "سستی در کارها و فرار از مسئولیت‌های فکری",
+                    "سریع‌اللسان بودن و فراموشکاری فوری",
+                    "تمایل شدید به کارهای هیجانی و پرخطر"
+                ],
+                answer: 1,
+                hint: "سوداوی‌ها اهل محاسبه، دقت و تفکر عمیق هستند، هرچند ممکن است به سمت وسواس یا نگرانی بروند."
+            },
+            {
+                q: "کدام طعم و مزه بیشترین تناسب را با تعدیل مزاج «دموی» (گرم و تر) دارد؟",
+                options: [
+                    "مزه شیرین و چرب",
+                    "مزه ترس، گس و ملس (مانند انار، زرشک و سرکه‌انگبین)",
+                    "مزه شور و تند",
+                    "فقط آب خالص بدون مزه",
+                    "طعم‌های بسیار تلخ",
+                    "ادویه‌جات تند کوبیده"
+                ],
+                answer: 1,
+                hint: "برای تعدیل گرمی و ترشی دم، طعم‌های ترش، گس و ملس (مخلوط ترش و شیرین ملایم) عالی هستند."
+            },
+            {
+                q: "هدف اصلی از شناخت دقیق مزاج در طب سنتی ایرانی چیست؟",
+                options: [
+                    "پیشگیری از بیماری‌ها با سبک زندگی متناسب، حفظ سلامتی و درمان فردی",
+                    "فقط پیش‌بینی آینده افراد و طالع‌بینی",
+                    "دسته‌بندی افراد برای مسابقات ورزشی",
+                    "تغییر دادن طبع ذاتی انسان‌ها به طبعی دیگر",
+                    "افزایش وزن یا کاهش وزن سریع بدون قاعده",
+                    "صرفاً جنبه سرگرمی و تفنن علمی دارد"
+                ],
+                answer: 0,
+                hint: "شناخت مزاج چراغ راهنمایی برای حفظ‌الصحه (سلامتی)، تغذیه درست و پیشگیری از ابتلا به بیماری‌هاست."
+            }
+        ];
 
-<script>
-    const questions = [
-        { q: "ساختار بدنی شما چگونه است؟", 
-          options: [ {t: "درشت هیکل و عضلانی", v: "دم"}, {t: "متوسط و خشک", v: "صفرا"}, {t: "چاق و نرم", v: "بلغم"}, {t: "لاغر و استخوانی", v: "سودا"} ] },
-        { q: "رنگ پوست شما به کدام نزدیک‌تر است؟", 
-          options: [ {t: "سفید و شفاف", v: "بلغم"}, {t: "گندمی مایل به زرد", v: "صفرا"}, {t: "سرخ و گلگون", v: "دم"}, {t: "تیره یا سبزه", v: "سودا"} ] },
-        { q: "وضعیت موهای شما چگونه است؟", 
-          options: [ {t: "پرپشت، ضخیم و تیره", v: "دم"}, {t: "کم‌حجم و نازک", v: "صفرا"}, {t: "نرم و لخت", v: "بلغم"}, {t: "زبر و خشک", v: "سودا"} ] },
-        { q: "طعم مورد علاقه شما کدام است؟", 
-          options: [ {t: "شیرینی (عسل، شیره)", v: "دم"}, {t: "ترشی و سرکه", v: "صفرا"}, {t: "شوری و تندی", v: "سودا"}, {t: "ملس و کم‌مزه", v: "بلغم"} ] },
-        { q: "دمای بدن شما معمولاً چگونه است؟", 
-          options: [ {t: "همیشه احساس گرما دارم", v: "صفرا"}, {t: "معمولاً احساس سرما می‌کنم", v: "بلغم"}, {t: "دمای بدنم معتدل است", v: "دم"}, {t: "سرمایی هستم", v: "سودا"} ] },
-        { q: "خواب شما چگونه است؟", 
-          options: [ {t: "عمیق و طولانی", v: "بلغم"}, {t: "سبک و با خواب‌های زیاد", v: "صفرا"}, {t: "سنگین و راحت", v: "دم"}, {t: "دیر خوابیدن و بی‌قراری", v: "سودا"} ] },
-        { q: "واکنش شما به استرس چیست؟", 
-          options: [ {t: "خشم و تندی", v: "صفرا"}, {t: "اضطراب و فکر زیاد", v: "سودا"}, {t: "بی‌تفاوتی و آرامش", v: "بلغم"}, {t: "هیجان‌زدگی", v: "دم"} ] },
-        { q: "عملکرد گوارش شما چگونه است؟", 
-          options: [ {t: "بسیار سریع و گرسنگی زودرس", v: "صفرا"}, {t: "کند و دیر هضم", v: "بلغم"}, {t: "معتدل و منظم", v: "دم"}, {t: "نفخ و خشکی در دفع", v: "سودا"} ] },
-        { q: "سرعت عمل شما در کارها چقدر است؟", 
-          options: [ {t: "سریع و عجول", v: "صفرا"}, {t: "کند و با تأمل", v: "سودا"}, {t: "متناسب و دقیق", v: "دم"}, {t: "آرام و صبور", v: "بلغم"} ] },
-        { q: "وضعیت تشنگی شما چگونه است؟", 
-          options: [ {t: "همیشه تشنه‌ام", v: "صفرا"}, {t: "کم تشنه می‌شوم", v: "بلغم"}, {t: "تشنگی متوسط", v: "دم"}, {t: "خشکی دهان", v: "سودا"} ] }
-    ];
+        let currentQ = parseInt(localStorage.getItem('game003_idx')) || 0;
+        let score = parseInt(localStorage.getItem('game003_score')) || 0;
+        let giftScore = parseInt(localStorage.getItem('game003_gift')) || 0;
+        let answered = false;
 
-    let currentQ = 0;
-    let scores = { "دم": 0, "صفرا": 0, "بلغم": 0, "سودا": 0 };
+        function render() {
+            if (currentQ >= questions.length) {
+                document.getElementById('question-text').innerText = "🎉 تبریک! شما آزمون تخصصی هویت‌سنجی مزاج را با موفقیت به پایان رساندید.";
+                document.getElementById('options-container').innerHTML = `
+                    <div style="text-align:center; font-size:16px; padding:15px; line-height:1.8; color:#2b6cb0; background:#f7fafc; border-radius:8px;">
+                        <b>امتیاز نهایی شما:</b> ${score} از ${questions.length}<br>
+                        <b>مجموع هدایای کسب شده:</b> 🎁 ${giftScore}<br>
+                        <b>نتیجه تحلیل مزاجی:</b> ${score >= 16 ? 'شناخت بسیار عمیق و تسلط کامل بر مبانی مزاج‌شناسی! 🌟' : score >= 10 ? 'آشنایی خوب و قابل قبول با ارکان و امزاج 👍' : 'نیاز به مطالعه بیشتر در متون حفظ‌الصحه 📚'}
+                    </div>`;
+                document.getElementById('hint-box').style.display = 'none';
+                document.getElementById('next-btn').style.display = 'none';
+                document.getElementById('q-counter').innerText = "پایان آزمون";
+                localStorage.removeItem('game003_idx');
+                localStorage.removeItem('game003_score');
+                localStorage.removeItem('game003_gift');
+                return;
+            }
 
-    function renderQ() {
-        if(currentQ >= questions.length) { showResult(); return; }
-        const q = questions[currentQ];
-        document.getElementById('question-text').innerText = q.q;
-        document.getElementById('progress').style.width = `${(currentQ/questions.length)*100}%`;
-        const container = document.getElementById('options-container');
-        container.innerHTML = '';
-        q.options.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.innerText = opt.t;
-            btn.onclick = () => { scores[opt.v]++; currentQ++; renderQ(); };
-            container.appendChild(btn);
-        });
-    }
+            answered = false;
+            const q = questions[currentQ];
+            document.getElementById('q-counter').innerText = `سوال ${currentQ + 1} از ${questions.length}`;
+            document.getElementById('score').innerText = score;
+            document.getElementById('gift-score').innerText = giftScore;
+            document.getElementById('question-text').innerText = q.q;
+            
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index, q.answer, q.hint);
+                optionsContainer.appendChild(btn);
+            });
 
-    function showResult() {
-        document.getElementById('quiz-area').style.display = 'none';
-        document.getElementById('result-area').style.display = 'block';
-        const top = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
-        const desc = {
-            "دم": "مزاج شما متمایل به گرم و تر است. تعادل در خون و آرامش روانی ویژگی شماست.",
-            "صفرا": "مزاج شما متمایل به گرم و خشک است. دقت و تیزبینی در کنار فعالیت بالا دارید.",
-            "بلغم": "مزاج شما متمایل به سرد و تر است. آرامش و صبوری نقطه قوت شماست.",
-            "سودا": "مزاج شما متمایل به سرد و خشک است. تفکر عمیق و نظم، خصیصه شماست."
-        };
-        document.getElementById('result-title').innerText = top;
-        document.getElementById('result-desc').innerText = desc[top];
-    }
-    renderQ();
-</script>
+            document.getElementById('hint-box').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'none';
+        }
+
+        function checkAnswer(selected, correct, hint) {
+            if (answered) return;
+            answered = true;
+
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === correct) btn.classList.add('correct');
+                if (idx === selected && selected !== correct) btn.classList.add('incorrect');
+            });
+
+            if (selected === correct) {
+                score++;
+                giftScore += 10; // پاداش هدیه عملکرد
+                document.getElementById('score').innerText = score;
+                document.getElementById('gift-score').innerText = giftScore;
+            }
+
+            const hintBox = document.getElementById('hint-box');
+            hintBox.innerText = `💡 نکته تخصصی طب سنتی: ${hint}`;
+            hintBox.style.display = 'block';
+
+            document.getElementById('next-btn').style.display = 'block';
+
+            // ذخیره پیشرفت در localStorage
+            localStorage.setItem('game003_idx', currentQ);
+            localStorage.setItem('game003_score', score);
+            localStorage.setItem('game003_gift', giftScore);
+        }
+
+        function nextQuestion() {
+            currentQ++;
+            localStorage.setItem('game003_idx', currentQ);
+            render();
+        }
+
+        function resetGame() {
+            if (confirm("آیا می‌خواهید آزمون از ابتدا شروع شود؟ پیشرفت فعلی پاک خواهد شد.")) {
+                localStorage.removeItem('game003_idx');
+                localStorage.removeItem('game003_score');
+                localStorage.removeItem('game003_gift');
+                currentQ = 0;
+                score = 0;
+                giftScore = 0;
+                render();
+            }
+        }
+
+        render();
+    </script>
 </body>
 </html>
