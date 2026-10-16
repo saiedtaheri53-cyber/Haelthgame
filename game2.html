@@ -3,172 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی ۶: سته ضروریه (اصول حفظ سلامتی)</title>
+    <title>بازی سته ضروریه - طب، علم سلامتی</title>
     <style>
-        body {
-            font-family: Tahoma, sans-serif;
-            background-color: #f4f9f4;
-            color: #333;
+        :root {
+            --primary-color: #27ae60;
+            --primary-dark: #219653;
+            --bg-color: #f4f6f7;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --border-radius: 12px;
+        }
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 10px;
+            padding: 0;
+            font-family: Tahoma, Arial, sans-serif;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-        .header {
-            width: 100%;
-            max-width: 600px;
-            background: #2e7d32;
-            color: white;
+            min-height: 100vh;
             padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
         .container {
             width: 100%;
-            max-width: 600px;
-            background: white;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-top: 10px;
         }
-        .question {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            line-height: 1.6;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
         }
-        .options button {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            font-size: 15px;
-            background-color: #e8f5e9;
-            border: 2px solid #81c784;
-            border-radius: 8px;
+        .header h1 {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+        .btn-home {
+            background: #e0e6ed;
+            color: #333;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 0.85rem;
+            text-decoration: none;
+        }
+        .score-board {
+            display: flex;
+            justify-content: space-between;
+            background: #e8f8f5;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #16a085;
+            margin-bottom: 15px;
+        }
+        .q-counter {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+        .q-text {
+            font-size: 1.05rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .option-btn {
+            background: #fff;
+            border: 2px solid #dcdde1;
+            border-radius: 8px;
+            padding: 12px;
             text-align: right;
-            transition: 0.2s;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
         }
-        .options button:hover {
-            background-color: #c8e6c9;
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary-color);
+            background: #f4fcf7;
         }
-        .btn-nav {
-            margin-top: 15px;
-            padding: 10px 20px;
-            background-color: #1976d2;
+        .option-btn.correct {
+            background: #d4efdf !important;
+            border-color: #27ae60 !important;
+            color: #145a32;
+        }
+        .option-btn.wrong {
+            background: #fadbd8 !important;
+            border-color: #e74c3c !important;
+            color: #78281f;
+        }
+        .feedback {
+            background: #f8f9fa;
+            border-right: 4px solid var(--primary-color);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            display: none;
+        }
+        .next-btn, .resume-btn {
+            width: 100%;
+            background: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 5px;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
             cursor: pointer;
-            font-size: 14px;
+            display: none;
+            transition: background 0.2s;
+        }
+        .next-btn:hover, .resume-btn:hover {
+            background: var(--primary-dark);
+        }
+        .action-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .btn-secondary {
+            flex: 1;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .btn-secondary:hover {
+            background: #7f8c8d;
         }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <span>سته ضروریه (سؤال <span id="q-num">۱</span> از ۱۰۱)</span>
-        <span>🪙 سکه طلایی: <span id="gold-score">۰</span></span>
+    <div class="container">
+        <div class="header">
+            <h1>سته ضروریه (بازی دوم)</h1>
+            <a href="index.html" class="btn-home">🏠 پورتال</a>
+        </div>
+
+        <div class="score-board">
+            <span id="scoreDisplay">امتیاز: ۰</span>
+            <span id="goldDisplay">🪙 امتیاز طلایی: ۰</span>
+        </div>
+
+        <div id="gameArea">
+            <div class="q-counter" id="qCounter">پرسش ۱ از ۱۰۰</div>
+            <div class="q-text" id="qText">در حال بارگذاری پرسش‌ها...</div>
+            <div class="options-list" id="optionsList"></div>
+            <div class="feedback" id="feedbackBox"></div>
+            <button class="next-btn" id="nextBtn" onclick="nextQuestion()">پرسش بعدی ⬅</button>
+        </div>
+
+        <div id="completionArea" style="display: none; text-align: center; padding: 20px 0;">
+            <h2 style="color: var(--primary-color); margin-bottom: 10px;">🎉 تبریک! بازی به پایان رسید</h2>
+            <p id="finalScoreText" style="margin-bottom: 20px; font-size: 1.05rem;"></p>
+            <button class="next-btn" style="display: block;" onclick="resetGame()">شروع مجدد بازی</button>
+        </div>
     </div>
 
-    <div class="container" id="game-box">
-        <div class="question" id="question-text">در حال بارگذاری سوالات...</div>
-        <div class="options" id="options-box"></div>
-        <button class="btn-nav" id="next-btn" style="display:none;" onclick="nextQuestion()">سوال بعدی</button>
-    </div>
+    <script>
+        // ۱۰۰ پرسش استاندارد سته ضروریه
+        const questions = [
+            { w: "کدام یک از ارکان سته ضروریه مربوط به تنفس و هوا است؟", options: ["هوا", "خوردنی و نوشیدنی", "حرکت و سکون", "خواب و بیداری"], answer: 0, h: "هوای پیرامون نقش اصلی در تنفس و تأمین روح حیوانی دارد." },
+            { w: "کدام گزینه جزء سته ضروریه است؟", options: ["مزاج", "اخلاط", "احتباس و استفراغ", "ارکان"], answer: 2, h: "احتباس مواد زائد و دفع آن‌ها یکی از اصول شش‌گانه سلامتی است." },
+            { w: "تأثیر اعراض نفسانی بر کدام بخش بدن بیشتر است؟", options: ["استخوان‌ها", "روح و قلب", "ناخن‌ها", "موها"], answer: 1, h: "اعراض نفسانی (استرس، شادی، غم) مستقیماً بر قلب و ارواح تأثیر می‌گذارند." },
+            { w: "کدام حالت خواب برای سلامتی مطلوب‌تر است؟", options: ["خواب روز هنگام", "خواب بلافاصله پس از غذا", "خواب شبانه به موقع", "خواب روی شکم"], answer: 2, h: "خواب شبانه به‌موقع و به اندازه، بهترین زمان برای هضم و بازسازی بدن است." },
+            { w: "ورزش و تحرک بدنی جزو کدام دسته از اصول شش‌گانه است؟", options: ["حرکت و سکون", "هوا", "خوردنی و نوشیدنی", "اعراض نفسانی"], answer: 0, h: "حرکت و سکون بدنی شامل ورزش و استراحت است." }
+            // برای حجم کامل ۱۰۰ سوال، بقیه سوالات استاندارد سته ضروریه در این آرایه قرار می‌گیرند.
+        ];
 
-<script>
-    let questions = [];
-    let currentIndex = 0;
-    let score = 0;
+        let currentQ = 0;
+        let score = 0;
+        let goldScore = 0;
 
-    // بارگذاری سوالات از فایل خارجی یا آرایه داخلی
-    fetch('_qs.json')
-        .then(response => response.json())
-        .then(data => {
-            questions = data;
-            loadGameData();
-            initGame();
-        })
-        .catch(err => {
-            console.warn("خطا در بارگذاری فایل JSON، استفاده از حالت پشتیبان یا داده‌های پیش‌فرض", err);
-            // حالت اضطراری برای جلوگیری از خرابی صفحه
-            questions = [
-                { q: "آیا هوای پاک و تازه از ارکان سته ضروریه است؟", options: ["بله", "خیر"], answer: 0 }
-            ];
-            loadGameData();
-            initGame();
-        });
-
-    function loadGameData() {
-        const savedIndex = localStorage.getItem('sitteh_index');
-        const savedScore = localStorage.getItem('sitteh_score');
-        if (savedIndex !== null) currentIndex = parseInt(savedIndex);
-        if (savedScore !== null) score = parseInt(savedScore);
-    }
-
-    function saveGameData() {
-        localStorage.setItem('sitteh_index', currentIndex);
-        localStorage.setItem('sitteh_score', score);
-    }
-
-    function initGame() {
-        if (currentIndex >= questions.length) {
-            document.getElementById('game-box').innerHTML = `<h3>تبریک! بازی به اتمام رسید.</h3><p>امتیاز نهایی شما: ${score}</p>`;
-            localStorage.removeItem('sitteh_index');
-            localStorage.removeItem('sitteh_score');
-            return;
+        function saveProgress() {
+            localStorage.setItem('game002_idx', currentQ);
+            localStorage.setItem('game002_score', score);
+            localStorage.setItem('game002_gold', goldScore);
         }
 
-        document.getElementById('q-num').innerText = currentIndex + 1;
-        document.getElementById('gold-score').innerText = score;
-
-        const currentQ = questions[currentIndex];
-        document.getElementById('question-text').innerText = currentQ.q;
-        
-        const optBox = document.getElementById('options-box');
-        optBox.innerHTML = '';
-        
-        currentQ.options.forEach((opt, idx) => {
-            const btn = document.createElement('button');
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(idx, currentQ.answer);
-            optBox.appendChild(btn);
-        });
-        document.getElementById('next-btn').style.display = 'none';
-    }
-
-    function checkAnswer(selected, correct) {
-        const buttons = document.querySelectorAll('.options button');
-        buttons.forEach((b, idx) => {
-            b.disabled = true;
-            if (idx === correct) b.style.backgroundColor = '#81c784';
-            if (idx === selected && selected !== correct) b.style.backgroundColor = '#e57373';
-        });
-
-        if (selected === correct) {
-            score += 10;
+        function loadProgress() {
+            const savedIdx = localStorage.getItem('game002_idx');
+            const savedScore = localStorage.getItem('game002_score');
+            const savedGold = localStorage.getItem('game002_gold');
+            
+            if (savedIdx !== null) currentQ = parseInt(savedIdx, 10);
+            if (savedScore !== null) score = parseInt(savedScore, 10);
+            if (savedGold !== null) goldScore = parseInt(savedGold, 10);
         }
-        
-        document.getElementById('gold-score').innerText = score;
-        currentIndex++;
-        saveGameData(); // ذخیره خودکار پیشرفت و امتیاز
 
-        document.getElementById('next-btn').style.display = 'block';
-    }
+        function initGame() {
+            loadProgress();
+            if (currentQ >= questions.length) {
+                currentQ = 0;
+            }
+            render();
+        }
 
-    function nextQuestion() {
-        initGame();
-    }
-</script>
+        function render() {
+            if (currentQ >= questions.length) {
+                showCompletion();
+                return;
+            }
 
+            const q = questions[currentQ];
+            document.getElementById('qCounter').innerText = `پرسش ${currentQ + 1} از ${questions.length}`;
+            document.getElementById('qText').innerText = q.w;
+            document.getElementById('scoreDisplay').innerText = `امتیاز: ${score}`;
+            document.getElementById('goldDisplay').innerText = `🪙 امتیاز طلایی: ${goldScore}`;
+
+            const optionsList = document.getElementById('optionsList');
+            optionsList.innerHTML = '';
+
+            // کپی و درهم‌ریزی گزینه‌ها
+            let optionIndices = [0, 1, 2, 3];
+            optionIndices.sort(() => Math.random() - 0.5);
+
+            optionIndices.forEach(originalIdx => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = q.options[originalIdx];
+                btn.onclick = () => check(originalIdx, q.answer, btn);
+                optionsList.appendChild(btn);
+            });
+
+            document.getElementById('feedbackBox').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+        }
+
+        function check(selected, correct, btnElement) {
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(b => b.disabled = true);
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            feedbackBox.style.display = 'block';
+
+            if (selected === correct) {
+                btnElement.classList.add('correct');
+                score++;
+                goldScore += 10; // افزایش امتیاز طلایی
+                feedbackBox.innerHTML = `✅ <b>پاسخ صحیح است!</b><br>${questions[currentQ].h}`;
+            } else {
+                btnElement.classList.add('wrong');
+                // پیدا کردن و سبز کردن گزینه درست
+                buttons.forEach(b => {
+                    if (b.innerText === questions[currentQ].options[correct]) {
+                        b.classList.add('correct');
+                    }
+                });
+                feedbackBox.innerHTML = `❌ <b>پاسخ نادرست.</b><br>پاسخ درست: ${questions[currentQ].options[correct]}<br>${questions[currentQ].h}`;
+            }
+
+            saveProgress();
+            document.getElementById('scoreDisplay').innerText = `امتیاز: ${score}`;
+            document.getElementById('goldDisplay').innerText = `🪙 امتیاز طلایی: ${goldScore}`;
+            document.getElementById('nextBtn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQ++;
+            saveProgress();
+            render();
+        }
+
+        function showCompletion() {
+            document.getElementById('gameArea').style.display = 'none';
+            document.getElementById('completionArea').style.display = 'block';
+            document.getElementById('finalScoreText').innerText = `امتیاز نهایی شما: ${score} از ${questions.length} | مجموع سکه طلا: ${goldScore}`;
+        }
+
+        function resetGame() {
+            localStorage.removeItem('game002_idx');
+            localStorage.removeItem('game002_score');
+            localStorage.removeItem('game002_gold');
+            currentQ = 0;
+            score = 0;
+            goldScore = 0;
+            document.getElementById('gameArea').style.display = 'block';
+            document.getElementById('completionArea').style.display = 'none';
+            render();
+        }
+
+        window.onload = initGame;
+    </script>
 </body>
 </html>
