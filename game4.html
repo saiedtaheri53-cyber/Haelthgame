@@ -3,182 +3,401 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی ارکان و اخلاط اربعه</title>
+    <title>مزاج‌سنج اختصاصی کاربران | پورتال سلامت</title>
     <style>
-        :root { --primary: #2c3e50; --accent: #e67e22; --bg: #f4f7f6; --text: #333; }
-        body { font-family: 'Tahoma', sans-serif; background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        #game-container { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 90%; max-width: 600px; text-align: center; }
-        .question { font-size: 1.4rem; margin-bottom: 1.5rem; font-weight: bold; }
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        button { padding: 15px; font-size: 1rem; border: 2px solid var(--primary); background: white; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-        button:hover { background: var(--primary); color: white; }
-        .stats { margin-top: 2rem; display: flex; justify-content: space-around; font-size: 0.9rem; color: #666; }
-        .feedback { margin-top: 1rem; height: 1.5rem; font-weight: bold; }
-        .correct { color: #27ae60; } .wrong { color: #c0392b; }
-        .hint { font-style: italic; color: #7f8c8d; margin-top: 10px; display: none; }
+        :root {
+            --primary: #2e7d32;
+            --secondary: #4caf50;
+            --accent: #ffb300;
+            --bg: #f4f9f4;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --text-light: #555555;
+            --shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .score-badge {
+            background: #fff8e1;
+            color: #f57f17;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            border: 1px solid #ffe082;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background: #e0e0e0;
+            border-radius: 8px;
+            height: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--secondary);
+            width: 5%;
+            transition: width 0.4s ease;
+        }
+
+        .question-box {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: #fafafa;
+            border: 2px solid #e0e0e0;
+            padding: 14px 18px;
+            text-align: right;
+            border-radius: 10px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text);
+        }
+
+        .option-btn:hover {
+            background: #e8f5e9;
+            border-color: var(--secondary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .result-box {
+            display: none;
+            text-align: right;
+        }
+
+        .result-box h3 {
+            color: var(--primary);
+            font-size: 22px;
+            margin-top: 0;
+        }
+
+        .result-card {
+            background: #f1f8e9;
+            border-right: 5px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            line-height: 1.7;
+        }
+
+        .nav-links {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-link {
+            flex: 1;
+            text-align: center;
+            background: var(--primary);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-link:hover {
+            background: #1b5e20;
+        }
     </style>
 </head>
 <body>
 
-<div id="game-container">
-    <div id="score-board" class="stats">
-        <span>امتیاز: <span id="score">0</span></span>
-        <span>سوال: <span id="q-count">0</span>/98</span>
+<div class="container">
+    <div id="quiz-container">
+        <div class="header">
+            <h2 id="quiz-title">مزاج‌سنج اختصاصی کاربران</h2>
+            <div class="score-badge">🎁 کل سکه‌ها: <span id="total-gifts">0</span></div>
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div class="question-box" id="question-text">در حال بارگذاری سوالات...</div>
+        <div class="options-list" id="options-container"></div>
     </div>
-    <div id="game-area">
-        <div class="question" id="question-text">در حال بارگذاری...</div>
-        <div class="options-grid" id="options-container"></div>
-        <div class="feedback" id="feedback-text"></div>
-        <div class="hint" id="hint-text"></div>
+
+    <div class="result-box" id="result-container">
+        <h3>نتیجه تحلیل مزاج اختصاصی شما</h3>
+        <div class="result-card" id="result-content"></div>
+        <div class="nav-links">
+            <a href="Main_Menu_Game_Library.html" class="btn-link">بازگشت به پورتال بازی‌ها</a>
+            <button onclick="location.reload()" class="btn-link" style="background:#ff8f00; border:none; cursor:pointer;">تکرار آزمون</button>
+        </div>
     </div>
 </div>
 
 <script>
-const rawQuestions = [
-    { w: "عنصر آتش چه مزاجی دارد؟", a: "گرم و خشک", h: "مزاج صفراوی است" },
-    { w: "کدام عنصر سرد و تر است؟", a: "آب", h: "مزاج بلغمی است" },
-    { w: "عنصر خاک چه مزاجی دارد؟", a: "سرد و خشک", h: "مزاج سوداوی است" },
-    { w: "کدام عنصر گرم و تر است؟", a: "هوا", h: "مزاج دموی است" },
-    { w: "کدام خلط مربوط به عنصر آتش است؟", a: "صفرا", h: "مزاج صفرا گرم و خشک است" },
-    { w: "کدام خلط مربوط به عنصر هواست؟", a: "دم", h: "مزاج دم گرم و تر است" },
-    { w: "کدام خلط مربوط به عنصر آب است؟", a: "بلغم", h: "مزاج بلغم سرد و تر است" },
-    { w: "کدام خلط مربوط به عنصر خاک است؟", a: "سودا", h: "مزاج سودا سرد و خشک است" },
-    { w: "به معنای چهار رکن بنیادین چیست؟", a: "ارکان اربعه", h: "آتش، هوا، آب، خاک" },
-    { w: "کدام کیفیت مقابل گرما است؟", a: "سردی", h: "گرما و سردی متضادند" },
-    { w: "کدام کیفیت مقابل تری است؟", a: "خشکی", h: "تری و خشکی متضادند" },
-    { w: "مزاجِ صفراوی در کدام فصل غلبه دارد؟", a: "تابستان", h: "گرما غلبه دارد" },
-    { w: "مزاجِ دموی در کدام فصل غلبه دارد؟", a: "بهار", h: "گرما و تری" },
-    { w: "مزاجِ سوداوی در کدام فصل غلبه دارد؟", a: "پاییز", h: "سردی و خشکی" },
-    { w: "مزاجِ بلغمی در کدام فصل غلبه دارد؟", a: "زمستان", h: "سردی و تری" },
-    { w: "کدام رکن سبک‌ترین است؟", a: "آتش", h: "حرکت طبیعی آن رو به بالاست" },
-    { w: "کدام رکن سنگین‌ترین است؟", a: "خاک", h: "حرکت طبیعی آن رو به مرکز است" },
-    { w: "جایگاه طبیعی عنصر هوا کجاست؟", a: "بالای آب", h: "سبک‌تر از آب" },
-    { w: "کدام عنصر واسطه بین آتش و آب است؟", a: "هوا", h: "مرطوب است" },
-    { w: "آیا بدن انسان از ارکان تشکیل شده است؟", a: "بله", h: "بدن ماحصل ترکیب ارکان است" },
-    { w: "مفهوم اعتدال یعنی چه؟", a: "تعادل کیفیت‌ها", h: "حالت سلامت" },
-    { w: "کدام خلط لزج‌تر است؟", a: "بلغم", h: "طبیعت آب" },
-    { w: "کدام خلط تند و تیز است؟", a: "صفرا", h: "طبیعت آتش" },
-    { w: "سیاهی و خشکی صفت کدام خلط است؟", a: "سودا", h: "سرد و خشک" },
-    { w: "قرمزی و شیرینی صفت کدام خلط است؟", a: "دم", h: "خون" },
-    { w: "کدام خلط سریع‌تر تغییر می‌کند؟", a: "صفرا", h: "به دلیل گرمی" },
-    { w: "سودا شبیه کدام رکن است؟", a: "خاک", h: "سرد و خشک" },
-    { w: "بلغم شبیه کدام رکن است؟", a: "آب", h: "سرد و تر" },
-    { w: "دم شبیه کدام رکن است؟", a: "هوا", h: "گرم و تر" },
-    { w: "صفرا شبیه کدام رکن است؟", a: "آتش", h: "گرم و خشک" },
-    { w: "در چه سنی غلبه صفرا بیشتر است؟", a: "جوانی", h: "سن گرمی" },
-    { w: "در چه سنی غلبه بلغم بیشتر است؟", a: "کودکی", h: "سن تری و رشد" },
-    { w: "در چه سنی غلبه سودا بیشتر است؟", a: "پیری", h: "سن سردی و خشکی" },
-    { w: "کدام خلط برای حرکات بدن لازم است؟", a: "دم", h: "حامل مواد مغذی" },
-    { w: "بیماری نتیجه چیست؟", a: "سوءمزاج", h: "خروج از تعادل" },
-    { w: "تغذیه بر کدام رکن تأثیر دارد؟", a: "همه ارکان", h: "تغییر کیفیت خلط" },
-    { w: "آیا مزاج ارثی است؟", a: "بله", h: "مزاج ذاتی" },
-    { w: "کدام رنگ پوست نشانه صفراست؟", a: "زرد", h: "غلبه گرما" },
-    { w: "کدام رنگ پوست نشانه بلغم است؟", a: "سفید", h: "غلبه سردی و رطوبت" },
-    { w: "کدام رنگ پوست نشانه سودا است؟", a: "تیره", h: "غلبه سردی و خشکی" },
-    { w: "خواب زیاد نشانه چیست؟", a: "غلبه بلغم", h: "طبیعت سرد و تر" },
-    { w: "کم‌خوابی نشانه چیست؟", a: "غلبه صفرا", h: "خشکی و گرما" },
-    { w: "آیا ارکان همیشه در حال تغییرند؟", a: "بله", h: "تبادل مستمر" },
-    { w: "هدف علم طب چیست؟", a: "حفظ سلامت", h: "تدبیر بدن" },
-    { w: "کدام خلط سرد و تر است؟", a: "بلغم", h: "مشابه آب" },
-    { w: "کدام خلط گرم و تر است؟", a: "دم", h: "مشابه هوا" },
-    { w: "کدام خلط گرم و خشک است؟", a: "صفرا", h: "مشابه آتش" },
-    { w: "کدام خلط سرد و خشک است؟", a: "سودا", h: "مشابه خاک" },
-    { w: "عنصر آتش در بدن کجاست؟", a: "کبد", h: "منبع حرارت" },
-    { w: "عنصر آب در بدن کجاست؟", a: "مغز", h: "مرطوب" },
-    { w: "طبیعت گرم و خشک چیست؟", a: "آتش", h: "صفرا" },
-    { w: "طبیعت سرد و تر چیست؟", a: "آب", h: "بلغم" },
-    { w: "طبیعت گرم و تر چیست؟", a: "هوا", h: "دم" },
-    { w: "طبیعت سرد و خشک چیست؟", a: "خاک", h: "سودا" },
-    { w: "آیا اخلاط در تمام اعضا وجود دارند؟", a: "بله", h: "انتشار در بدن" },
-    { w: "تعادل یعنی چه؟", a: "سلامتی", h: "میانه بودن" },
-    { w: "کدام خلط وزن بدن را افزایش می‌دهد؟", a: "بلغم", h: "آب زیاد" },
-    { w: "کدام خلط باعث لاغری می‌شود؟", a: "صفرا", h: "خشکی و سوختن" },
-    { w: "نشانه غلبه دم چیست؟", a: "سرخی صورت", h: "گرمی و خون زیاد" },
-    { w: "نشانه غلبه سودا چیست؟", a: "تیرگی", h: "سردی و خشکی" },
-    { w: "آیا اخلاط با سن تغییر می‌کنند؟", a: "بله", h: "تحول عمر" },
-    { w: "کدام عضو سرد است؟", a: "استخوان", h: "سوداوی" },
-    { w: "کدام عضو گرم است؟", a: "قلب", h: "منبع اصلی حرارت" },
-    { w: "کدام غذا صفرازا است؟", a: "گردو", h: "گرم و خشک" },
-    { w: "کدام غذا بلغم‌زاست؟", a: "ماست", h: "سرد و تر" },
-    { w: "کدام غذا سودازاست؟", a: "عدس", h: "سرد و خشک" },
-    { w: "کدام غذا دم‌زاست؟", a: "گوشت گوسفند", h: "گرم و تر" },
-    { w: "در هنگام عطش چه بنوشیم؟", a: "آب", h: "خنک" },
-    { w: "آیا ورزش حرارت بدن را زیاد می‌کند؟", a: "بله", h: "تولید انرژی" },
-    { w: "عنصرِ حیات چیست؟", a: "حرارت غریزی", h: "قلب" },
-    { w: "آیا سودا ضرر دارد؟", a: "بستگی به مقدار دارد", h: "تعادل لازم است" },
-    { w: "بهترین حالت بدن چیست؟", a: "اعتدال", h: "میانه" },
-    { w: "آیا خواب زیاد سودازاست؟", a: "خیر", h: "بلغم‌زاست" },
-    { w: "آیا عصبانیت صفرا را زیاد می‌کند؟", a: "بله", h: "غلبه گرما" },
-    { w: "آیا ترس سودا را زیاد می‌کند؟", a: "بله", h: "غلبه سردی و خشکی" },
-    { w: "کدام رکن در تنفس نقش دارد؟", a: "هوا", h: "حیات" },
-    { w: "کدام خلط تپش قلب می‌آورد؟", a: "صفرا", h: "گرمی بیش از حد" },
-    { w: "کدام خلط باعث آرامش است؟", a: "بلغم", h: "سردی" },
-    { w: "کدام عضو با سودا ارتباط دارد؟", a: "طحال", h: "محل ذخیره" },
-    { w: "کدام خلط برای رشد کودکان لازم است؟", a: "دم", h: "گرم و تر" },
-    { w: "کدام خلط برای تقویت استخوان است؟", a: "سودا", h: "سرد و خشک" },
-    { w: "کدام رکن در هضم غذا نقش دارد؟", a: "آتش", h: "حرارت معده" },
-    { w: "آیا همه ارکان در هر فرد وجود دارند؟", a: "بله", h: "ساختار بدن" },
-    { w: "بهترین مزاج کدام است؟", a: "مزاج معتدل", h: "سالم‌ترین حالت" },
-    { w: "آیا صفراوی‌ها زود عصبانی می‌شوند؟", a: "بله", h: "آتش درونی" },
-    { w: "آیا بلغمی‌ها صبورترند؟", a: "بله", h: "آرامش رطوبت" },
-    { w: "کدام خلط به خون کمک می‌کند؟", a: "دم", h: "هم‌جنس" },
-    { w: "کدام رکن در کبد فعال است؟", a: "آتش", h: "حرارت تولید خون" },
-    { w: "کدام رکن در طحال فعال است؟", a: "خاک", h: "جذب سودا" },
-    { w: "عنصر خاک عامل چیست؟", a: "پایداری", h: "ثبات" },
-    { w: "عنصر آتش عامل چیست؟", a: "تغییر", h: "انرژی" },
-    { w: "آیا بدن از ترکیب ارکان تشکیل شده؟", a: "بله", h: "قانون طبیعت" },
-    { w: "کدام خلط برای مو و ناخن مفید است؟", a: "سودا", h: "خشکی و ساختار" },
-    { w: "آیا هوای پاک برای ارکان مفید است؟", a: "بله", h: "نیاز اولیه" },
-    { w: "کدام خلط با طحال مرتبط است؟", a: "سودا", h: "جذب و دفع" },
-    { w: "کدام خلط با کبد مرتبط است؟", a: "دم", h: "تولید خون" },
-    { w: "کدام رکن باعث لطافت پوست است؟", a: "آب", h: "رطوبت" },
-    { w: "جمع‌بندی: «ارکان اربعه» کدام‌اند؟", a: "آتش، هوا، آب، خاک", h: "چهار عنصر بنیادین" }
-];
+    // بانک ۲۰ سوال جامع تشخیصی مزاج
+    const questions = [
+        { q: "۱. ساختار جسمانی و استخوان‌بندی شما چگونه است؟", options: [
+            { text: "درشت، عضلانی و چهارشانه", type: "dam", weight: 2 },
+            { text: "متوسط، استخوان‌بندی باریک و خشک", type: "safra", weight: 2 },
+            { text: "چاق، نرم‌گوشت و پرحجم", type: "balgham", weight: 2 },
+            { text: "لاغر، استخوانی و کم‌گوشت", type: "sowda", weight: 2 }
+        ]},
+        { q: "۲. رنگ پوست طبیعی بدن شما چه تمایلی دارد؟", options: [
+            { text: "گلگون، سرخ و سفید", type: "dam", weight: 2 },
+            { text: "زردچوبه‌ای، گندمی مایل به زرد", type: "safra", weight: 2 },
+            { text: "سفید و رنگ‌پریده، مهتابی", type: "balgham", weight: 2 },
+            { text: "سبزه تیره، گندمی تیره یا مایل به خاکستری", type: "sowda", weight: 2 }
+        ]},
+        { q: "۳. حرارت بدن شما در حالت عادی چگونه است؟", options: [
+            { text: "گرم، دیگران از گرمای دست من تعجب می‌کنند", type: "dam", weight: 3 },
+            { text: "بسیار گرم و گاهی احساس حرارت درونی", type: "safra", weight: 3 },
+            { text: "سرد، دست و پای همیشه سردی دارم", type: "balgham", weight: 3 },
+            { text: "سرد و خشک، معمولاً با پتو هم گرم نمی‌شوم", type: "sowda", weight: 3 }
+        ]},
+        { q: "۴. میزان خواب و کیفیت آن در شما چطور است؟", options: [
+            { text: "خواب سنگین و نسبتاً زیاد (۸ ساعت یا بیشتر)", type: "dam", weight: 2 },
+            { text: "خواب کم، سبک و بیدار شدن سریع", type: "safra", weight: 2 },
+            { text: "خواب‌آلودگی زیاد در طول روز، سنگین", type: "balgham", weight: 2 },
+            { text: "خواب کم، سبک، دچار بی‌خوابی یا افکار شبانه", type: "sowda", weight: 2 }
+        ]},
+        { q: "۵. واکنش عاطفی و خلق‌وخوی غالب شما کدام است؟", options: [
+            { text: "خوش‌رو، سخاوتمند، اهل صلح و گاهی تندمزاجی آنی", type: "dam", weight: 2 },
+            { text: "پرتلاش، تیزهوش، بی‌قرار و زودجوش", type: "safra", weight: 2 },
+            { text: "آرام، صبور، کم‌حرف، دیرعصبانی‌شونده", type: "balgham", weight: 2 },
+            { text: "دقیق، اهل تحلیل، محافظه‌کار، اهل تفکر عمیق", type: "sowda", weight: 2 }
+        ]},
+        { q: "۶. وضعیت هضم غذا و اشتهای شما چطور است؟", options: [
+            { text: "اشتهای خوب، هضم قوی و توانایی خوردن غذاهای مختلف", type: "dam", weight: 2 },
+            { text: "اشتهای متغیر، گاهی ضعف ناگهانی همراه با گرسنگی کاذب", type: "safra", weight: 2 },
+            { text: "اشتهای زیاد اما هضم ضعیف، آب دهان در خواب", type: "balgham", weight: 2 },
+            { text: "اشتهای کم، نفخ معده، دیر هضم شدن غذا", type: "sowda", weight: 2 }
+        ]},
+        { q: "۷. تمایل شما به آب و نوشیدنی‌ها چگونه است؟", options: [
+            { text: "تشنگی متوسط، دوستدار آب خنک", type: "dam", weight: 1 },
+            { text: "تشنگی زیاد، علاقه شدید به آب سرد و مایعات ترش", type: "safra", weight: 2 },
+            { text: "کم‌تشنگی، نیاز کمتر به نوشیدن آب", type: "balgham", weight: 1 },
+            { text: "تشنگی متوسط اما حساسیت به سردی آب", type: "sowda", weight: 1 }
+        ]},
+        { q: "۸. واکنش شما نسبت به فصل‌ها (گرما و سرما) چطور است؟", options: [
+            { text: "تحمل سرما خوب است، بهار و هوای معتدل را دوست دارم", type: "dam", weight: 2 },
+            { text: "از هوای گرم فراری‌ام، تابستان برایم آزاردهنده است", type: "safra", weight: 2 },
+            { text: "از سرما بیزارم، زمستان و پاییز حالم را می‌گیرد", type: "balgham", weight: 2 },
+            { text: "هوای سرد و خشک پاییز باعث خشکی پوست و افسردگی‌ام می‌شود", type: "sowda", weight: 2 }
+        ]},
+        { q: "۹. سرعت حرکت، تکلم و انجام کارها در شما چگونه است؟", options: [
+            { text: "چابک، معتدل و باانرژی", type: "dam", weight: 2 },
+            { text: "سریع، فرز، تندتند راه رفتن و سریع حرف زدن", type: "safra", weight: 2 },
+            { text: "کند، باوقار، آرام و باحوصله", type: "balgham", weight: 2 },
+            { text: "دقیق اما کند، با تأمل و محاسبه‌شده", type: "sowda", weight: 2 }
+        ]},
+        { q: "۱۰. وضعیت موی سر (رنگ، جنس و ریزش) شما چطور است؟", options: [
+            { text: "پُرپشت، ضخیم و گاهی مجعد (موج‌دار)", type: "dam", weight: 2 },
+            { text: "کم‌پشت، نازک، مایل به خرمایی یا مستعد کم‌پشتی زودرس", type: "safra", weight: 2 },
+            { text: "نرم، لخت، نازک و روشن", type: "balgham", weight: 2 },
+            { text: "تیره، ضخیم، خشک یا مستعد سفیدی زودرس", type: "sowda", weight: 2 }
+        ]},
+        { q: "۱۱. نبض بدن شما در حالت معاینه چگونه است؟", options: [
+            { text: "پر، قوی و با دامنه وسیع", type: "dam", weight: 3 },
+            { text: "سریع، باریک و محکم", type: "safra", weight: 3 },
+            { text: "کند، نرم و ضعیف", type: "balgham", weight: 3 },
+            { text: "کند، سفت و باریک", type: "sowda", weight: 3 }
+        ]},
+        { q: "۱۲. تعریق بدن و بوی عرق شما چه ویژگی دارد؟", options: [
+            { text: "تعریق نسبتاً زیاد با بوی گرم و مطبوع", type: "dam", weight: 2 },
+            { text: "تعریق زیاد در نواحی پیشانی و سر با بوی تند", type: "safra", weight: 2 },
+            { text: "تعریق کم، پوست سرد و مرطوب", type: "balgham", weight: 2 },
+            { text: "تعریق بسیار کم، پوست خشک", type: "sowda", weight: 2 }
+        ]},
+        { q: "۱۳. وضعیت دهان و طعم آن به هنگام صبح چیست؟", options: [
+            { text: "طعم دهان شیرین یا طبیعی هنگام بیدار شدن", type: "dam", weight: 2 },
+            { text: "طعم تلخ، خشکی دهان و احساس حرارت در گلو", type: "safra", weight: 2 },
+            { text: "طعم دهان ترش، بی‌مزه یا پُر از آب دهان شفاف", type: "balgham", weight: 2 },
+            { text: "طعم دهان شور، ترش یا گس", type: "sowda", weight: 2 }
+        ]},
+        { q: "۱۴. علاقه غذایی شما به چه طعم‌هایی است؟", options: [
+            { text: "علاقه به طعم‌های ملایم، شیرینی طبیعی و ترشی ملایم", type: "dam", weight: 2 },
+            { text: "علاقه به ترشیجات، آبلیمو، ماست و غذاهای خنک", type: "safra", weight: 2 },
+            { text: "علاقه به گرمی‌ها، چای پررنگ، ادویه و خرما", type: "balgham", weight: 2 },
+            { text: "علاقه به شیرینی‌جات گرم، عسل، گوشت گوسفند و ارده", type: "sowda", weight: 2 }
+        ]},
+        { q: "۱۵. میزان حافظه و یادگیری شما چگونه است؟", options: [
+            { text: "حافظه خوب در حفظ کلیات، یادگیری متوسط", type: "dam", weight: 2 },
+            { text: "حفظ سریع مطالب اما فراموشی سریع جزئیات", type: "safra", weight: 2 },
+            { text: "یادگیری کند اما ماندگار در حافظه درازمدت", type: "balgham", weight: 2 },
+            { text: "دقت بالا در حفظ جزئیات، تفکر عمیق و دقیق", type: "sowda", weight: 2 }
+        ]},
+        { q: "۱۶. وضعیت پوست از نظر میزان چربی یا خشکی چیست؟", options: [
+            { text: "پوست مرطوب، باطراوت و گلگون", type: "dam", weight: 2 },
+            { text: "پوست نسبتاً خشک یا مختلط، مستعد جوش و آکنه گرم", type: "safra", weight: 2 },
+            { text: "پوست نرم، سرد، سفید و مرطوب", type: "balgham", weight: 2 },
+            { text: "پوست خشک، سرد، تیره و مستعد ترک‌خوردگی", type: "sowda", weight: 2 }
+        ]},
+        { q: "۱۷. واکنش شما در برابر استرس و بحران‌ها چیست؟", options: [
+            { text: "حفظ آرامش نسبی و تلاش برای صلح و سازش", type: "dam", weight: 2 },
+            { text: "واکنش سریع، عصبانیت آنی و فروکش کردن سریع", type: "safra", weight: 2 },
+            { text: "بی‌تفاوت نسبت به تنش‌ها، درون‌گرا و تحمل بالا", type: "balgham", weight: 2 },
+            { text: "نگرانی زیاد، وسواس فکری و تمرکز روی جنبه‌های منفی", type: "sowda", weight: 2 }
+        ]},
+        { q: "۱۸. وضعیت تنفس و سینه شما چطور است؟", options: [
+            { text: "سینه‌ای پهن، تنفس عمیق و فراخ", type: "dam", weight: 2 },
+            { text: "تنفس سریع، عمق متوسط", type: "safra", weight: 2 },
+            { text: "تنفس آرام، گاهی احساس سنگینی در سینه به دلیل سردی", type: "balgham", weight: 2 },
+            { text: "تنفس کوتاه و سطحی", type: "sowda", weight: 2 }
+        ]},
+        { q: "۱۹. قدرت بدنی و استقامت شما در کارهای سخت چگونه است؟", options: [
+            { text: "انرژی عالی و استقامت بدنی خوب", type: "dam", weight: 2 },
+            { text: "انرژی انفجاری بالا اما زود خسته شدن در کارهای یکنواخت", type: "safra", weight: 2 },
+            { text: "انرژی کم برای کارهای پرتحرک، نیازمند استراحت زیاد", type: "balgham", weight: 2 },
+            { text: "استقامت فکری بالا اما توان بدنی متوسط و زودرنج", type: "sowda", weight: 2 }
+        ]},
+        { q: "۲۰. میل به فعالیت‌های اجتماعی و ارتباط با دیگران؟", options: [
+            { text: "بسیار اجتماعی، خوش‌برخورد، مهمان‌دوست و پرجمعیت", type: "dam", weight: 2 },
+            { text: "رهبر مآب، اهل رقابت، صریح و قاطع در گفتار", type: "safra", weight: 2 },
+            { text: "گوشه‌گیر، کم‌حرف، متمایل به سکوت و آرامش فردی", type: "balgham", weight: 2 },
+            { text: "اهل مطالعه، تنهایی‌طلب، دقیق و سنجیده در روابط", type: "sowda", weight: 2 }
+        ]}
+    ];
 
-let currentQuestionIndex = 0; let score = 0;
-let allCorrectAnswers = rawQuestions.map(q => q.a);
+    let currentQuestion = 0;
+    let scores = { dam: 0, safra: 0, balgham: 0, sowda: 0 };
+    let totalGifts = parseInt(localStorage.getItem('health_game_total_gifts') || '40'); // شروع از امتیازات بازی‌های قبل
 
-function initGame() { rawQuestions.sort(() => Math.random() - 0.5); showQuestion(); }
+    const descriptions = {
+        dam: {
+            title: "مزاج غالب: دموی (گرم و تر)",
+            desc: "شما طبعی گرم و تر دارید. خون در وجود شما جریان پرنشاطی دارد. افراد دموی‌مزاج معمولاً شاداب، خوش‌خلق، دارای انرژی بالا و بدنی قوی هستند.",
+            moseleh: "کاهو، سرکه، انار ترش، زرشک، مرکبات و غذاهای با طبع خنک و تر."
+        },
+        safra: {
+            title: "مزاج غالب: صفراوی (گرم و خشک)",
+            desc: "طبع شما گرم و خشک است. صفرا نمایانگر عنصر آتش در وجود شماست. تیزهوش، پرانرژی، فرز، دقیق و گاهی زودجوش و پرشور هستید.",
+            moseleh: "آلو، خیار، هندوانه، کاهو، سکنجبین، عناب و آش‌های ساده و خنک."
+        },
+        balgham: {
+            title: "مزاج غالب: بلغمی (سرد و تر)",
+            desc: "طبع شما سرد و تر است (منسوب به آب). افرادی با این مزاج آرام، صبور، متین، دوراندیش و دارای حافظه خوب در درازمدت هستند.",
+            moseleh: "عسل، ارده با شیره، ادویه‌جات گرم (زنجبیل، دارچین)، خرما و گردو."
+        },
+        sowda: {
+            title: "مزاج غالب: سوداوی (سرد و خشک)",
+            desc: "طبع شما سرد و خشک است (منسوب به خاک). افرادی با این مزاج بسیار دقیق، اهل تحلیل، منطقی، وفادار، عمیق و سخت‌کوش هستند.",
+            moseleh: "غذاهای آب‌پز گرم، گوشت گوسفند، عسل، انجیر، مویز و خورشت‌های چرب با ادویه گرم."
+        }
+    };
 
-function showQuestion() {
-    const qData = rawQuestions[currentQuestionIndex];
-    document.getElementById('question-text').textContent = qData.w;
-    document.getElementById('q-count').textContent = currentQuestionIndex + 1;
-    const options = generateSmartOptions(qData.a);
-    const container = document.getElementById('options-container'); container.innerHTML = '';
-    options.forEach(opt => {
-        const btn = document.createElement('button'); btn.textContent = opt;
-        btn.onclick = () => checkAnswer(opt, qData); container.appendChild(btn);
-    });
-}
+    function updateGiftDisplay() {
+        document.getElementById('total-gifts').innerText = totalGifts;
+        localStorage.setItem('health_game_total_gifts', totalGifts);
+    }
 
-function generateSmartOptions(correctAnswer) {
-    let options = [correctAnswer];
-    let pool = allCorrectAnswers.filter(a => a !== correctAnswer);
-    pool.sort(() => Math.random() - 0.5);
-    for(let i = 0; i < 3; i++) { if(pool[i]) options.push(pool[i]); }
-    while(options.length < 4) { options.push("گزینه نامعتبر"); }
-    return options.sort(() => Math.random() - 0.5);
-}
+    function loadQuestion() {
+        if (currentQuestion >= questions.length) {
+            showResult();
+            return;
+        }
 
-function checkAnswer(selected, qData) {
-    const feedback = document.getElementById('feedback-text');
-    const hint = document.getElementById('hint-text');
-    document.querySelectorAll('#options-container button').forEach(b => b.disabled = true);
-    if (selected === qData.a) { score += 10; feedback.textContent = "صحیح!"; feedback.className = "feedback correct"; document.getElementById('score').textContent = score; }
-    else { feedback.textContent = "خطا!"; feedback.className = "feedback wrong"; }
-    hint.textContent = "راهنما: " + qData.h; hint.style.display = "block";
-    setTimeout(() => {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < rawQuestions.length) showQuestion(); else endGame();
-    }, 2500);
-}
+        const q = questions[currentQuestion];
+        document.getElementById('question-text').innerText = q.q;
+        document.getElementById('progress-bar').style.width = ((currentQuestion + 1) / questions.length) * 100 + '%';
 
-function endGame() {
-    document.getElementById('game-area').innerHTML = `<h2>پایان بازی!</h2><p>امتیاز نهایی شما: ${score}</p><button onclick="location.reload()">شروع مجدد</button>`;
-}
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
 
-initGame();
+        q.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt.text;
+            btn.onclick = () => selectAnswer(opt.type, opt.weight);
+            container.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(type, weight) {
+        scores[type] += weight;
+        totalGifts += 5; // هر پاسخ درست معادل ۵ سکه هدیه
+        updateGiftDisplay();
+        
+        currentQuestion++;
+        loadQuestion();
+    }
+
+    function showResult() {
+        document.getElementById('quiz-container').style.display = 'none';
+        
+        // پیدا کردن بیشترین امتیاز
+        let maxType = 'dam';
+        let maxVal = -1;
+        for (let t in scores) {
+            if (scores[t] > maxVal) {
+                maxVal = scores[t];
+                maxType = t;
+            }
+        }
+
+        const res = descriptions[maxType];
+        const resCard = document.getElementById('result-content');
+        resCard.innerHTML = `
+            <strong style="font-size:18px; color: #1b5e20;">${res.title}</strong><br><br>
+            ${res.desc}<br><br>
+            <strong>🌿 توصیه‌های تغذیه‌ای و مصلحات:</strong><br>
+            ${res.moseleh}
+        `;
+
+        document.getElementById('result-container').style.display = 'block';
+    }
+
+    // مقداردهی اولیه
+    updateGiftDisplay();
+    loadQuestion();
 </script>
+
 </body>
 </html>
