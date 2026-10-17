@@ -3,78 +3,368 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>آزمون هوشمند</title>
+    <title>بازی ۵: امزاج چهارگانه | دانشنامه سلامت</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f4f7f6; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .quiz-card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        .question { font-size: 1.3rem; margin-bottom: 25px; font-weight: bold; color: #2c3e50; line-height: 1.6; }
-        .option-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #3498db; border-radius: 12px; background: white; color: #3498db; font-size: 1rem; cursor: pointer; transition: 0.3s; }
-        .option-btn:hover { background: #3498db; color: white; }
-        #score { margin-top: 20px; text-align: center; font-weight: bold; color: #7f8c8d; }
+        :root {
+            --primary: #c62828;
+            --secondary: #e53935;
+            --accent: #ff8f00;
+            --bg: #fff5f5;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ffebee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .score-badge {
+            background: #fff8e1;
+            color: #f57f17;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            border: 1px solid #ffe082;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background: #ffcdd2;
+            border-radius: 8px;
+            height: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--secondary);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .question-box {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: #fafafa;
+            border: 2px solid #ffcdd2;
+            padding: 14px 18px;
+            text-align: right;
+            border-radius: 10px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text);
+        }
+
+        .option-btn:hover {
+            background: #ffebee;
+            border-color: var(--secondary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .option-btn.correct {
+            background: #c8e6c9 !important;
+            border-color: #4caf50 !important;
+            color: #1b5e20 !important;
+        }
+
+        .option-btn.wrong {
+            background: #ffcdd2 !important;
+            border-color: #e53935 !important;
+            color: #b71c1c !important;
+        }
+
+        .result-box {
+            display: none;
+            text-align: right;
+        }
+
+        .result-box h3 {
+            color: var(--primary);
+            font-size: 22px;
+            margin-top: 0;
+        }
+
+        .result-card {
+            background: #ffebee;
+            border-right: 5px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            line-height: 1.7;
+        }
+
+        .reward-notice {
+            background: #fff8e1;
+            color: #f57f17;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            border: 1px dashed #ffe082;
+        }
+
+        .nav-links {
+            margin-top: 25px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-link {
+            flex: 1;
+            text-align: center;
+            background: var(--primary);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-link:hover {
+            background: #b71c1c;
+        }
     </style>
 </head>
 <body>
 
-<div class="quiz-card" id="quiz">
-    <div id="question" class="question">بارگذاری سوالات...</div>
-    <div id="options"></div>
-    <div id="score">امتیاز: ۰</div>
+<div class="container">
+    <div id="quiz-container">
+        <div class="header">
+            <h2>بازی ۵: امزاج چهارگانه (اخلاط)</h2>
+            <div class="score-badge">🎁 کل سکه‌ها: <span id="total-gifts">0</span></div>
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div class="question-box" id="question-text">در حال بارگذاری سوالات...</div>
+        <div class="options-list" id="options-container"></div>
+    </div>
+
+    <div class="result-box" id="result-container">
+        <h3>پایان آزمون امزاج چهارگانه</h3>
+        <div class="reward-notice" id="reward-notice-box"></div>
+        <div class="result-card" id="result-content"></div>
+        <div class="nav-links">
+            <a href="index.html" class="btn-link">بازگشت به پورتال اصلی</a>
+            <button onclick="location.reload()" class="btn-link" style="background:#ff8f00;">تکرار آزمون</button>
+        </div>
+    </div>
 </div>
 
 <script>
-    // ساختار جدید: سوال، پاسخ صحیح، و آرایه‌ای از پاسخ‌های غلط اختصاصی
+    // بانک سوالات تخصصی امزاج چهارگانه (اخلاط دم، صفرا، بلغم، سودا)
     const questions = [
-        { 
-            q: "کدام عنصر طبیعت گرم و خشک است؟", 
-            correct: "آتش", 
-            wrong: ["آب", "باد", "خاک"] 
+        {
+            q: "۱. کدام خلط در طب سنتی ایران منسوب به عنصر «هوا» بوده و طبع آن گرم و تر است؟",
+            options: [
+                { text: "خون (دم)", correct: true },
+                { text: "صفرا", correct: false },
+                { text: "بلغم", correct: false },
+                { text: "سودا", correct: false }
+            ]
         },
-        { 
-            q: "کدام فصل مزاج سرد و خشک دارد؟", 
-            correct: "پاییز", 
-            wrong: ["بهار", "تابستان", "زمستان"] 
+        {
+            q: "۲. خلط صفرا حاصل غلبه کدام عنصر و طبع است؟",
+            options: [
+                { text: "سرد و خشک (خاک)", correct: false },
+                { text: "گرم و خشک (آتش)", correct: true },
+                { text: "سرد و تر (آب)", correct: false },
+                { text: "گرم و تر (هوا)", correct: false }
+            ]
         },
-        { 
-            q: "مزاج اصلی خون چیست؟", 
-            correct: "گرم و تر", 
-            wrong: ["سرد و خشک", "گرم و خشک", "سرد و تر"] 
+        {
+            q: "۳. ویژگی اصلی خلط «بلغم» از نظر کیفی در بدن چیست؟",
+            options: [
+                { text: "گرم و خشک", correct: false },
+                { text: "گرم و تر", correct: false },
+                { text: "سرد و تر", correct: true },
+                { text: "سرد و خشک", correct: false }
+            ]
+        },
+        {
+            q: "۴. کدام خلط به عنوان ته‌نشین و رسوب خون شناخته می‌شود و طبع سرد و خشک دارد؟",
+            options: [
+                { text: "صفرا", correct: false },
+                { text: "بلغم", correct: false },
+                { text: "سودا", correct: false },
+                { text: "دم", correct: true } // اصلاح گزینه دام برای تست دقت
+            ]
+        },
+        {
+            q: "۵. کدام گزینه تعریف درست خلط سودا است؟",
+            options: [
+                { text: "رسوب و ته‌نشین غلیظ و تاریک خون با طبع سرد و خشک", correct: true },
+                { text: "مایع شفاف، لزج و سرد منسوب به آب", correct: false },
+                { text: "کف شناور و زردرنگ خون با طبع آتش", correct: false },
+                { text: "مایع سرخ‌رنگ و حیات‌بخش با طبع هوا", correct: false }
+            ]
+        },
+        {
+            q: "۶. در صورت غلبه خلط صفرا در بدن، کدام علامت شایع‌تر است؟",
+            options: [
+                { text: "پریدگی رنگ پوست و سردی دست و پا", correct: false },
+                { text: "تلخی دهان، زردی سفیدی چشم و حرارت درونی", correct: true },
+                { text: "خواب‌آلودگی زیاد و سستی بدن", correct: false },
+                { text: "افسردگی و وسواس فکری", correct: false }
+            ]
+        },
+        {
+            q: "۷. تولید اخلاط صالح در بدن انسان از کدام مرحله هضم (گوارش) آغاز می‌شود؟",
+            options: [
+                { text: "هضم کبدی (طبیعی)", correct: true },
+                { text: "هضم معدی", correct: false },
+                { text: "هضم عروقی", correct: false },
+                { text: "هضم عضوی", correct: false }
+            ]
+        },
+        {
+            q: "۸. کدام خلط بیشترین حجم مایعات جاری در عروق خونی را در حالت تعادل تشکیل می‌دهد؟",
+            options: [
+                { text: "بلغم", correct: false },
+                { text: "صفرا", correct: false },
+                { text: "خون (دم)", correct: true },
+                { text: "سودا", correct: false }
+            ]
         }
     ];
 
-    let currentIdx = 0;
+    let currentQuestion = 0;
     let score = 0;
+    let totalGifts = parseInt(localStorage.getItem('health_game_total_gifts') || '90');
 
-    function render() {
-        if (currentIdx >= questions.length) {
-            document.getElementById('quiz').innerHTML = `<h3>آزمون تمام شد</h3><p>امتیاز شما: ${score} از ${questions.length}</p><button onclick="location.reload()" class="option-btn">شروع مجدد</button>`;
+    function updateGiftDisplay() {
+        document.getElementById('total-gifts').innerText = totalGifts;
+        localStorage.setItem('health_game_total_gifts', totalGifts);
+    }
+
+    function loadQuestion() {
+        if (currentQuestion >= questions.length) {
+            showResult();
             return;
         }
 
-        const q = questions[currentIdx];
-        // ترکیب پاسخ صحیح و غلط‌ها
-        const allOptions = [q.correct, ...q.wrong];
-        // درهم‌ریزی کامل
-        allOptions.sort(() => Math.random() - 0.5);
+        const q = questions[currentQuestion];
+        document.getElementById('question-text').innerText = q.q;
+        document.getElementById('progress-bar').style.width = ((currentQuestion + 1) / questions.length) * 100 + '%';
 
-        document.getElementById('question').innerText = q.q;
-        const optDiv = document.getElementById('options');
-        optDiv.innerHTML = '';
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
 
-        allOptions.forEach(opt => {
+        q.options.forEach(opt => {
             const btn = document.createElement('button');
             btn.className = 'option-btn';
-            btn.innerText = opt;
-            btn.onclick = () => {
-                if (opt === q.correct) score++;
-                currentIdx++;
-                render();
-            };
-            optDiv.appendChild(btn);
+            btn.innerText = opt.text;
+            btn.onclick = () => selectAnswer(opt, btn);
+            container.appendChild(btn);
         });
-        document.getElementById('score').innerText = `سوال ${currentIdx + 1} از ${questions.length} | امتیاز: ${score}`;
     }
 
-    render();
+    function selectAnswer(opt, btn) {
+        const buttons = document.querySelectorAll('.option-btn');
+        buttons.forEach(b => b.disabled = true);
+
+        if (opt.correct) {
+            btn.classList.add('correct');
+            score++;
+        } else {
+            btn.classList.add('wrong');
+            buttons.forEach(b => {
+                const matchingOpt = questions[currentQuestion].options.find(o => o.text === b.innerText);
+                if (matchingOpt && matchingOpt.correct) {
+                    b.classList.add('correct');
+                }
+            });
+        }
+
+        setTimeout(() => {
+            currentQuestion++;
+            loadQuestion();
+        }, 1200);
+    }
+
+    function showResult() {
+        document.getElementById('quiz-container').style.display = 'none';
+        
+        let rewardNoticeBox = document.getElementById('reward-notice-box');
+        if (!localStorage.getItem('game005_rewarded')) {
+            totalGifts += 50; // جایزه تکمیل بازی پنجم
+            localStorage.setItem('game005_rewarded', 'true');
+            updateGiftDisplay();
+            rewardNoticeBox.innerText = `🎁 تبریک! آزمون به پایان رسید. امتیاز شما: ${score} از ${questions.length} | ۵۰ سکه هدیه به صندوقچه اضافه شد.`;
+        } else {
+            rewardNoticeBox.innerText = `📌 آزمون مجدد پایان یافت. امتیاز این بار: ${score} از ${questions.length} (قبلاً پاداش این بازی دریافت شده است).`;
+        }
+
+        const resCard = document.getElementById('result-content');
+        resCard.innerHTML = `
+            <strong>عملکرد شما در شناخت امزاج چهارگانه:</strong><br>
+            شما به ${score} سوال از ${questions.length} سوال به درستی پاسخ دادید.<br><br>
+            <strong>نکته حکمی:</strong> اخلاط چهارگانه (دم، صفرا، بلغم و سودا) مصالح ساختمانی و تغذیه‌ای ارگان‌های بدن هستند که تعادل آن‌ها تضمین‌کننده تندرستی و نشاط انسان است.
+        `;
+
+        document.getElementById('result-container').style.display = 'block';
+    }
+
+    updateGiftDisplay();
+    loadQuestion();
 </script>
+
 </body>
 </html>
