@@ -131,6 +131,18 @@
             line-height: 1.7;
         }
 
+        .reward-notice {
+            background: #fff8e1;
+            color: #f57f17;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            border: 1px dashed #ffe082;
+        }
+
         .nav-links {
             margin-top: 25px;
             display: flex;
@@ -147,6 +159,9 @@
             text-decoration: none;
             font-weight: bold;
             transition: background 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
         }
 
         .btn-link:hover {
@@ -173,10 +188,11 @@
 
     <div class="result-box" id="result-container">
         <h3>نتیجه تحلیل مزاج اختصاصی شما</h3>
+        <div class="reward-notice" id="reward-notice-box"></div>
         <div class="result-card" id="result-content"></div>
         <div class="nav-links">
-            <a href="Main_Menu_Game_Library.html" class="btn-link">بازگشت به پورتال بازی‌ها</a>
-            <button onclick="location.reload()" class="btn-link" style="background:#ff8f00; border:none; cursor:pointer;">تکرار آزمون</button>
+            <a href="index.html" class="btn-link">بازگشت به پورتال اصلی</a>
+            <button onclick="location.reload()" class="btn-link" style="background:#ff8f00;">تکرار آزمون</button>
         </div>
     </div>
 </div>
@@ -308,7 +324,7 @@
 
     let currentQuestion = 0;
     let scores = { dam: 0, safra: 0, balgham: 0, sowda: 0 };
-    let totalGifts = parseInt(localStorage.getItem('health_game_total_gifts') || '40'); // شروع از امتیازات بازی‌های قبل
+    let totalGifts = parseInt(localStorage.getItem('health_game_total_gifts') || '40');
 
     const descriptions = {
         dam: {
@@ -362,9 +378,6 @@
 
     function selectAnswer(type, weight) {
         scores[type] += weight;
-        totalGifts += 5; // هر پاسخ درست معادل ۵ سکه هدیه
-        updateGiftDisplay();
-        
         currentQuestion++;
         loadQuestion();
     }
@@ -372,6 +385,17 @@
     function showResult() {
         document.getElementById('quiz-container').style.display = 'none';
         
+        // بررسی اینکه آیا قبلاً سکه این بازی دریافت شده است یا خیر
+        let rewardNoticeBox = document.getElementById('reward-notice-box');
+        if (!localStorage.getItem('game004_rewarded')) {
+            totalGifts += 50; // جایزه ثابت تکمیل آزمون
+            localStorage.setItem('game004_rewarded', 'true');
+            updateGiftDisplay();
+            rewardNoticeBox.innerText = "🎁 تبریک! ۵۰ سکه هدیه تکمیل موفقیت‌آمیز آزمون به صندوقچه شما اضافه شد.";
+        } else {
+            rewardNoticeBox.innerText = "📌 این آزمون قبلاً تکمیل شده بود؛ امتیاز تکرار تعلق نمی‌گیرد.";
+        }
+
         // پیدا کردن بیشترین امتیاز
         let maxType = 'dam';
         let maxVal = -1;
