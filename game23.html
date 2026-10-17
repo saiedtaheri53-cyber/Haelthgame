@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی ۵: امزاج چهارگانه (اخلاط و تعادل تن) | دانشنامه سلامت</title>
+    <title>بازی ۵: امزاج چهارگانه و اخلاط (۳۰ سوال تخصصی) | دانشنامه سلامت</title>
     <style>
         :root {
             --primary: #c62828;
@@ -29,7 +29,7 @@
 
         .container {
             width: 100%;
-            max-width: 700px;
+            max-width: 750px;
             background: var(--card-bg);
             border-radius: 16px;
             box-shadow: var(--shadow);
@@ -49,7 +49,7 @@
         .header h2 {
             margin: 0;
             color: var(--primary);
-            font-size: 20px;
+            font-size: 19px;
         }
 
         .score-badge {
@@ -88,7 +88,7 @@
         }
 
         .question-box {
-            font-size: 19px;
+            font-size: 18px;
             font-weight: bold;
             margin-bottom: 20px;
             line-height: 1.7;
@@ -103,10 +103,10 @@
         .option-btn {
             background: #fafafa;
             border: 2px solid #ffcdd2;
-            padding: 15px 20px;
+            padding: 14px 18px;
             text-align: right;
             border-radius: 10px;
-            font-size: 16px;
+            font-size: 15px;
             cursor: pointer;
             transition: all 0.2s ease;
             color: var(--text);
@@ -195,12 +195,12 @@
 <div class="container">
     <div id="quiz-container">
         <div class="header">
-            <h2>بازی ۵: امزاج چهارگانه (اخلاط و تعادل تن)</h2>
+            <h2>بازی ۵: امزاج چهارگانه و اخلاط (۳۰ سوال)</h2>
             <div class="score-badge">🎁 کل سکه‌ها: <span id="total-gifts">0</span></div>
         </div>
 
         <div class="progress-info">
-            <span id="question-counter">سوال ۱ از ۱۰</span>
+            <span id="question-counter">سوال ۱ از ۳۰</span>
             <span id="score-counter">امتیاز: ۰</span>
         </div>
         <div class="progress-bar-container">
@@ -212,7 +212,7 @@
     </div>
 
     <div class="result-box" id="result-container">
-        <h3>پایان آزمون تخصصی امزاج چهارگانه</h3>
+        <h3>پایان آزمون جامع امزاج چهارگانه</h3>
         <div class="reward-notice" id="reward-notice-box"></div>
         <div class="result-card" id="result-content"></div>
         <div class="nav-links">
@@ -223,98 +223,38 @@
 </div>
 
 <script>
-    // بانک ۱۰ پرسشی ناب، متنوع و بدون تکرار پیرامون اخلاط چهارگانه
+    // بانک ۳۰ پرسشی ناب، متنوع و استاندارد پیرامون اخلاط و امزاج
     const questions = [
-        { 
-            q: "۱. کدام خلط در طب سنتی منسوب به عنصر «هوا» و طبع گرم و تر است و نقش حیات‌بخشی در عروق دارد؟", 
-            options: [
-                { text: "خون (دم)", correct: true }, 
-                { text: "صفرا", correct: false }, 
-                { text: "بلغم", correct: false }, 
-                { text: "سودا", correct: false }
-            ] 
-        },
-        { 
-            q: "۲. خلط صفرا حاصل غلبه کدام عنصر و طبع در تن انسان است؟", 
-            options: [
-                { text: "سرد و خشک (خاک)", correct: false }, 
-                { text: "گرم و خشک (آتش)", correct: true }, 
-                { text: "سرد و تر (آب)", correct: false }, 
-                { text: "گرم و تر (هوا)", correct: false }
-            ] 
-        },
-        { 
-            q: "۳. ویژگی کیفی و اصلی خلط «بلغم» از نظر طبع در تن چیست؟", 
-            options: [
-                { text: "گرم و خشک", correct: false }, 
-                { text: "گرم و تر", correct: false }, 
-                { text: "سرد و تر", correct: true }, 
-                { text: "سرد و خشک", correct: false }
-            ] 
-        },
-        { 
-            q: "۴. کدام خلط به عنوان رسوب و ته‌نشین غلیظ و تاریک خون با طبع سرد و خشک شناخته می‌شود؟", 
-            options: [
-                { text: "صفرا", correct: false }, 
-                { text: "بلغم", correct: false }, 
-                { text: "سودا", correct: true }, 
-                { text: "دم", correct: false }
-            ] 
-        },
-        { 
-            q: "۵. در صورت غلبه صفرا در بدن، کدام علامت کلینیکی و شایع‌تر بروز می‌کند؟", 
-            options: [
-                { text: "تلخی دهان، زردی سفیدی چشم و حرارت درونی بالا", correct: true }, 
-                { text: "پریدگی رنگ پوست و سردی شدید اندام‌ها", correct: false }, 
-                { text: "خواب‌آلودگی زیاد، کندی ذهن و سستی بدن", correct: false }, 
-                { text: "افسردگی مزمن و وسواس فکری تیره", correct: false }
-            ] 
-        },
-        { 
-            q: "۶. تولید اخلاط صالح و متوازن در بدن انسان به طور عمده در کدام عضو و مرحله هضم صورت می‌پذیرد؟", 
-            options: [
-                { text: "هضم کبدی (طبیعی)", correct: true }, 
-                { text: "هضم معدی (اولی)", correct: false }, 
-                { text: "هضم عروقی (سوم)", correct: false }, 
-                { text: "هضم عضوی (چهارم)", correct: false }
-            ] 
-        },
-        { 
-            q: "۷. کدام خلط بیشترین حجم مایعات جاری در عروق خونی را در حالت تعادل و سلامت تن تشکیل می‌دهد؟", 
-            options: [
-                { text: "بلغم", correct: false }, 
-                { text: "صفرا", correct: false }, 
-                { text: "خون (دم)", correct: true }, 
-                { text: "سودا", correct: false }
-            ] 
-        },
-        { 
-            q: "۸. عامل اصلی و ریشه‌ای ایجاد وسواس فکری، تیرگی خیال و افکار منفی در طب سنتی کدام است؟", 
-            options: [
-                { text: "غلبه سودای سوخته یا سودای طبیعی رسوب‌کرده", correct: true }, 
-                { text: "غلبه خلط دم و انبساط بیش از حد عروق", correct: false }, 
-                { text: "غلبه صفرا و فوران حرارت کبد", correct: false }, 
-                { text: "غلبه بلغم و رطوبت زائد معده", correct: false }
-            ] 
-        },
-        { 
-            q: "۹. کدام خلط به دلیل سردی و غلظت بالا، بیش از سایر اخلاط نیازمند حرارت کافی و زمان طولانی‌تر برای پخت در کبد است؟", 
-            options: [
-                { text: "بلغم", correct: true }, 
-                { text: "صفرا", correct: false }, 
-                { text: "خون (دم)", correct: false }, 
-                { text: "صفرا و دم", correct: false }
-            ] 
-        },
-        { 
-            q: "۱۰. رنگ طبیعی، استاندارد و سالم خون خالص صالح در عروق بدن انسان کدام است؟", 
-            options: [
-                { text: "سرخ روشن و شفاف مایل به انیمیشن حیات", correct: true }, 
-                { text: "زرد کهربایی تند", correct: false }, 
-                { text: "سفید شیری مات و لزج", correct: false }, 
-                { text: "سیاه تیره و کدر غلیظ", correct: false }
-            ] 
-        }
+        { q: "۱. کدام خلط در طب سنتی منسوب به عنصر «هوا» و طبع گرم و تر است و نقش حیاتی در تغذیه اندام‌ها دارد؟", options: [{ text: "خون (دم)", correct: true }, { text: "صفرا", correct: false }, { text: "بلغم", correct: false }, { text: "سودا", correct: false }] },
+        { q: "۲. خلط صفرا حاصل غلبه کدام عنصر و طبع در تن انسان است؟", options: [{ text: "سرد و خشک (خاک)", correct: false }, { text: "گرم و خشک (آتش)", correct: true }, { text: "سرد و تر (آب)", correct: false }, { text: "گرم و تر (هوا)", correct: false }] },
+        { q: "۳. ویژگی کیفی و اصلی خلط «بلغم» از نظر طبع در تن چیست؟", options: [{ text: "گرم و خشک", correct: false }, { text: "گرم و تر", correct: false }, { text: "سرد و تر", correct: true }, { text: "سرد و خشک", correct: false }] },
+        { q: "۴. کدام خلط به عنوان رسوب و ته‌نشین غلیظ و تاریک خون با طبع سرد و خشک شناخته می‌شود؟", options: [{ text: "صفرا", correct: false }, { text: "بلغم", correct: false }, { text: "سودا", correct: true }, { text: "دم", correct: false }] },
+        { q: "۵. در صورت غلبه صفرا در بدن، کدام علامت کلینیکی و شایع‌تر بروز می‌کند؟", options: [{ text: "تلخی دهان، زردی سفیدی چشم و حرارت درونی بالا", correct: true }, { text: "پریدگی رنگ پوست و سردی شدید اندام‌ها", correct: false }, { text: "خواب‌آلودگی زیاد، کندی ذهن و سستی بدن", correct: false }, { text: "افسردگی مزمن و وسواس فکری تیره", correct: false }] },
+        { q: "۶. تولید اخلاط صالح و متوازن در بدن انسان به طور عمده در کدام عضو و مرحله هضم صورت می‌پذیرد؟", options: [{ text: "هضم کبدی (طبیعی)", correct: true }, { text: "هضم معدی (اولی)", correct: false }, { text: "هضم عروقی (سوم)", correct: false }, { text: "هضم عضوی (چهارم)", correct: false }] },
+        { q: "۷. کدام خلط بیشترین حجم مایعات جاری در عروق خونی را در حالت تعادل و سلامت تن تشکیل می‌دهد؟", options: [{ text: "بلغم", correct: false }, { text: "صفرا", correct: false }, { text: "خون (دم)", correct: true }, { text: "سودا", correct: false }] },
+        { q: "۸. عامل اصلی و ریشه‌ای ایجاد وسواس فکری، تیرگی خیال و افکار منفی در طب سنتی کدام است؟", options: [{ text: "غلبه سودای سوخته یا سودای طبیعی رسوب‌کرده", correct: true }, { text: "غلبه خلط دم و انبساط بیش از حد عروق", correct: false }, { text: "غلبه صفرا و فوران حرارت کبد", correct: false }, { text: "غلبه بلغم و رطوبت زائد معده", correct: false }] },
+        { q: "۹. کدام خلط به دلیل سردی و غلظت بالا، بیش از سایر اخلاط نیازمند حرارت کافی و زمان طولانی‌تر برای پخت در کبد است؟", options: [{ text: "بلغم", correct: true }, { text: "صفرا", correct: false }, { text: "خون (دم)", correct: false }, { text: "صفرا و دم", correct: false }] },
+        { q: "۱۰. رنگ طبیعی، استاندارد و سالم خون خالص صالح در عروق بدن انسان کدام است؟", options: [{ text: "سرخ روشن و شفاف مایل به انیمیشن حیات", correct: true }, { text: "زرد کهربایی تند", correct: false }, { text: "سفید شیری مات و لزج", correct: false }, { text: "سیاه تیره و کدر غلیظ", correct: false }] },
+        { q: "۱۱. کدام مزاج انسانی دارای سرعت در انفعال، پرحرفی، نشاط زیاد و رگ‌های گشاد است؟", options: [{ text: "دموی مزاج", correct: true }, { text: "سوداوی مزاج", correct: false }, { text: "بلغمی مزاج", correct: false }, { text: "صفرایی مزاج", correct: false }] },
+        { q: "۱۲. افراد دارای طبع سرد و تر (بلغمی) معمولاً چه واکنشی نسبت به هوای سرد زمستان نشان می‌دهند؟", options: [{ text: "احساس سرما و انقباض شدید و کرختی", correct: true }, { text: "لذت از سرما و تحمل بالا", correct: false }, { text: "انرژی و تحرک فوق‌العاده", correct: false }, { text: "تعریق فراوان", correct: false }] },
+        { q: "۱۳. کدام خلط در صورت تعادل، حافظ مفاصل از سایش و تامین‌کننده رطوبت مغز و اعصاب است؟", options: [{ text: "بلغم", correct: true }, { text: "صفرا", correct: false }, { text: "سودا", correct: false }, { text: "صفرای سوخته", correct: false }] },
+        { q: "۱۴. تندخویی، زودجوشی، چالاکی و لاغری نسبی از ویژگی‌های بارز کدام مزاج است؟", options: [{ text: "صفرایی مزاج", correct: true }, { text: "بلغمی مزاج", correct: false }, { text: "دموی مزاج", correct: false }, { text: "سوداوی مزاج", correct: false }] },
+        { q: "۱۵. در تدابیر حفظ‌الصحه، افراد سوداوی‌مزاج باید از مصرف کدام دسته مواد غذایی بیشتر بپرهیزند؟", options: [{ text: "غذاهای بسیار خشک، مانده، بادمجان و عدس زیاد", correct: true }, { text: "آب‌لیمو و آش‌های ترش‌مزه سبک", correct: false }, { text: "شربت‌های گرم و تر عسل", correct: false }, { text: "میوه‌های آبدار شیرین", correct: false }] },
+        { q: "۱۶. کدام عضو بدن به عنوان پالایشگاه اصلی و تولیدکننده اولیه اخلاط صالح شناخته می‌شود؟", options: [{ text: "کبد (طبیعت مدبر)", correct: true }, { text: "معده", correct: false }, { text: "طحال", correct: false }, { text: "کلیه", correct: false }] },
+        { q: "۱۷. مسئولیت اصلی طحال در سیستم اخلاطی بدن چیست؟", options: [{ text: "جذب و دفع سودای زائد از خون", correct: true }, { text: "تولید بلغم رقیق", correct: false }, { text: "پخت اولیه غذا", correct: false }, { text: "ترشح صفرا به روده", correct: false }] },
+        { q: "۱۸. پوست تیره، موهای مجعد و خشک، و پوسته‌ریزی خفیف از علائم غلبه کدام خلط است؟", options: [{ text: "سودا", correct: true }, { text: "دم", correct: false }, { text: "بلغم", correct: false }, { text: "صفرا", correct: false }] },
+        { q: "۱۹. سنگینی سر، خواب‌آلودگی بعد از غذا و آب‌ریزش دهان در خواب نشانه غلبه کدام خلط است؟", options: [{ text: "بلغم", correct: true }, { text: "صفرا", correct: false }, { text: "سودا", correct: false }, { text: "دم", correct: false }] },
+        { q: "۲۰. کدام خلط بیشترین سبک‌بالی و سرعت انتقال ذهنی را در صورت تعادل ایجاد می‌کند؟", options: [{ text: "صفرا و دم متعادل", correct: true }, { text: "سودای غلیظ", correct: false }, { text: "بلغم متراکم", correct: false }, { text: "سودای سوخته", correct: false }] },
+        { q: "۲۱. بهترین راه تعدیل خلط صفرا در فصل تابستان چیست؟", options: [{ text: "مصرف مبردان طبیعی مانند آب‌انار، سکنجبین و کاهو", correct: true }, { text: "مصرف ادویه‌جات تند و فلفل فراوان", correct: false }, { text: "کاهش مصرف مایعات و نوشیدنی‌ها", correct: false }, { text: "ورزش سنگین در آفتاب مستقیم", correct: false }] },
+        { q: "۲۲. در طب سنتی، رنگ ادرار غلیظ و زرد بسیار تیره بدون مصرف دارو، معمولاً نشانه غلبه چیست؟", options: [{ text: "صفرا و حرارت کبد", correct: true }, { text: "بلغم و سردی کلیه", correct: false }, { text: "سودا و رسوب تن", correct: false }, { text: "رطوبت بیش از حد", correct: false }] },
+        { q: "۲۳. کدامیک از طبع‌های چهارگانه به عنوان سنگین‌ترین و کندترین طبع از نظر حرکات بدنی شناخته می‌شود؟", options: [{ text: "سرد و خشک (سودا) و سرد و تر (بلغم)", correct: true }, { text: "گرم و تر (دم)", correct: false }, { text: "گرم و خشک (صفرا)", correct: false }, { text: "گرم و تر و گرم و خشک", correct: false }] },
+        { q: "۲۴. واژه «دم» در زبان عربی و اصطلاح طب سنتی به چه معناست؟", options: [{ text: "خون", correct: true }, { text: "صفرا", correct: false }, { text: "بلغم", correct: false }, { text: "سودا", correct: false }] },
+        { q: "۲۵. کدام خلط به عنوان «نمک خون» و محرک اشتها و کارکرد دستگاه گوارش عمل می‌کند؟", options: [{ text: "صفرا", correct: true }, { text: "سودا", correct: false }, { text: "بلغم", correct: false }, { text: "سودای طبیعی", correct: false }] },
+        { q: "۲۶. سفیدی بیش از حد رنگ پوست، سردی لمس بدن و نرمی بافت عضلانی نشانه چیست؟", options: [{ text: "غلبه بلغم", correct: true }, { text: "غلبه صفرا", correct: false }, { text: "غلبه سودا", correct: false }, { text: "غلبه دم خالص", correct: false }] },
+        { q: "۲۷. احساس گزگز دست و پا، تیر کشیدن عضلات و افکار منفی گذرا از عوارض نامتعادل شدن کدام خلط است؟", options: [{ text: "سودا", correct: true }, { text: "دم", correct: false }, { text: "بلغم", correct: false }, { text: "صفرا", correct: false }] },
+        { q: "۲۸. حجامت و فصد در طب سنتی به طور عمده با چه هدفی روی اخلاط انجام می‌شود؟", options: [{ text: "پاکسازی مواد زائد و اخلاط سوخته یا اضافی از خون", correct: true }, { text: "افزایش فوری حجم بلغم در بدن", correct: false }, { text: "سرد کردن شدید مزاج معده", correct: false }, { text: "تولید صفرا در طحال", correct: false }] },
+        { q: "۲۹. کدام خلط به طور طبیعی باعث ایجاد حس طراوت، سرخی گونه‌ها و رگ‌های برجسته اما نرم می‌شود؟", options: [{ text: "دم (خون)", correct: true }, { text: "بلغم", correct: false }, { text: "سودا", correct: false }, { text: "صفرای زرد", correct: false }] },
+        { q: "۳۰. هدف نهایی شناخت امزاج چهارگانه و اخلاط در «دانشنامه سلامت» چیست؟", options: [{ text: "حفظ تندرستی (حفظ‌الصحه) و اصلاح سبک زندگی بر اساس طبع فردی", correct: true }, { text: "پیچیده کردن مباحث تغذیه", correct: false }, { text: "پرهیز مطلق از تمام غذاها", correct: false }, { text: "تقلید محض بدون استدلال حکمی", correct: false }] }
     ];
 
     let currentQuestion = parseInt(localStorage.getItem('game005_current_q') || '0');
@@ -383,19 +323,19 @@
         
         let rewardNoticeBox = document.getElementById('reward-notice-box');
         if (!localStorage.getItem('game005_rewarded')) {
-            totalGifts += 50; // جایزه تکمیل بازی پنجم
+            totalGifts += 100; // جایزه ویژه تکمیل ۳۰ سوال بازی پنجم
             localStorage.setItem('game005_rewarded', 'true');
             updateDisplay();
-            rewardNoticeBox.innerText = `🎁 تبریک! آزمون تخصصی امزاج چهارگانه به پایان رسید. امتیاز شما: ${score} از ${questions.length} | ۵۰ سکه هدیه به صندوقچه اضافه شد.`;
+            rewardNoticeBox.innerText = `🎁 تبریک! آزمون جامع ۳۰ سوالی امزاج چهارگانه به پایان رسید. امتیاز شما: ${score} از ${questions.length} | ۱۰۰ سکه هدیه به صندوقچه اضافه شد.`;
         } else {
             rewardNoticeBox.innerText = `📌 آزمون مجدد پایان یافت. امتیاز این بار: ${score} از ${questions.length} (پاداش این بازی قبلاً دریافت شده است).`;
         }
 
         const resCard = document.getElementById('result-content');
         resCard.innerHTML = `
-            <strong>تحلیل عملکرد شما در شناخت امزاج چهارگانه:</strong><br>
+            <strong>تحلیل عملکرد شما در آزمون جامع اخلاط و امزاج:</strong><br>
             شما به ${score} سوال از ${questions.length} سوال به درستی پاسخ دادید.<br><br>
-            <strong>پیام حکمی:</strong> شناخت دقیق اخلاط چهارگانه (دم، صفرا، بلغم و سودا) کلید اصلی اصلاح تغذیه، سبک زندگی و دستیابی به تندرستی پایدار است.
+            <strong>پیام حکمی:</strong> تسلط بر جزئیات اخلاط چهارگانه (دم، صفرا، بلغم و سودا) راهنمای مطمئنی برای انتخاب خوراک سالم و زندگی با طراوت است.
         `;
 
         document.getElementById('result-container').style.display = 'block';
