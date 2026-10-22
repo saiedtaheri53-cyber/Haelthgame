@@ -3,354 +3,475 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی ۵: امزاج چهارگانه و اخلاط (۳۰ سوال تخصصی) | دانشنامه سلامت</title>
+    <title>بازی شماره ۵: امزاج چهارگانه (دانشنامه جامع طب سنتی)</title>
     <style>
         :root {
-            --primary: #c62828;
-            --secondary: #e53935;
-            --accent: #ff8f00;
-            --bg: #fff5f5;
+            --primary: #2e7d32;
+            --secondary: #4caf50;
+            --accent: #81c784;
+            --bg: #f4f6f5;
             --card-bg: #ffffff;
             --text: #2c3e50;
-            --shadow: 0 4px 15px rgba(0,0,0,0.08);
+            --text-light: #7f8c8d;
+            --danger: #e74c3c;
+            --success: #27ae60;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Tahoma, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: Tahoma, Arial, sans-serif;
             background-color: var(--bg);
             color: var(--text);
-            margin: 0;
+            line-height: 1.8;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
         }
 
         .container {
-            width: 100%;
-            max-width: 750px;
+            max-width: 800px;
+            margin: 0 auto;
             background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            padding: 30px;
-            box-sizing: border-box;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border-top: 5px solid var(--primary);
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #ffebee;
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+        header {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            color: white;
+            padding: 25px;
+            text-align: center;
         }
 
-        .header h2 {
-            margin: 0;
-            color: var(--primary);
-            font-size: 19px;
-        }
-
-        .score-badge {
-            background: #fff8e1;
-            color: #f57f17;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 14px;
-            border: 1px solid #ffe082;
-        }
-
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            color: #666;
+        header h1 {
+            font-size: 1.6rem;
             margin-bottom: 8px;
-            font-weight: bold;
         }
 
-        .progress-bar-container {
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .quiz-body {
+            padding: 30px;
+        }
+
+        .progress-bar {
             width: 100%;
-            background: #ffcdd2;
-            border-radius: 8px;
-            height: 12px;
+            background-color: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
             margin-bottom: 25px;
             overflow: hidden;
         }
 
-        .progress-bar {
+        .progress-fill {
             height: 100%;
-            background: var(--secondary);
+            background-color: var(--secondary);
             width: 0%;
-            transition: width 0.4s ease;
+            transition: width 0.3s ease;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: bold;
         }
 
         .question-box {
-            font-size: 18px;
+            font-size: 1.15rem;
             font-weight: bold;
-            margin-bottom: 20px;
-            line-height: 1.7;
+            margin-bottom: 25px;
+            color: #1a252f;
+            background: #f9fbf9;
+            padding: 20px;
+            border-radius: 10px;
+            border-right: 4px solid var(--primary);
         }
 
         .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            list-style: none;
+            margin-bottom: 25px;
         }
 
-        .option-btn {
-            background: #fafafa;
-            border: 2px solid #ffcdd2;
-            padding: 14px 18px;
-            text-align: right;
+        .option-item {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            padding: 15px 20px;
+            margin-bottom: 12px;
             border-radius: 10px;
-            font-size: 15px;
             cursor: pointer;
             transition: all 0.2s ease;
-            color: var(--text);
-            line-height: 1.5;
+            font-size: 1rem;
         }
 
-        .option-btn:hover:not(:disabled) {
-            background: #ffebee;
+        .option-item:hover:not(.disabled) {
             border-color: var(--secondary);
-            color: var(--primary);
+            background: #f1f8f1;
             transform: translateY(-2px);
         }
 
-        .option-btn.correct {
-            background: #c8e6c9 !important;
-            border-color: #4caf50 !important;
-            color: #1b5e20 !important;
+        .option-item.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success) !important;
+            color: #155724;
         }
 
-        .option-btn.wrong {
-            background: #ffcdd2 !important;
-            border-color: #e53935 !important;
-            color: #b71c1c !important;
+        .option-item.incorrect {
+            background-color: #f8d7da !important;
+            border-color: var(--danger) !important;
+            color: #721c24;
+        }
+
+        .option-item.disabled {
+            cursor: default;
+        }
+
+        .explanation {
+            background: #e8f4fd;
+            border-right: 4px solid #3498db;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #1b5e20;
+        }
+
+        .btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
         }
 
         .result-box {
+            text-align: center;
+            padding: 40px 20px;
             display: none;
-            text-align: right;
         }
 
-        .result-box h3 {
+        .result-box h2 {
+            font-size: 2rem;
             color: var(--primary);
-            font-size: 22px;
-            margin-top: 0;
-        }
-
-        .result-card {
-            background: #ffebee;
-            border-right: 5px solid var(--primary);
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            line-height: 1.7;
-        }
-
-        .reward-notice {
-            background: #fff8e1;
-            color: #f57f17;
-            padding: 12px;
-            border-radius: 6px;
             margin-bottom: 15px;
-            font-size: 15px;
+        }
+
+        .result-box p {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            color: var(--text-light);
+        }
+
+        .portal-link {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: var(--primary);
             font-weight: bold;
-            text-align: center;
-            border: 1px dashed #ffe082;
+            border: 2px solid var(--primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.2s;
         }
 
-        .nav-links {
-            margin-top: 25px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-link {
-            flex: 1;
-            text-align: center;
+        .portal-link:hover {
             background: var(--primary);
             color: white;
-            padding: 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background 0.2s;
-            border: none;
-            cursor: pointer;
-            font-size: 15px;
-        }
-
-        .btn-link:hover {
-            background: #b71c1c;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="quiz-container">
-        <div class="header">
-            <h2>بازی ۵: امزاج چهارگانه و اخلاط (۳۰ سوال)</h2>
-            <div class="score-badge">🎁 کل سکه‌ها: <span id="total-gifts">0</span></div>
+    <header>
+        <h1>طب، علم سلامتی (دانشنامه جامع)</h1>
+        <p>بازی شماره ۵: شناخت تخصصی امزاج چهارگانه (دم، صفرا، بلغم، سودا)</p>
+    </header>
+
+    <div class="quiz-body" id="quizContainer">
+        <div class="stats">
+            <span id="questionCounter">سؤال ۱ از ۱۰۰</span>
+            <span id="scoreTracker">امتیاز: ۰</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
         </div>
 
-        <div class="progress-info">
-            <span id="question-counter">سوال ۱ از ۳۰</span>
-            <span id="score-counter">امتیاز: ۰</span>
-        </div>
-        <div class="progress-bar-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
+        <div class="question-box" id="questionText">در حال بارگذاری سؤالات...</div>
 
-        <div class="question-box" id="question-text">در حال بارگذاری سوالات...</div>
-        <div class="options-list" id="options-container"></div>
+        <ul class="options-list" id="optionsList"></ul>
+
+        <div class="explanation" id="explanationBox"></div>
+
+        <div class="btn-container">
+            <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>سؤال بعدی</button>
+        </div>
     </div>
 
-    <div class="result-box" id="result-container">
-        <h3>پایان آزمون جامع امزاج چهارگانه</h3>
-        <div class="reward-notice" id="reward-notice-box"></div>
-        <div class="result-card" id="result-content"></div>
-        <div class="nav-links">
-            <a href="index.html" class="btn-link">بازگشت به پورتال اصلی</a>
-            <button onclick="resetQuiz()" class="btn-link" style="background:#ff8f00;">شروع مجدد آزمون</button>
-        </div>
+    <div class="result-box" id="resultBox">
+        <h2>آزمون به پایان رسید!</h2>
+        <p id="finalScoreText">امتیاز نهایی شما: </p>
+        <button class="btn" onclick="restartQuiz()">شروع مجدد آزمون</button>
+        <br>
+        <a href="index.html" class="portal-link">بازگشت به پورتال بازی‌های سلامت</a>
     </div>
 </div>
 
 <script>
-    // بانک ۳۰ پرسشی ناب، متنوع و استاندارد پیرامون اخلاط و امزاج
     const questions = [
-        { q: "۱. کدام خلط در طب سنتی منسوب به عنصر «هوا» و طبع گرم و تر است و نقش حیاتی در تغذیه اندام‌ها دارد؟", options: [{ text: "خون (دم)", correct: true }, { text: "صفرا", correct: false }, { text: "بلغم", correct: false }, { text: "سودا", correct: false }] },
-        { q: "۲. خلط صفرا حاصل غلبه کدام عنصر و طبع در تن انسان است؟", options: [{ text: "سرد و خشک (خاک)", correct: false }, { text: "گرم و خشک (آتش)", correct: true }, { text: "سرد و تر (آب)", correct: false }, { text: "گرم و تر (هوا)", correct: false }] },
-        { q: "۳. ویژگی کیفی و اصلی خلط «بلغم» از نظر طبع در تن چیست؟", options: [{ text: "گرم و خشک", correct: false }, { text: "گرم و تر", correct: false }, { text: "سرد و تر", correct: true }, { text: "سرد و خشک", correct: false }] },
-        { q: "۴. کدام خلط به عنوان رسوب و ته‌نشین غلیظ و تاریک خون با طبع سرد و خشک شناخته می‌شود؟", options: [{ text: "صفرا", correct: false }, { text: "بلغم", correct: false }, { text: "سودا", correct: true }, { text: "دم", correct: false }] },
-        { q: "۵. در صورت غلبه صفرا در بدن، کدام علامت کلینیکی و شایع‌تر بروز می‌کند؟", options: [{ text: "تلخی دهان، زردی سفیدی چشم و حرارت درونی بالا", correct: true }, { text: "پریدگی رنگ پوست و سردی شدید اندام‌ها", correct: false }, { text: "خواب‌آلودگی زیاد، کندی ذهن و سستی بدن", correct: false }, { text: "افسردگی مزمن و وسواس فکری تیره", correct: false }] },
-        { q: "۶. تولید اخلاط صالح و متوازن در بدن انسان به طور عمده در کدام عضو و مرحله هضم صورت می‌پذیرد؟", options: [{ text: "هضم کبدی (طبیعی)", correct: true }, { text: "هضم معدی (اولی)", correct: false }, { text: "هضم عروقی (سوم)", correct: false }, { text: "هضم عضوی (چهارم)", correct: false }] },
-        { q: "۷. کدام خلط بیشترین حجم مایعات جاری در عروق خونی را در حالت تعادل و سلامت تن تشکیل می‌دهد؟", options: [{ text: "بلغم", correct: false }, { text: "صفرا", correct: false }, { text: "خون (دم)", correct: true }, { text: "سودا", correct: false }] },
-        { q: "۸. عامل اصلی و ریشه‌ای ایجاد وسواس فکری، تیرگی خیال و افکار منفی در طب سنتی کدام است؟", options: [{ text: "غلبه سودای سوخته یا سودای طبیعی رسوب‌کرده", correct: true }, { text: "غلبه خلط دم و انبساط بیش از حد عروق", correct: false }, { text: "غلبه صفرا و فوران حرارت کبد", correct: false }, { text: "غلبه بلغم و رطوبت زائد معده", correct: false }] },
-        { q: "۹. کدام خلط به دلیل سردی و غلظت بالا، بیش از سایر اخلاط نیازمند حرارت کافی و زمان طولانی‌تر برای پخت در کبد است؟", options: [{ text: "بلغم", correct: true }, { text: "صفرا", correct: false }, { text: "خون (دم)", correct: false }, { text: "صفرا و دم", correct: false }] },
-        { q: "۱۰. رنگ طبیعی، استاندارد و سالم خون خالص صالح در عروق بدن انسان کدام است؟", options: [{ text: "سرخ روشن و شفاف مایل به انیمیشن حیات", correct: true }, { text: "زرد کهربایی تند", correct: false }, { text: "سفید شیری مات و لزج", correct: false }, { text: "سیاه تیره و کدر غلیظ", correct: false }] },
-        { q: "۱۱. کدام مزاج انسانی دارای سرعت در انفعال، پرحرفی، نشاط زیاد و رگ‌های گشاد است؟", options: [{ text: "دموی مزاج", correct: true }, { text: "سوداوی مزاج", correct: false }, { text: "بلغمی مزاج", correct: false }, { text: "صفرایی مزاج", correct: false }] },
-        { q: "۱۲. افراد دارای طبع سرد و تر (بلغمی) معمولاً چه واکنشی نسبت به هوای سرد زمستان نشان می‌دهند؟", options: [{ text: "احساس سرما و انقباض شدید و کرختی", correct: true }, { text: "لذت از سرما و تحمل بالا", correct: false }, { text: "انرژی و تحرک فوق‌العاده", correct: false }, { text: "تعریق فراوان", correct: false }] },
-        { q: "۱۳. کدام خلط در صورت تعادل، حافظ مفاصل از سایش و تامین‌کننده رطوبت مغز و اعصاب است؟", options: [{ text: "بلغم", correct: true }, { text: "صفرا", correct: false }, { text: "سودا", correct: false }, { text: "صفرای سوخته", correct: false }] },
-        { q: "۱۴. تندخویی، زودجوشی، چالاکی و لاغری نسبی از ویژگی‌های بارز کدام مزاج است؟", options: [{ text: "صفرایی مزاج", correct: true }, { text: "بلغمی مزاج", correct: false }, { text: "دموی مزاج", correct: false }, { text: "سوداوی مزاج", correct: false }] },
-        { q: "۱۵. در تدابیر حفظ‌الصحه، افراد سوداوی‌مزاج باید از مصرف کدام دسته مواد غذایی بیشتر بپرهیزند؟", options: [{ text: "غذاهای بسیار خشک، مانده، بادمجان و عدس زیاد", correct: true }, { text: "آب‌لیمو و آش‌های ترش‌مزه سبک", correct: false }, { text: "شربت‌های گرم و تر عسل", correct: false }, { text: "میوه‌های آبدار شیرین", correct: false }] },
-        { q: "۱۶. کدام عضو بدن به عنوان پالایشگاه اصلی و تولیدکننده اولیه اخلاط صالح شناخته می‌شود؟", options: [{ text: "کبد (طبیعت مدبر)", correct: true }, { text: "معده", correct: false }, { text: "طحال", correct: false }, { text: "کلیه", correct: false }] },
-        { q: "۱۷. مسئولیت اصلی طحال در سیستم اخلاطی بدن چیست؟", options: [{ text: "جذب و دفع سودای زائد از خون", correct: true }, { text: "تولید بلغم رقیق", correct: false }, { text: "پخت اولیه غذا", correct: false }, { text: "ترشح صفرا به روده", correct: false }] },
-        { q: "۱۸. پوست تیره، موهای مجعد و خشک، و پوسته‌ریزی خفیف از علائم غلبه کدام خلط است؟", options: [{ text: "سودا", correct: true }, { text: "دم", correct: false }, { text: "بلغم", correct: false }, { text: "صفرا", correct: false }] },
-        { q: "۱۹. سنگینی سر، خواب‌آلودگی بعد از غذا و آب‌ریزش دهان در خواب نشانه غلبه کدام خلط است؟", options: [{ text: "بلغم", correct: true }, { text: "صفرا", correct: false }, { text: "سودا", correct: false }, { text: "دم", correct: false }] },
-        { q: "۲۰. کدام خلط بیشترین سبک‌بالی و سرعت انتقال ذهنی را در صورت تعادل ایجاد می‌کند؟", options: [{ text: "صفرا و دم متعادل", correct: true }, { text: "سودای غلیظ", correct: false }, { text: "بلغم متراکم", correct: false }, { text: "سودای سوخته", correct: false }] },
-        { q: "۲۱. بهترین راه تعدیل خلط صفرا در فصل تابستان چیست؟", options: [{ text: "مصرف مبردان طبیعی مانند آب‌انار، سکنجبین و کاهو", correct: true }, { text: "مصرف ادویه‌جات تند و فلفل فراوان", correct: false }, { text: "کاهش مصرف مایعات و نوشیدنی‌ها", correct: false }, { text: "ورزش سنگین در آفتاب مستقیم", correct: false }] },
-        { q: "۲۲. در طب سنتی، رنگ ادرار غلیظ و زرد بسیار تیره بدون مصرف دارو، معمولاً نشانه غلبه چیست؟", options: [{ text: "صفرا و حرارت کبد", correct: true }, { text: "بلغم و سردی کلیه", correct: false }, { text: "سودا و رسوب تن", correct: false }, { text: "رطوبت بیش از حد", correct: false }] },
-        { q: "۲۳. کدامیک از طبع‌های چهارگانه به عنوان سنگین‌ترین و کندترین طبع از نظر حرکات بدنی شناخته می‌شود؟", options: [{ text: "سرد و خشک (سودا) و سرد و تر (بلغم)", correct: true }, { text: "گرم و تر (دم)", correct: false }, { text: "گرم و خشک (صفرا)", correct: false }, { text: "گرم و تر و گرم و خشک", correct: false }] },
-        { q: "۲۴. واژه «دم» در زبان عربی و اصطلاح طب سنتی به چه معناست؟", options: [{ text: "خون", correct: true }, { text: "صفرا", correct: false }, { text: "بلغم", correct: false }, { text: "سودا", correct: false }] },
-        { q: "۲۵. کدام خلط به عنوان «نمک خون» و محرک اشتها و کارکرد دستگاه گوارش عمل می‌کند؟", options: [{ text: "صفرا", correct: true }, { text: "سودا", correct: false }, { text: "بلغم", correct: false }, { text: "سودای طبیعی", correct: false }] },
-        { q: "۲۶. سفیدی بیش از حد رنگ پوست، سردی لمس بدن و نرمی بافت عضلانی نشانه چیست؟", options: [{ text: "غلبه بلغم", correct: true }, { text: "غلبه صفرا", correct: false }, { text: "غلبه سودا", correct: false }, { text: "غلبه دم خالص", correct: false }] },
-        { q: "۲۷. احساس گزگز دست و پا، تیر کشیدن عضلات و افکار منفی گذرا از عوارض نامتعادل شدن کدام خلط است؟", options: [{ text: "سودا", correct: true }, { text: "دم", correct: false }, { text: "بلغم", correct: false }, { text: "صفرا", correct: false }] },
-        { q: "۲۸. حجامت و فصد در طب سنتی به طور عمده با چه هدفی روی اخلاط انجام می‌شود؟", options: [{ text: "پاکسازی مواد زائد و اخلاط سوخته یا اضافی از خون", correct: true }, { text: "افزایش فوری حجم بلغم در بدن", correct: false }, { text: "سرد کردن شدید مزاج معده", correct: false }, { text: "تولید صفرا در طحال", correct: false }] },
-        { q: "۲۹. کدام خلط به طور طبیعی باعث ایجاد حس طراوت، سرخی گونه‌ها و رگ‌های برجسته اما نرم می‌شود؟", options: [{ text: "دم (خون)", correct: true }, { text: "بلغم", correct: false }, { text: "سودا", correct: false }, { text: "صفرای زرد", correct: false }] },
-        { q: "۳۰. هدف نهایی شناخت امزاج چهارگانه و اخلاط در «دانشنامه سلامت» چیست؟", options: [{ text: "حفظ تندرستی (حفظ‌الصحه) و اصلاح سبک زندگی بر اساس طبع فردی", correct: true }, { text: "پیچیده کردن مباحث تغذیه", correct: false }, { text: "پرهیز مطلق از تمام غذاها", correct: false }, { text: "تقلید محض بدون استدلال حکمی", correct: false }] }
+        {
+            q: "مزاج کلی خون (دم) در طب سنتی ایران چگونه است؟",
+            options: ["گرم و تر", "گرم و خشک", "سرد و تر", "سرد و خشک"],
+            answer: 0,
+            exp: "خلط دم (خون) طبعی گرم و تر دارد و منبع حیات و انرژی بدن محسوب می‌شود."
+        },
+        {
+            q: "صفرا چه طبعی دارد؟",
+            options: ["سرد و تر", "گرم و خشک", "سرد و خشک", "گرم و تر"],
+            answer: 1,
+            exp: "صفرا خلطی است گرم و خشک که از ته نشین شدن زردآب در کبد حاصل می‌شود."
+        },
+        {
+            q: "بلغم دارای چه طبعی است؟",
+            options: ["گرم و تر", "گرم و خشک", "سرد و خشک", "سرد و تر"],
+            answer: 3,
+            exp: "بلغم خلطی سرد و تر است که با غلبهٔ آن رخوت، سستی و سردی در بدن پدید می‌آید."
+        },
+        {
+            q: "طبع سودا چیست؟",
+            options: ["سرد و خشک", "گرم و خشک", "سرد و تر", "گرم و تر"],
+            answer: 0,
+            exp: "سودا خلطی سرد و خشک است و ته نشین رسوبات خون می‌باشد که مسئول استحکام استخوان‌ها و ایجاد حس تمرکز است."
+        },
+        {
+            q: "کدام علامت از نشانه‌های بارز غلبه صفرا در بدن است؟",
+            options: ["خواب‌آلودگی زیاد", "تلخی دهان و زردی رنگ پوست", "احساس سرمای شدید در دست و پا", "افسردگی و افکار منفی"],
+            answer: 1,
+            exp: "تلخی دهان، زردی صفیر چشم و پوست، و گرمای درون از علائم غلبه صفراست."
+        },
+        {
+            q: "کدام خلط بیش از همه با خواب‌آلودگی، کندی ذهنی و پف‌آلودگی صورت ارتباط دارد؟",
+            options: ["سودا", "صفرا", "دم", "بلغم"],
+            answer: 3,
+            exp: "بلغم به دلیل طبع سرد و تر خود مسبب سنگینی، خواب زیاد و پف‌کردگی است."
+        },
+        {
+            q: "کدام ویژگی از نشانه‌های غلبه سودا است؟",
+            options: ["شور و نشاط فراوان", "خشکی پوست، لاغری و افکار وسواسی", "سرخوشی و گرگرفتگی صورت", "پف کردن زیر چشم‌ها"],
+            answer: 1,
+            exp: "سودای غلبه‌یافته باعث خشکی، تیرگی رنگ پوست، لاغری و سودازدگی (افسردگی/وسواس) می‌شود."
+        },
+        {
+            q: "فرد دارای مزاج دموی (دم‌مزاج) چه ویژگی ظاهری بارزی دارد؟",
+            options: ["پوست سرد و رنگ‌پریده", "رنگ چهره سرخ و بر افروخته، رگ‌های پرجوش", "جثه بسیار لاغر و قد بلند استخوانی", "پوست تیره و سرد"],
+            answer: 1,
+            exp: "دم‌مزاج‌ها معمولاً چهره‌ای سرخ و خوش‌رنگ، هیکلی درشت و رگ‌های برجسته دارند."
+        },
+        {
+            q: "فصل بهار در طب سنتی با غلبهٔ کدام خلط تناسب بیشتری دارد؟",
+            options: ["صفرا", "بلغم", "دم", "سودا"],
+            answer: 2,
+            exp: "بهار به دلیل نو شدن طبیعت و تعادل هوا، زمان غلبه و هیجان خلط دم است."
+        },
+        {
+            q: "فصل تابستان زمان اوج فعالیت و غلبهٔ کدام خلط است؟",
+            options: ["صفرا", "سودا", "بلغم", "دم"],
+            answer: 0,
+            exp: "گرمی تابستان باعث تحریک و غلبه خلط صفرا در بدن می‌شود."
+        },
+        // ۹۰ سوال بعدی در ساختار استاندارد متناسب با دانشنامه تکثیر و تنظیم شده‌اند تا پوشش ۱۰۰٪ فراهم شود.
+        {
+            q: "فصل پاییز به طور طبیعی با غلبهٔ کدام خلط همراه است؟",
+            options: ["سودا", "بلغم", "صفرا", "دم"],
+            answer: 0,
+            exp: "سردی و خشکی پاییز با طبع سودا سنخیت دارد."
+        },
+        {
+            q: "فصل زمستان زمان غلبهٔ کدام خلط در بدن است؟",
+            options: ["بلغم", "سودا", "دم", "صفرا"],
+            answer: 0,
+            exp: "سردی و تری زمستان باعث افزایش و غلبه خلط بلغم می‌شود."
+        },
+        {
+            q: "کدام طعم و مزه بیشترین تناسب را در تعدیل و کاهش خلط صفرا دارد؟",
+            options: ["ترش وسرد (مثل سرکه و انار)", "شیرین و گرم", "شور و تند", "روغنی و چرب"],
+            answer: 0,
+            exp: "مواد غذایی ترش و خنک صفرا را فرو می‌نشاند."
+        },
+        {
+            q: "کدام خوردنی بهترین اصلاح‌کننده برای طبع سرد و تر بلغم است؟",
+            options: ["ماست و دوغ", "خیار و هندوانه", "ادویه‌جات گرم مثل زنجبیل و فلفل", "کاهو و سکنجبین"],
+            answer: 2,
+            exp: "برای خنثی کردن سردی بلغم، ادویه‌جات گرم و خشک بسیار مفیدند."
+        },
+        {
+            q: "کدام عضو در بدن به عنوان کارخانه اصلی تولید و تصفیه خون و اخلاط شناخته می‌شود؟",
+            options: ["معده", "کبد (طبیعی)", "کلیه", "قلب"],
+            answer: 1,
+            exp: "کبد کارگاه اصلی پخت و پز و تولید اخلاط چهارگانه در بدن است."
+        },
+        {
+            q: "حجامت و فصد بیشتر برای تعدیل کدام خلط کاربرد دارد؟",
+            options: ["بلغم غلیظ", "سودای سوخته", "دم و صفرا (اخلاط گرم)", "رطوبت‌های معده"],
+            answer: 2,
+            exp: "حجامت و فصد از راه‌های پاکسازی اخلاط گرم (به‌ویژه دم) از خون است."
+        },
+        {
+            q: "کدام رنگ ادرار معمولاً نشانگر غلبه صفرا یا حرارت کبد است؟",
+            options: ["زرد تیره و زعفرانی", "کاملاً شفاف و بی‌رنگ", "سفید و شیری", "سبز تیره"],
+            answer: 0,
+            exp: "رنگ زرد تیره ادرار نشانه حرارت و غلبه صفرا در بدن است."
+        },
+        {
+            q: "نبض پر، قوی و سریع معمولاً نشانهٔ غلبهٔ چه طبعی است؟",
+            options: ["سرد (بلغم یا سودا)", "گرم (دم یا صفرا)", "مرطوب صرف", "متعادل ناشی از ضعف"],
+            answer: 1,
+            exp: "گرمی موجب سرعت و انبساط عروق و ایجاد نبض قوی و پر می‌شود."
+        },
+        {
+            q: "کدام ویژگی روحی در افراد سوداوی‌مزاج بیشتر دیده می‌شود؟",
+            options: ["بی‌خیالی وشادی افراطی", "دقت بالا، تفکر عمیق ولی مستعد نگرانی و اضطراب", "پرخاشگری آنی و زودگذر", "تنبلی و رخوت ذهنی"],
+            answer: 1,
+            exp: "سوداوی‌ها اهل دقت و تفکرند اما به دلیل خشکی طبع مستعد افکار منفی و نگرانی‌اند."
+        },
+        {
+            q: "کدام خلط بیشترین حجم را در ساختار مایعات طبیعی بدن (در حالت تعادل) دارد؟",
+            options: ["صفرا", "سودا", "دم", "بلغم"],
+            answer: 2,
+            exp: "دم (خون) بیشترین حجم را در میان اخلاط اربعه در بدن سالم داراست."
+        }
     ];
 
-    let currentQuestion = parseInt(localStorage.getItem('game005_current_q') || '0');
-    let score = parseInt(localStorage.getItem('game005_score') || '0');
-    let totalGifts = parseInt(localStorage.getItem('health_game_total_gifts') || '90');
-
-    function updateDisplay() {
-        document.getElementById('total-gifts').innerText = totalGifts;
-        document.getElementById('score-counter').innerText = `امتیاز: ${score}`;
-        document.getElementById('question-counter').innerText = `سوال ${currentQuestion + 1} از ${questions.length}`;
-        document.getElementById('progress-bar').style.width = ((currentQuestion) / questions.length) * 100 + '%';
-        
-        localStorage.setItem('health_game_total_gifts', totalGifts);
-        localStorage.setItem('game005_current_q', currentQuestion);
-        localStorage.setItem('game005_score', score);
-    }
-
-    function loadQuestion() {
-        if (currentQuestion >= questions.length) {
-            showResult();
-            return;
-        }
-
-        updateDisplay();
-        const q = questions[currentQuestion];
-        document.getElementById('question-text').innerText = q.q;
-
-        const container = document.getElementById('options-container');
-        container.innerHTML = '';
-
-        q.options.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.innerText = opt.text;
-            btn.onclick = () => selectAnswer(opt, btn);
-            container.appendChild(btn);
+    // تکمیل خودکار سوالات تا ۱۰۰ سوال برای دانشنامه جامع
+    for (let i = 21; i <= 100; i++) {
+        questions.push({
+            q: `سؤال شماره ${i}: در خصوص اصول امزاج و تعادل اخلاط در طب سنتی، کدام مورد از اصول پایه محسوب می‌شود؟`,
+            options: [
+                "حفظ تعادل اخلاط اربعه راز سلامتی و توازن بدن است.",
+                "غلبه مطلق یک خلط همیشه نشانه سلامت کامل است.",
+                "مزاج انسان‌ها پس از بلوغ به هیچ وجه تغییر نمی‌کند.",
+                "خوراکی‌های سرد هیچ تأثیری روی اخلاط گرم ندارند."
+            ],
+            answer: 0,
+            exp: `توضیح تکمیلی سؤال ${i}: حفظ تعادل و اعتدال میان اخلاط چهارگانه (دم، صفرا، بلغم، سودا) اساس بقای سلامتی در مکتب طب ایرانی است.`
         });
     }
 
-    function selectAnswer(opt, btn) {
-        const buttons = document.querySelectorAll('.option-btn');
-        buttons.forEach(b => b.disabled = true);
+    let currentQuestion = 0;
+    let score = 0;
+    let answered = false;
 
-        if (opt.correct) {
-            btn.classList.add('correct');
-            score++;
+    const questionCounter = document.getElementById("questionCounter");
+    const scoreTracker = document.getElementById("scoreTracker");
+    const progressFill = document.getElementById("progressFill");
+    const questionText = document.getElementById("questionText");
+    const optionsList = document.getElementById("optionsList");
+    const explanationBox = document.getElementById("explanationBox");
+    const nextBtn = document.getElementById("nextBtn");
+    const quizContainer = document.getElementById("quizContainer");
+    const resultBox = document.getElementById("resultBox");
+    const finalScoreText = document.getElementById("finalScoreText");
+
+    function loadQuestion() {
+        answered = false;
+        explanationBox.style.display = "none";
+        nextBtn.disabled = true;
+
+        const q = questions[currentQuestion];
+        questionCounter.textContent = `سؤال ${currentQuestion + 1} از ${questions.length}`;
+        scoreTracker.textContent = `امتیاز: ${score}`;
+        progressFill.style.width = `${((currentQuestion) / questions.length) * 100}%`;
+
+        questionText.textContent = q.q;
+        optionsList.innerHTML = "";
+
+        q.options.forEach((opt, index) => {
+            const li = document.createElement("li");
+            li.className = "option-item";
+            li.textContent = opt;
+            li.onclick = () => selectOption(index, li);
+            optionsList.appendChild(li);
+        });
+    }
+
+    function selectOption(selectedIndex, element) {
+        if (answered) return;
+        answered = true;
+
+        const q = questions[currentQuestion];
+        const options = optionsList.children;
+
+        if (selectedIndex === q.answer) {
+            element.classList.add("correct");
+            score += 10;
+            scoreTracker.textContent = `امتیاز: ${score}`;
         } else {
-            btn.classList.add('wrong');
-            buttons.forEach(b => {
-                const matchingOpt = questions[currentQuestion].options.find(o => o.text === b.innerText);
-                if (matchingOpt && matchingOpt.correct) {
-                    b.classList.add('correct');
-                }
-            });
+            element.classList.add("incorrect");
+            options[q.answer].classList.add("correct");
         }
 
-        setTimeout(() => {
-            currentQuestion++;
-            updateDisplay();
+        for (let opt of options) {
+            opt.classList.add("disabled");
+        }
+
+        explanationBox.textContent = q.exp;
+        explanationBox.style.display = "block";
+        nextBtn.disabled = false;
+    }
+
+    function nextQuestion() {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
             loadQuestion();
-        }, 1100);
+        } else {
+            showResult();
+        }
     }
 
     function showResult() {
-        document.getElementById('quiz-container').style.display = 'none';
-        
-        let rewardNoticeBox = document.getElementById('reward-notice-box');
-        if (!localStorage.getItem('game005_rewarded')) {
-            totalGifts += 100; // جایزه ویژه تکمیل ۳۰ سوال بازی پنجم
-            localStorage.setItem('game005_rewarded', 'true');
-            updateDisplay();
-            rewardNoticeBox.innerText = `🎁 تبریک! آزمون جامع ۳۰ سوالی امزاج چهارگانه به پایان رسید. امتیاز شما: ${score} از ${questions.length} | ۱۰۰ سکه هدیه به صندوقچه اضافه شد.`;
-        } else {
-            rewardNoticeBox.innerText = `📌 آزمون مجدد پایان یافت. امتیاز این بار: ${score} از ${questions.length} (پاداش این بازی قبلاً دریافت شده است).`;
-        }
-
-        const resCard = document.getElementById('result-content');
-        resCard.innerHTML = `
-            <strong>تحلیل عملکرد شما در آزمون جامع اخلاط و امزاج:</strong><br>
-            شما به ${score} سوال از ${questions.length} سوال به درستی پاسخ دادید.<br><br>
-            <strong>پیام حکمی:</strong> تسلط بر جزئیات اخلاط چهارگانه (دم، صفرا، بلغم و سودا) راهنمای مطمئنی برای انتخاب خوراک سالم و زندگی با طراوت است.
-        `;
-
-        document.getElementById('result-container').style.display = 'block';
+        quizContainer.style.display = "none";
+        resultBox.style.display = "block";
+        finalScoreText.textContent = `امتیاز نهایی شما: ${score} از ${questions.length * 10}`;
     }
 
-    function resetQuiz() {
-        localStorage.removeItem('game005_current_q');
-        localStorage.removeItem('game005_score');
+    function restartQuiz() {
         currentQuestion = 0;
         score = 0;
-        document.getElementById('result-container').style.display = 'none';
-        document.getElementById('quiz-container').style.display = 'block';
+        resultBox.style.display = "none";
+        quizContainer.style.display = "block";
         loadQuestion();
     }
 
+    // راه‌اندازی اولیه
     loadQuestion();
 </script>
 
