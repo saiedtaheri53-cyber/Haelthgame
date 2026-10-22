@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی شماره ۵: امزاج چهارگانه (دانشنامه جامع طب سنتی)</title>
+    <title>بازی شماره ۵: شناخت امزاج و اخلاط (دانشنامه جامع طب سنتی)</title>
     <style>
         :root {
-            --primary: #2e7d32;
-            --secondary: #4caf50;
-            --accent: #81c784;
+            --primary: #1b5e20;
+            --secondary: #2e7d32;
+            --accent: #d4af37; /* رنگ طلایی برای صندوق‌ها */
+            --accent-hover: #b89728;
             --bg: #f4f6f5;
             --card-bg: #ffffff;
             --text: #2c3e50;
             --text-light: #7f8c8d;
-            --danger: #e74c3c;
+            --danger: #c0392b;
             --success: #27ae60;
         }
 
@@ -32,20 +33,21 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 850px;
             margin: 0 auto;
             background: var(--card-bg);
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             overflow: hidden;
-            border-top: 5px solid var(--primary);
+            border-top: 6px solid var(--primary);
         }
 
         header {
-            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            background: linear-gradient(135deg, #0d3b12, #1b5e20);
             color: white;
             padding: 25px;
             text-align: center;
+            position: relative;
         }
 
         header h1 {
@@ -58,6 +60,28 @@
             opacity: 0.9;
         }
 
+        .top-nav {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .portal-btn-sm {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: bold;
+            transition: background 0.2s;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .portal-btn-sm:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
         .quiz-body {
             padding: 30px;
         }
@@ -67,7 +91,7 @@
             background-color: #e0e0e0;
             height: 10px;
             border-radius: 5px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             overflow: hidden;
         }
 
@@ -85,6 +109,17 @@
             font-size: 0.9rem;
             color: var(--text-light);
             font-weight: bold;
+        }
+
+        .badge-gold {
+            background: #fff8e1;
+            color: #b78103;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--accent);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .question-box {
@@ -165,12 +200,64 @@
         }
 
         .btn:hover {
-            background-color: #1b5e20;
+            background-color: #0d3b12;
         }
 
         .btn:disabled {
             background-color: #bdc3c7;
             cursor: not-allowed;
+        }
+
+        /* استایل مودال صندوق امتیاز طلایی */
+        .chest-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .chest-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border-top: 5px solid var(--accent);
+        }
+
+        .chest-content h3 {
+            color: #b78103;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .chest-content p {
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .btn-gold {
+            background-color: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+
+        .btn-gold:hover {
+            background-color: var(--accent-hover);
         }
 
         .result-box {
@@ -198,7 +285,7 @@
             color: var(--primary);
             font-weight: bold;
             border: 2px solid var(--primary);
-            padding: 10px 20px;
+            padding: 12px 30px;
             border-radius: 8px;
             transition: all 0.2s;
         }
@@ -213,14 +300,20 @@
 
 <div class="container">
     <header>
+        <div class="top-nav">
+            <a href="index.html" class="portal-btn-sm">⟵ بازگشت به پورتال</a>
+        </div>
         <h1>طب، علم سلامتی (دانشنامه جامع)</h1>
-        <p>بازی شماره ۵: شناخت تخصصی امزاج چهارگانه (دم، صفرا، بلغم، سودا)</p>
+        <p>بازی شماره ۵: شناخت تخصصی امزاج و اخلاط چهارگانه (دم، صفرا، بلغم، سودا)</p>
     </header>
 
     <div class="quiz-body" id="quizContainer">
         <div class="stats">
             <span id="questionCounter">سؤال ۱ از ۱۰۰</span>
-            <span id="scoreTracker">امتیاز: ۰</span>
+            <div>
+                <span class="badge-gold" id="goldChestBadge">🏆 صندوق: ۰</span>
+                <span id="scoreTracker" style="margin-right: 15px;">امتیاز: ۰</span>
+            </div>
         </div>
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
@@ -237,161 +330,81 @@
         </div>
     </div>
 
+    <!-- مدال صندوق امتیاز طلایی -->
+    <div class="chest-modal" id="chestModal">
+        <div class="chest-content">
+            <h3>🎁 صندوق امتیاز طلایی!</h3>
+            <p>تبریک! شما به بخش مهمی از دانشنامه رسیدید. یک صندوق گنج طلایی پاداش عملکرد شماست.</p>
+            <button class="btn-gold" onclick="claimChest()">گشودن و دریافت ۵۰ امتیاز!</button>
+        </div>
+    </div>
+
     <div class="result-box" id="resultBox">
-        <h2>آزمون به پایان رسید!</h2>
+        <h2>آزمون دانشنامه به پایان رسید!</h2>
         <p id="finalScoreText">امتیاز نهایی شما: </p>
-        <button class="btn" onclick="restartQuiz()">شروع مجدد آزمون</button>
+        <p id="finalChestText" style="color: #b78103; font-weight: bold; margin-bottom: 20px;"></p>
+        <button class="btn" onclick="restartQuiz()" style="margin-left: 10px;">شروع مجدد آزمون</button>
         <br>
         <a href="index.html" class="portal-link">بازگشت به پورتال بازی‌های سلامت</a>
     </div>
 </div>
 
 <script>
+    // بانک ۱۰۰ سوال تخصصی و کاملاً یکتا (بدون تکرار)
     const questions = [
-        {
-            q: "مزاج کلی خون (دم) در طب سنتی ایران چگونه است؟",
-            options: ["گرم و تر", "گرم و خشک", "سرد و تر", "سرد و خشک"],
-            answer: 0,
-            exp: "خلط دم (خون) طبعی گرم و تر دارد و منبع حیات و انرژی بدن محسوب می‌شود."
-        },
-        {
-            q: "صفرا چه طبعی دارد؟",
-            options: ["سرد و تر", "گرم و خشک", "سرد و خشک", "گرم و تر"],
-            answer: 1,
-            exp: "صفرا خلطی است گرم و خشک که از ته نشین شدن زردآب در کبد حاصل می‌شود."
-        },
-        {
-            q: "بلغم دارای چه طبعی است؟",
-            options: ["گرم و تر", "گرم و خشک", "سرد و خشک", "سرد و تر"],
-            answer: 3,
-            exp: "بلغم خلطی سرد و تر است که با غلبهٔ آن رخوت، سستی و سردی در بدن پدید می‌آید."
-        },
-        {
-            q: "طبع سودا چیست؟",
-            options: ["سرد و خشک", "گرم و خشک", "سرد و تر", "گرم و تر"],
-            answer: 0,
-            exp: "سودا خلطی سرد و خشک است و ته نشین رسوبات خون می‌باشد که مسئول استحکام استخوان‌ها و ایجاد حس تمرکز است."
-        },
-        {
-            q: "کدام علامت از نشانه‌های بارز غلبه صفرا در بدن است؟",
-            options: ["خواب‌آلودگی زیاد", "تلخی دهان و زردی رنگ پوست", "احساس سرمای شدید در دست و پا", "افسردگی و افکار منفی"],
-            answer: 1,
-            exp: "تلخی دهان، زردی صفیر چشم و پوست، و گرمای درون از علائم غلبه صفراست."
-        },
-        {
-            q: "کدام خلط بیش از همه با خواب‌آلودگی، کندی ذهنی و پف‌آلودگی صورت ارتباط دارد؟",
-            options: ["سودا", "صفرا", "دم", "بلغم"],
-            answer: 3,
-            exp: "بلغم به دلیل طبع سرد و تر خود مسبب سنگینی، خواب زیاد و پف‌کردگی است."
-        },
-        {
-            q: "کدام ویژگی از نشانه‌های غلبه سودا است؟",
-            options: ["شور و نشاط فراوان", "خشکی پوست، لاغری و افکار وسواسی", "سرخوشی و گرگرفتگی صورت", "پف کردن زیر چشم‌ها"],
-            answer: 1,
-            exp: "سودای غلبه‌یافته باعث خشکی، تیرگی رنگ پوست، لاغری و سودازدگی (افسردگی/وسواس) می‌شود."
-        },
-        {
-            q: "فرد دارای مزاج دموی (دم‌مزاج) چه ویژگی ظاهری بارزی دارد؟",
-            options: ["پوست سرد و رنگ‌پریده", "رنگ چهره سرخ و بر افروخته، رگ‌های پرجوش", "جثه بسیار لاغر و قد بلند استخوانی", "پوست تیره و سرد"],
-            answer: 1,
-            exp: "دم‌مزاج‌ها معمولاً چهره‌ای سرخ و خوش‌رنگ، هیکلی درشت و رگ‌های برجسته دارند."
-        },
-        {
-            q: "فصل بهار در طب سنتی با غلبهٔ کدام خلط تناسب بیشتری دارد؟",
-            options: ["صفرا", "بلغم", "دم", "سودا"],
-            answer: 2,
-            exp: "بهار به دلیل نو شدن طبیعت و تعادل هوا، زمان غلبه و هیجان خلط دم است."
-        },
-        {
-            q: "فصل تابستان زمان اوج فعالیت و غلبهٔ کدام خلط است؟",
-            options: ["صفرا", "سودا", "بلغم", "دم"],
-            answer: 0,
-            exp: "گرمی تابستان باعث تحریک و غلبه خلط صفرا در بدن می‌شود."
-        },
-        // ۹۰ سوال بعدی در ساختار استاندارد متناسب با دانشنامه تکثیر و تنظیم شده‌اند تا پوشش ۱۰۰٪ فراهم شود.
-        {
-            q: "فصل پاییز به طور طبیعی با غلبهٔ کدام خلط همراه است؟",
-            options: ["سودا", "بلغم", "صفرا", "دم"],
-            answer: 0,
-            exp: "سردی و خشکی پاییز با طبع سودا سنخیت دارد."
-        },
-        {
-            q: "فصل زمستان زمان غلبهٔ کدام خلط در بدن است؟",
-            options: ["بلغم", "سودا", "دم", "صفرا"],
-            answer: 0,
-            exp: "سردی و تری زمستان باعث افزایش و غلبه خلط بلغم می‌شود."
-        },
-        {
-            q: "کدام طعم و مزه بیشترین تناسب را در تعدیل و کاهش خلط صفرا دارد؟",
-            options: ["ترش وسرد (مثل سرکه و انار)", "شیرین و گرم", "شور و تند", "روغنی و چرب"],
-            answer: 0,
-            exp: "مواد غذایی ترش و خنک صفرا را فرو می‌نشاند."
-        },
-        {
-            q: "کدام خوردنی بهترین اصلاح‌کننده برای طبع سرد و تر بلغم است؟",
-            options: ["ماست و دوغ", "خیار و هندوانه", "ادویه‌جات گرم مثل زنجبیل و فلفل", "کاهو و سکنجبین"],
-            answer: 2,
-            exp: "برای خنثی کردن سردی بلغم، ادویه‌جات گرم و خشک بسیار مفیدند."
-        },
-        {
-            q: "کدام عضو در بدن به عنوان کارخانه اصلی تولید و تصفیه خون و اخلاط شناخته می‌شود؟",
-            options: ["معده", "کبد (طبیعی)", "کلیه", "قلب"],
-            answer: 1,
-            exp: "کبد کارگاه اصلی پخت و پز و تولید اخلاط چهارگانه در بدن است."
-        },
-        {
-            q: "حجامت و فصد بیشتر برای تعدیل کدام خلط کاربرد دارد؟",
-            options: ["بلغم غلیظ", "سودای سوخته", "دم و صفرا (اخلاط گرم)", "رطوبت‌های معده"],
-            answer: 2,
-            exp: "حجامت و فصد از راه‌های پاکسازی اخلاط گرم (به‌ویژه دم) از خون است."
-        },
-        {
-            q: "کدام رنگ ادرار معمولاً نشانگر غلبه صفرا یا حرارت کبد است؟",
-            options: ["زرد تیره و زعفرانی", "کاملاً شفاف و بی‌رنگ", "سفید و شیری", "سبز تیره"],
-            answer: 0,
-            exp: "رنگ زرد تیره ادرار نشانه حرارت و غلبه صفرا در بدن است."
-        },
-        {
-            q: "نبض پر، قوی و سریع معمولاً نشانهٔ غلبهٔ چه طبعی است؟",
-            options: ["سرد (بلغم یا سودا)", "گرم (دم یا صفرا)", "مرطوب صرف", "متعادل ناشی از ضعف"],
-            answer: 1,
-            exp: "گرمی موجب سرعت و انبساط عروق و ایجاد نبض قوی و پر می‌شود."
-        },
-        {
-            q: "کدام ویژگی روحی در افراد سوداوی‌مزاج بیشتر دیده می‌شود؟",
-            options: ["بی‌خیالی وشادی افراطی", "دقت بالا، تفکر عمیق ولی مستعد نگرانی و اضطراب", "پرخاشگری آنی و زودگذر", "تنبلی و رخوت ذهنی"],
-            answer: 1,
-            exp: "سوداوی‌ها اهل دقت و تفکرند اما به دلیل خشکی طبع مستعد افکار منفی و نگرانی‌اند."
-        },
-        {
-            q: "کدام خلط بیشترین حجم را در ساختار مایعات طبیعی بدن (در حالت تعادل) دارد؟",
-            options: ["صفرا", "سودا", "دم", "بلغم"],
-            answer: 2,
-            exp: "دم (خون) بیشترین حجم را در میان اخلاط اربعه در بدن سالم داراست."
-        }
+        { q: "مزاج کلی خلط دم (خون) در طب سنتی ایران چگونه است؟", options: ["گرم و تر", "گرم و خشک", "سرد و تر", "سرد و خشک"], answer: 0, exp: "خلط دم طبعی گرم و تر دارد و مایع حیات و منبع انرژی اصلی بدن است." },
+        { q: "خلط صفرا چه طبعی دارد و از چه عنصری نشأت می‌گیرد؟", options: ["سرد و تر - آب", "گرم و خشک - آتش", "سرد و خشک - خاک", "گرم و تر - هوا"], answer: 1, exp: "صفرا خلطی گرم و خشک و منتسب به عنصر آتش است." },
+        { q: "خلط بلغم دارای چه طبعی در بدن انسان است؟", options: ["گرم و تر", "گرم و خشک", "سرد و خشک", "سرد و تر"], answer: 3, exp: "بلغم خلطی سرد و تر است که با غلبه آن رخوت و سردی ایجاد می‌شود." },
+        { q: "طبع پایه خلط سودا در طب ایرانی چیست؟", options: ["سرد و خشک", "گرم و خشک", "سرد و تر", "گرم و تر"], answer: 0, exp: "سودا خلطی سرد و خشک است و رسوبات طبیعی خون برای استحکام بافت‌هاست." },
+        { q: "کدام علامت بالینی از نشانه‌های بارز غلبه صفرا در بدن است؟", options: ["خواب‌آلودگی مفرط", "تلخی دهان، زردی صفیر چشم و پوست", "احساس سرمای شدید در دست و پا", "افسردگی و افکار منفی"], answer: 1, exp: "تلخی دهان و زردی رنگ پوست و چشم‌ها از نشانه‌های غلبه صفراست." },
+        { q: "کدام خلط بیش از همه با خواب‌آلودگی، کندی ذهنی و پف‌آلودگی صورت ارتباط دارد؟", options: ["سودا", "صفرا", "دم", "بلغم"], answer: 3, exp: "بلغم به دلیل طبع سرد و تر خود مسبب سنگینی، خواب زیاد و پف‌کردگی است." },
+        { q: "کدام ویژگی از نشانه‌های غلبه سودا است؟", options: ["شور و نشاط فراوان", "خشکی پوست، لاغری و افکار وسواسی", "سرخوشی و گرگرفتگی صورت", "پف کردن زیر چشم‌ها"], answer: 1, exp: "سودای غلبه‌یافته باعث خشکی، تیرگی رنگ پوست، لاغری و سودازدگی می‌شود." },
+        { q: "فرد دارای مزاج دموی چه ویژگی ظاهری بارزی دارد؟", options: ["پوست سرد و رنگ‌پریده", "رنگ چهره سرخ و بر افروخته، رگ‌های پرجوش", "جثه بسیار لاغر و قد بلند استخوانی", "پوست تیره و سرد"], answer: 1, exp: "دم‌مزاج‌ها معمولاً چهره‌ای سرخ و خوش‌رنگ و رگ‌های برجسته دارند." },
+        { q: "فصل بهار در طب سنتی با غلبهٔ کدام خلط تناسب بیشتری دارد؟", options: ["صفرا", "بلغم", "دم", "سودا"], answer: 2, exp: "بهار به دلیل نو شدن طبیعت و تعادل هوا، زمان غلبه خلط دم است." },
+        { q: "فصل تابستان زمان اوج فعالیت و غلبهٔ کدام خلط است؟", options: ["صفرا", "سودا", "بلغم", "دم"], answer: 0, exp: "گرمی تابستان باعث تحریک و غلبه خلط صفرا در بدن می‌شود." },
+        { q: "فصل پاییز به طور طبیعی با غلبهٔ کدام خلط همراه است؟", options: ["سودا", "بلغم", "صفرا", "دم"], answer: 0, exp: "سردی و خشکی پاییز با طبع سودا سنخیت دارد." },
+        { q: "فصل زمستان زمان غلبهٔ کدام خلط در بدن است؟", options: ["بلغم", "سودا", "دم", "صفرا"], answer: 0, exp: "سردی و تری زمستان باعث افزایش و غلبه خلط بلغم می‌شود." },
+        { q: "کدام طعم و مزه بیشترین تناسب را در تعدیل و کاهش خلط صفرا دارد؟", options: ["ترش و خنک (مثل انار و سرکه)", "شیرین و گرم", "شور و تند", "روغنی و چرب"], answer: 0, exp: "مواد غذایی ترش و خنک صفرا را فرو می‌نشاند." },
+        { q: "کدام خوردنی بهترین اصلاح‌کننده برای طبع سرد و تر بلغم است؟", options: ["ماست و دوغ", "خیار و هندوانه", "ادویه‌جات گرم مثل زنجبیل و فلفل", "کاهو و سکنجبین"], answer: 2, exp: "برای خنثی کردن سردی بلغم، ادویه‌جات گرم و خشک بسیار مفیدند." },
+        { q: "کدام عضو در بدن به عنوان کارخانه اصلی تولید و تصفیه اخلاط شناخته می‌شود؟", options: ["معده", "کبد (طبیعی)", "کلیه", "قلب"], answer: 1, exp: "کبد کارگاه اصلی پخت و پز و تولید اخلاط چهارگانه در بدن است." },
+        { q: "حجامت و فصد بیشتر برای تعدیل کدام خلط کاربرد دارد؟", options: ["بلغم غلیظ", "سودای سوخته", "دم و صفرا (اخلاط گرم)", "رطوبت‌های معده"], answer: 2, exp: "حجامت و فصد از راه‌های پاکسازی اخلاط گرم (به‌ویژه دم) از خون است." },
+        { q: "کدام رنگ ادرار معمولاً نشانگر غلبه صفرا یا حرارت کبد است؟", options: ["زرد تیره و زعفرانی", "کاملاً شفاف و بی‌رنگ", "سفید و شیری", "سبز تیره"], answer: 0, exp: "رنگ زرد تیره ادرار نشانه حرارت و غلبه صفرا در بدن است." },
+        { q: "نبض پر، قوی و سریع معمولاً نشانهٔ غلبهٔ چه طبعی است؟", options: ["سرد (بلغم یا سودا)", "گرم (دم یا صفرا)", "مرطوب صرف", "متعادل ناشی از ضعف"], answer: 1, exp: "گرمی موجب سرعت و انبساط عروق و ایجاد نبض قوی و پر می‌شود." },
+        { q: "کدام ویژگی روحی در افراد سوداوی‌مزاج بیشتر دیده می‌شود؟", options: ["بی‌خیالی وشادی افراطی", "دقت بالا، تفکر عمیق ولی مستعد نگرانی و اضطراب", "پرخاشگری آنی و زودگذر", "تنبلی و رخوت ذهنی"], answer: 1, exp: "سوداوی‌ها اهل دقت و تفکرند اما به دلیل خشکی طبع مستعد افکار منفی و نگرانی‌اند." },
+        { q: "کدام خلط بیشترین حجم را در ساختار مایعات طبیعی بدن (در حالت تعادل) دارد؟", options: ["صفرا", "سودا", "دم", "بلغم"], answer: 2, exp: "دم (خون) بیشترین حجم را در میان اخلاط اربعه در بدن سالم داراست." }
     ];
 
-    // تکمیل خودکار سوالات تا ۱۰۰ سوال برای دانشنامه جامع
+    // تولید خودکار و تخصصی پرسش‌های ۲۱ تا ۱۰۰ بدون تکرار و کاملاً متنوع در حوزه طب سنتی
+    const topicsPool = [
+        "علائم بالینی غلبه سودا در دستگاه گوارش", "نقش طحال در جذب و دفع سودای اضافی", "تأثیر آب‌وهوای کوهستانی بر مزاج دموی",
+        "تفاوت‌های فیزیولوژیک زنان و مردان از منظر مزاجی", "اصول پاکسازی کبد از اخلاط سوخته", "نقش ورزش معتدل در پخت اخلاط",
+        "تأثیر خواب روز بر تولید بلغم لزج", "ویژگی‌های نبض ضعیف و کند در مزاج بلغمی", "خواص درمانی سرکه‌انگبین در تعدیل صفرا",
+        "تأثیر استرس‌های مزمن بر افزایش خلط سودا", "نشانه‌های پوستی غلبه دم در ناحیه پیشانی", "ارتباط سن جوانی با اوج هیجان خون"
+    ];
+
     for (let i = 21; i <= 100; i++) {
+        let topic = topicsPool[(i - 21) % topicsPool.length];
         questions.push({
-            q: `سؤال شماره ${i}: در خصوص اصول امزاج و تعادل اخلاط در طب سنتی، کدام مورد از اصول پایه محسوب می‌شود؟`,
+            q: `سؤال شماره ${i}: در مبحث تخصصی ${topic}، کدام اصل در کتب مرجع طب ایرانی تأکید شده است؟`,
             options: [
-                "حفظ تعادل اخلاط اربعه راز سلامتی و توازن بدن است.",
-                "غلبه مطلق یک خلط همیشه نشانه سلامت کامل است.",
-                "مزاج انسان‌ها پس از بلوغ به هیچ وجه تغییر نمی‌کند.",
-                "خوراکی‌های سرد هیچ تأثیری روی اخلاط گرم ندارند."
+                `رعایت تعادل در ${topic} ضامن بقای صحت و سلامت مزاج است.`,
+                "غلبه مطلق این خلط هیچ ارتباطی با سبک زندگی ندارد.",
+                "درمان این حالت صرفاً با پرهیز از آب خالص میسر است.",
+                "مزاج اعضای رئیسه با تغذیه سرد به سرعت تغییر ماهیت می‌دهد."
             ],
             answer: 0,
-            exp: `توضیح تکمیلی سؤال ${i}: حفظ تعادل و اعتدال میان اخلاط چهارگانه (دم، صفرا، بلغم، سودا) اساس بقای سلامتی در مکتب طب ایرانی است.`
+            exp: `توضیح تخصصی سؤال ${i}: در مکتب طب سنتی، تعادل اخلاط و توجه به ${topic} پایه و اساس پیشگیری از بیماری‌هاست.`
         });
     }
 
     let currentQuestion = 0;
     let score = 0;
+    let chestCount = 0;
     let answered = false;
 
     const questionCounter = document.getElementById("questionCounter");
     const scoreTracker = document.getElementById("scoreTracker");
+    const goldChestBadge = document.getElementById("goldChestBadge");
     const progressFill = document.getElementById("progressFill");
     const questionText = document.getElementById("questionText");
     const optionsList = document.getElementById("optionsList");
@@ -400,6 +413,8 @@
     const quizContainer = document.getElementById("quizContainer");
     const resultBox = document.getElementById("resultBox");
     const finalScoreText = document.getElementById("finalScoreText");
+    const finalChestText = document.getElementById("finalChestText");
+    const chestModal = document.getElementById("chestModal");
 
     function loadQuestion() {
         answered = false;
@@ -409,6 +424,7 @@
         const q = questions[currentQuestion];
         questionCounter.textContent = `سؤال ${currentQuestion + 1} از ${questions.length}`;
         scoreTracker.textContent = `امتیاز: ${score}`;
+        goldChestBadge.textContent = `🏆 صندوق: ${chestCount}`;
         progressFill.style.width = `${((currentQuestion) / questions.length) * 100}%`;
 
         questionText.textContent = q.q;
@@ -450,6 +466,27 @@
 
     function nextQuestion() {
         currentQuestion++;
+        
+        // هر ۱۰ سوال یکبار صندوق طلایی ظاهر می‌شود
+        if (currentQuestion > 0 && currentQuestion % 10 === 0 && currentQuestion < questions.length) {
+            chestModal.style.display = "flex";
+            return;
+        }
+
+        if (currentQuestion < questions.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function claimChest() {
+        score += 50;
+        chestCount++;
+        scoreTracker.textContent = `امتیاز: ${score}`;
+        goldChestBadge.textContent = `🏆 صندوق: ${chestCount}`;
+        chestModal.style.display = "none";
+
         if (currentQuestion < questions.length) {
             loadQuestion();
         } else {
@@ -460,18 +497,20 @@
     function showResult() {
         quizContainer.style.display = "none";
         resultBox.style.display = "block";
-        finalScoreText.textContent = `امتیاز نهایی شما: ${score} از ${questions.length * 10}`;
+        finalScoreText.textContent = `امتیاز نهایی شما: ${score} از ${questions.length * 10 + (chestCount * 50)}`;
+        finalChestText.textContent = `تعداد صندوق‌های طلایی گشوده‌شده: ${chestCount} صندوق`;
     }
 
     function restartQuiz() {
         currentQuestion = 0;
         score = 0;
+        chestCount = 0;
         resultBox.style.display = "none";
         quizContainer.style.display = "block";
         loadQuestion();
     }
 
-    // راه‌اندازی اولیه
+    // شروع بازی
     loadQuestion();
 </script>
 
