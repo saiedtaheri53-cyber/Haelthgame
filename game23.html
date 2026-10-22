@@ -348,7 +348,6 @@
 </div>
 
 <script>
-    // بانک ۱۰۰ سوال تخصصی با توزیع کاملاً متنوع گزینه‌های صحیح
     const questions = [
         { q: "مزاج کلی خلط دم (خون) در طب سنتی ایران چگونه است؟", options: ["گرم و تر", "گرم و خشک", "سرد و تر", "سرد و خشک"], answer: 0, exp: "خلط دم طبعی گرم و تر دارد و مایع حیات و منبع انرژی اصلی بدن است." },
         { q: "خلط صفرا چه طبعی دارد و از چه عنصری نشأت می‌گیرد؟", options: ["سرد و تر - آب", "گرم و خشک - آتش", "سرد و خشک - خاک", "گرم و تر - هوا"], answer: 1, exp: "صفرا خلطی گرم و خشک و منتسب به عنصر آتش است." },
@@ -372,7 +371,6 @@
         { q: "کدام خلط بیشترین حجم را در ساختار مایعات طبیعی بدن (در حالت تعادل) دارد؟", options: ["صفرا", "دم", "سودا", "بلغم"], answer: 1, exp: "دم (خون) بیشترین حجم را در میان اخلاط اربعه در بدن سالم داراست." }
     ];
 
-    // تولید خودکار سوالات ۲۱ تا ۱۰۰ با توزیع کاملاً تصادفی و صحیح گزینه‌ها (بدون تکرار گزینه اول)
     const baseTopics = [
         "علائم بالینی غلبه سودا در دستگاه گوارش", "نقش طحال در جذب و دفع سودای اضافی", "تأثیر آب‌وهوای کوهستانی بر مزاج دموی",
         "تفاوت‌های فیزیولوژیک زنان و مردان از منظر مزاجی", "اصول پاکسازی کبد از اخلاط سوخته", "نقش ورزش معتدل در پخت اخلاط",
@@ -380,18 +378,43 @@
         "تأثیر استرس‌های مزمن بر افزایش خلط سودا", "نشانه‌های پوستی غلبه دم در ناحیه پیشانی", "ارتباط سن جوانی با اوج هیجان خون"
     ];
 
+    const actionPool1 = [
+        "پرهیز از افراط در سردی‌ها و حفظ تعادل عمومی در",
+        "تقویت حرارت غریزی و تنظیم متابولیسم در",
+        "پاکسازی مجاری گوارشی از رطوبت‌های زائد در",
+        "اعتدال در خواب و بیداری و پرهیز از هیجانات در"
+    ];
+    const actionPool2 = [
+        "بهبود گردش خون مویرگی و دفع سموم",
+        "تقویت عملکرد گوارش و جذب مواد مغذی",
+        "تنظیم ترشحات غدد و تعادل حرارت درونی",
+        "حفظ رطوبت طبیعی و جلوگیری از خشکی بافت‌ها"
+    ];
+    const actionPool3 = [
+        "تعدیل ارکان اربعه و هماهنگی با طبیعت سرد و تر",
+        "مراقبت از کبد و عروق در برابر حرارت اضافی",
+        "تقویت قوای مدبره بدن برای دفع مواد زائد",
+        "افزایش نشاط سلولی و پایداری ایمنی بدن"
+    ];
+    const actionPool4 = [
+        "پرهیز از پرخوری و رعایت اصول شش‌گانه ضروری",
+        "تنظیم ساعات استراحت و فعالیت بدنی متناسب",
+        "استفاده از مصلحات غذایی و گیاهی سازگار",
+        "تأکید بر پاکسازی طبع با نظر حکیم حاذق"
+    ];
+
     for (let i = 21; i <= 100; i++) {
         let topic = baseTopics[(i - 21) % baseTopics.length];
-        let correctIdx = (i % 4); // توزیع متغیر پاسخ صحیح بین 0 تا 3
+        let correctIdx = (i % 4);
         
-        let allOpts = [
-            `پرهیز از افراط در سردی‌ها و حفظ تعادل عمومی در ${topic} اساسی است.`,
-            `تقویت حرارت غریزی و تنظیم متابولیسم در ${topic} اهمیت درجه اول دارد.`,
-            `پاکسازی مجاری گوارشی از رطوبت‌های زائد در ${topic} بسیار راهگشا است.`,
-            `اعتدال در خواب و بیداری و پرهیز از هیجانات در ${topic} توصیه می‌شود.`
-        ];
+        let poolIndex = i % 4;
+        let opt1 = `${actionPool1[i % actionPool1.length]} ${topic} حائز اهمیت است.`;
+        let opt2 = `${actionPool2[i % actionPool2.length]} از طریق ${topic} توصیه می‌شود.`;
+        let opt3 = `${actionPool3[i % actionPool3.length]} با تمرکز بر ${topic} ضروری است.`;
+        let opt4 = `${actionPool4[i % actionPool4.length]} در مبحث ${topic} پایه و اساسی است.`;
 
-        // جابجا کردن گزینه صحیح به موقعیت محاسبه شده
+        let allOpts = [opt1, opt2, opt3, opt4];
+
         let temp = allOpts[0];
         allOpts[0] = allOpts[correctIdx];
         allOpts[correctIdx] = temp;
@@ -404,10 +427,15 @@
         });
     }
 
-    let currentQuestion = 0;
-    let score = 0;
-    let chestCount = 0;
+    // وضعیت بازی و مدیریت ذخیره‌سازی محلی (LocalStorage)
+    let currentQuestion = parseInt(localStorage.getItem('game5_current') || '0');
+    let score = parseInt(localStorage.getItem('game5_score') || '0');
+    let chestCount = parseInt(localStorage.getItem('game5_chest') || '0');
     let answered = false;
+
+    if (currentQuestion >= questions.length) {
+        currentQuestion = 0;
+    }
 
     const questionCounter = document.getElementById("questionCounter");
     const scoreTracker = document.getElementById("scoreTracker");
@@ -422,6 +450,12 @@
     const finalScoreText = document.getElementById("finalScoreText");
     const finalChestText = document.getElementById("finalChestText");
     const chestModal = document.getElementById("chestModal");
+
+    function saveProgress() {
+        localStorage.setItem('game5_current', currentQuestion);
+        localStorage.setItem('game5_score', score);
+        localStorage.setItem('game5_chest', chestCount);
+    }
 
     function loadQuestion() {
         answered = false;
@@ -469,10 +503,12 @@
         explanationBox.textContent = q.exp;
         explanationBox.style.display = "block";
         nextBtn.disabled = false;
+        saveProgress();
     }
 
     function nextQuestion() {
         currentQuestion++;
+        saveProgress();
         
         if (currentQuestion > 0 && currentQuestion % 10 === 0 && currentQuestion < questions.length) {
             chestModal.style.display = "flex";
@@ -492,6 +528,7 @@
         scoreTracker.textContent = `امتیاز: ${score}`;
         goldChestBadge.textContent = `🏆 صندوق: ${chestCount}`;
         chestModal.style.display = "none";
+        saveProgress();
 
         if (currentQuestion < questions.length) {
             loadQuestion();
@@ -505,18 +542,26 @@
         resultBox.style.display = "block";
         finalScoreText.textContent = `امتیاز نهایی شما: ${score} از ${questions.length * 10 + (chestCount * 50)}`;
         finalChestText.textContent = `تعداد صندوق‌های طلایی گشوده‌شده: ${chestCount} صندوق`;
+        localStorage.removeItem('game5_current');
     }
 
     function restartQuiz() {
         currentQuestion = 0;
         score = 0;
         chestCount = 0;
+        localStorage.removeItem('game5_current');
+        localStorage.removeItem('game5_score');
+        localStorage.removeItem('game5_chest');
         resultBox.style.display = "none";
         quizContainer.style.display = "block";
         loadQuestion();
     }
 
-    loadQuestion();
+    if (currentQuestion >= questions.length) {
+        showResult();
+    } else {
+        loadQuestion();
+    }
 </script>
 
 </body>
