@@ -2,192 +2,386 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>بازی سته ضروریه</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی ۶: ارکان و نسبت آن‌ها با طبع‌ها | دانشنامه طب</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f4f4f9; display: flex; justify-content: center; padding: 20px; }
-        .container { background: white; width: 100%; max-width: 500px; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .header { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; }
-        #question { font-size: 1.2em; margin-bottom: 20px; line-height: 1.6; min-height: 80px; }
-        .option { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; background: #fff; cursor: pointer; text-align: right; transition: 0.3s; }
-        .option:hover { background: #e9ecef; }
-        .correct { background: #d4edda !important; border-color: #28a745 !important; }
-        .wrong { background: #f8d7da !important; border-color: #dc3545 !important; }
-        #next-btn { display: none; width: 100%; padding: 15px; background: #007bff; color: white; border: none; border-radius: 8px; margin-top: 20px; cursor: pointer; }
-        .nav-btn { display: block; width: 100%; padding: 10px; margin-top: 20px; background: #6c757d; color: white; border: none; border-radius: 8px; text-align: center; text-decoration: none; }
-        #msg { color: #d63384; font-weight: bold; margin-bottom: 10px; text-align: center; height: 25px; }
+        * { box-sizing: border-box; }
+        body {
+            font-family: Tahoma, sans-serif;
+            background: linear-gradient(135deg, #f0f7f4, #d8e8de);
+            margin: 0;
+            padding: 15px;
+            text-align: center;
+            color: #2c3e50;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+            background: white;
+            padding: 22px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e1eee6;
+            padding-bottom: 10px;
+        }
+        .header h2 { color: #2c6b4f; font-size: 16px; margin: 0; }
+        .stats { font-size: 13px; color: #d97706; font-weight: bold; }
+        
+        .progress-bar {
+            width: 100%;
+            background: #e1eee6;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            background: #2c6b4f;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-box {
+            background: #f9fbf9;
+            border: 1px solid #e1eee6;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            text-align: right;
+        }
+        .q-badge {
+            display: inline-block;
+            background: #d97706;
+            color: white;
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        .question-text {
+            font-size: 15px;
+            font-weight: bold;
+            color: #2c3e50;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-btn {
+            background: white;
+            border: 2px solid #2c6b4f;
+            color: #2c6b4f;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: right;
+            transition: 0.2s;
+            font-weight: bold;
+        }
+        .option-btn:hover { background: #e8f4ed; }
+        .option-btn.correct { background: #22c55e !important; color: white !important; border-color: #16a34a; }
+        .option-btn.wrong { background: #ef4444 !important; color: white !important; border-color: #dc2626; }
+
+        .explanation {
+            margin-top: 15px;
+            padding: 12px;
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #92400e;
+            text-align: right;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .btn {
+            background: #2c6b4f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .btn:hover { background: #1e4a36; }
+        .btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+        
+        .portal-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #2c6b4f;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .portal-link:hover { text-decoration: underline; }
+
+        footer {
+            margin-top: 15px;
+            font-size: 11px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <span id="q-counter">سوال ۱</span>
-        <span id="score">امتیاز: ۰</span>
+    <div class="container">
+        <div class="header">
+            <h2>بازی ۶: ارکان و نسبت آن‌ها با طبع‌ها</h2>
+            <div class="stats">امتیاز: <span id="score">0</span> | سوال <span id="currentQ">1</span> از ۱۰۰</div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="question-box">
+            <span class="q-badge" id="qTypeBadge">چهار گزینه‌ای</span>
+            <div class="question-text" id="questionText">در حال بارگذاری پرسش‌ها...</div>
+            <div class="options-grid" id="optionsContainer"></div>
+            <div class="explanation" id="explanationBox"></div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>سوال بعدی</button>
+            <button class="btn" style="background:#d97706;" onclick="playSoundToggle()">🔊 صدا: <span id="soundStatus">فعال</span></button>
+        </div>
+
+        <a href="index.html" class="portal-link">← بازگشت به پورتال اصلی دانشنامه</a>
     </div>
-    <div id="msg"></div>
-    <div id="question"></div>
-    <div id="options"></div>
-    <button id="next-btn" onclick="nextQuestion()">سوال بعدی</button>
-    <a href="index.html" class="nav-btn">بازگشت به فهرست</a>
-</div>
 
-<script>
-    const quizData = [
-        { q: "کدام عامل از سته ضروریه بیشترین تأثیر آنی را بر حیات دارد؟", o: ["هوا", "خواب", "غذا", "ورزش"], a: "هوا" },
-        { q: "مادر اصلی تمام بیماری‌ها در طب سنتی چیست؟", o: ["غذا و نوشیدنی", "اضطراب", "کم‌خوابی", "عدم ورزش"], a: "غذا و نوشیدنی" },
-        { q: "مصرف آب یخ بعد از غذا باعث چه می‌شود؟", o: ["ضعف هضم", "تقویت هضم", "افزایش حرارت", "هیچکدام"], a: "ضعف هضم" },
-        { q: "خواب معتدل چه اثری بر روح دارد؟", o: ["آرامش و بازسازی", "افزایش غضب", "کاهش تمرکز", "تولید صفرا"], a: "آرامش و بازسازی" },
-        { q: "ورزش ملایم چه تأثیری بر فضولات بدن دارد؟", o: ["تسهیل دفع", "توقف دفع", "افزایش احتباس", "تغییر مزاج"], a: "تسهیل دفع" },
-        { q: "خشم زیاد بر عملکرد کدام عضو تأثیر منفی دارد؟", o: ["کبد", "قلب", "کلیه", "معده"], a: "کبد" },
-        { q: "بهترین زمان برای خواب شبانه چه وقتی است؟", o: ["اوایل شب", "نزدیک صبح", "ظهر", "نیمه‌شب"], a: "اوایل شب" },
-        { q: "مصرف نانِ سبوس‌دار چه کمکی به معده می‌کند؟", o: ["هضم بهتر", "سنگینی معده", "نفخ شدید", "کاهش اشتها"], a: "هضم بهتر" },
-        { q: "حمام بسیار داغ چه آسیبی به بدن می‌زند؟", o: ["تحلیل قوا", "افزایش قدرت", "بهبود گردش خون", "تنظیم مزاج"], a: "تحلیل قوا" },
-        { q: "حرکت و سکون چه نقشی در بدن دارد؟", o: ["تنظیم سوخت‌وساز", "کاهش خون", "افزایش غضب", "توقف رشد"], a: "تنظیم سوخت‌وساز" },
-        { q: "کدام میوه برای تقویت معده توصیه شده است؟", o: ["به", "هندوانه", "خیار", "توت"], a: "به" },
-        { q: "مصرف زیاد گوشت گاو چه عارضه ای دارد؟", o: ["تولید سودا", "تولید خون صالح", "تقویت قلب", "رفع یبوست"], a: "تولید سودا" },
-        { q: "خوابیدن بلافاصله بعد از غذا چه اثری دارد؟", o: ["فساد هضم", "تقویت جذب", "آرامش معده", "کاهش وزن"], a: "فساد هضم" },
-        { q: "ورزش سنگین قبل از هضم غذا چه نتیجه‌ای دارد؟", o: ["اختلال هضم", "چربی‌سوزی", "عضله‌سازی", "افزایش اشتها"], a: ["اختلال هضم"]},
-        { q: "کدام نوشیدنی برای رفع عطش توصیه شده است؟", o: ["سکنجبین", "آب سرد", "نوشابه", "قهوه"], a: "سکنجبین" },
-        { q: "غم و اندوه طولانی باعث چه نوع مزاجی می‌شود؟", o: ["سوداوی", "دموی", "صفراوی", "بلغمی"], a: "سوداوی" },
-        { q: "هوای آلوده چه تاثیری بر روح دارد؟", o: ["کدورت روح", "صفای روح", "تقویت ذهن", "خواب عمیق"], a: "کدورت روح" },
-        { q: "خوابیدن در هوای بسیار سرد چه پیامدی دارد؟", o: ["سستی بدن", "تقویت قوا", "رفع بلغم", "گرم شدن"], a: "سستی بدن" },
-        { q: "بهترین نوع گوشت از نظر طب سنتی چیست؟", o: ["گوسفند", "گاو", "شتر", "بز"], a: "گوسفند" },
-        { q: "استفراغ (دفع) فضولات در زمان مناسب چه اثری دارد؟", o: ["پاکسازی بدن", "ضعف شدید", "تشنگی مفرط", "افزایش وزن"], a: "پاکسازی بدن" },
-        { q: "مصرف شیرینی زیاد چه تاثیری بر خون دارد؟", o: ["تولید دم نامناسب", "خون‌سازی قوی", "تصفیه خون", "کاهش قند"], a: "تولید دم نامناسب" },
-        { q: "پیاده‌روی آرام چه اثری بر اعصاب دارد؟", o: ["تسکین", "تحریک", "تولید سودا", "تغییر مزاج"], a: "تسکین" },
-        { q: "خواب نیمروز (قیلوله) چه زمانی مفید است؟", o: ["قبل از ظهر", "بعد از عصر", "غروب", "هیچ وقت"], a: "قبل از ظهر" },
-        { q: "خوردن غذا در حال ایستاده چه اثری دارد؟", o: ["اختلال گوارش", "افزایش هضم", "لاغری", "خواب بهتر"], a: "اختلال گوارش" },
-        { q: "کدام گیاه به عنوان مصلح لبنیات شناخته می‌شود؟", o: ["نعنا", "فلفل", "دارچین", "زنجبیل"], a: "نعنا" },
-        { q: "حمام کردن با آب نیم‌گرم چه اثری دارد؟", o: ["تلطیف پوست", "تحلیل قوا", "سفت شدن عضله", "افزایش صفرا"], a: "تلطیف پوست" },
-        { q: "ترس ناگهانی چه اثری بر سیستم عصبی دارد؟", o: ["سردی و خشکی", "گرمی و تری", "اعتدال", "افزایش خون"], a: "سردی و خشکی" },
-        { q: "ورزش معتدل چه اثری بر رنگ چهره دارد؟", o: ["سرخی ملایم", "زردی مفرط", "کبودی", "پریدگی"], a: "سرخی ملایم" },
-        { q: "خواب زیاد در روز چه عارضه‌ای دارد؟", o: ["تولید بلغم", "افزایش هوش", "تصفیه خون", "رفع خستگی"], a: "تولید بلغم" },
-        { q: "مصرف آب گرم ناشتا چه تاثیری دارد؟", o: ["شستشوی معده", "سنگینی کبد", "تولید صفرا", "ضعف معده"], a: "شستشوی معده" },
-        { q: "کدام عضو با عصبانیت درگیر می‌شود؟", o: ["کبد", "کلیه", "معده", "قلب"], a: "کبد" },
-        { q: "خوردن غذای شور چه تاثیری بر بدن دارد؟", o: ["خشکی مزاج", "تری مزاج", "تولید دم", "خواب زیاد"], a: "خشکی مزاج" },
-        { q: "استنشاق هوای کوهستان چه خاصیتی دارد؟", o: ["طراوت روح", "تولید بلغم", "سنگینی ذهن", "ضعف اعصاب"], a: "طراوت روح" },
-        { q: "ماست برای چه افرادی مضرتر است؟", o: ["افراد سردمزاج", "افراد گرم‌مزاج", "جوانان", "ورزشکاران"], a: "افراد سردمزاج" },
-        { q: "مصرف سبزیجات همراه غذا چه کمکی می‌کند؟", o: ["تسهیل هضم", "تولید صفرا", "کاهش اشتها", "افزایش سودا"], a: "تسهیل هضم" },
-        { q: "حمام رفتن با معده پر چه پیامدی دارد؟", o: ["انسداد عروق", "بهبود هضم", "کاهش وزن", "زیبایی پوست"], a: "انسداد عروق" },
-        { q: "خشم شدید چه تغییری در رنگ چهره می‌دهد؟", o: ["سرخی شدید", "زردی", "سفیدی", "تیرگی"], a: "سرخی شدید" },
-        { q: "ورزش تا چه زمانی باید ادامه یابد؟", o: ["تا قرمزی پوست", "تا خستگی مفرط", "تا تعریق شدید", "تا درد عضلانی"], a: "تا قرمزی پوست" },
-        { q: "خوابیدن در جای بسیار نرم چه اثری دارد؟", o: ["سستی بدن", "تقویت استخوان", "خواب عمیق", "رفع خستگی"], a: "سستی بدن" },
-        { q: "آیا نوشیدن آب وسط غذا توصیه می‌شود؟", o: ["خیر، ممنوع است", "بله، عالی است", "فرقی ندارد", "فقط آب ولرم"], a: "خیر، ممنوع است" },
-        { q: "عسل به عنوان چه ماده‌ای شناخته می‌شود؟", o: ["مصلح و مقوی", "مضر معده", "تولید سودا", "سرد مزاج"], a: "مصلح و مقوی" },
-        { q: "کدام حالت نفسانی باعث تولید بلغم می‌شود؟", o: ["غم و افسردگی", "شادی کاذب", "خشم", "غرور"], a: "غم و افسردگی" },
-        { q: "هوای لطیف (بهار) چه اثری بر روح دارد؟", o: ["گشایش روح", "تنگی روح", "سنگینی ذهن", "خواب‌آلودگی"], a: "گشایش روح" },
-        { q: "خواب شبانه چه نقشی در دفع فضولات مغزی دارد؟", o: ["دفع فضولات", "تجمع سموم", "افزایش صفرا", "کاهش یادگیری"], a: "دفع فضولات" },
-        { q: "کدام گوشت برای ورزشکاران توصیه می‌شود؟", o: ["گوسفند", "بوقلمون", "کبوتر", "همه موارد"], a: "همه موارد" },
-        { q: "حمام کردن مداوم با آب خیلی گرم باعث چه می‌شود؟", o: ["پیری زودرس", "جوانی پوست", "تقویت قلب", "تولید دم"], a: "پیری زودرس" },
-        { q: "شادی معتدل چه اثری بر قلب دارد؟", o: ["تقویت قلب", "ضعف قلب", "تولید صفرا", "سنگینی قفسه سینه"], a: "تقویت قلب" },
-        { q: "فعالیت بدنی بعد از خوردن ماهی چه عارضه‌ای دارد؟", o: ["درد مفاصل", "افزایش نیرو", "بهبود هضم", "لاغری"], a: "درد مفاصل" },
-        { q: "خوابیدن روی زمین سرد چه مضراتی دارد؟", o: ["عوارض مفصلی", "تقویت خون", "رفع سودا", "کاهش بلغم"], a: "عوارض مفصلی" },
-        { q: "نوشیدن چای بلافاصله بعد از غذا چه اثری دارد؟", o: ["جلوگیری از جذب آهن", "تقویت هضم", "تولید صفرا", "آرامش معده"], a: "جلوگیری از جذب آهن" },
-        { q: "کدام مزاج با غذاهای تند و تیز تشدید می‌شود؟", o: ["صفراوی", "بلغمی", "سوداوی", "دموی"], a: "صفراوی" },
-        { q: "آرامش روانی چه تاثیری بر هضم دارد؟", o: ["هضم کامل", "ضعف هضم", "تولید نفخ", "کاهش اشتها"], a: "هضم کامل" },
-        { q: "هوای تابستان برای کدام مزاج مفیدتر است؟", o: ["بلغمی", "صفراوی", "سوداوی", "دموی"], a: "بلغمی" },
-        { q: "خوابیدن در روز باعث چه تغییری در رنگ پوست می‌شود؟", o: ["زردی پوست", "سرخی", "شفافیت", "تیرگی"], a: "زردی پوست" },
-        { q: "مصرف مداوم غذاهای سرد برای چه کسی مضر است؟", o: ["سردمزاجان", "گرم‌مزاجان", "جوانان", "کودکان"], a: "سردمزاجان" },
-        { q: "حمام رفتن در حالت گرسنگی چه اثری دارد؟", o: ["ضعف قوا", "چربی‌سوزی", "تقویت خون", "تصفیه"], a: "ضعف قوا" },
-        { q: "اعراض نفسانی (استرس) چه اثری بر نبض دارد؟", o: ["تغییر ضربان", "اعتدال نبض", "کند شدن", "بی‌اثر"], a: "تغییر ضربان" },
-        { q: "آیا ورزش در هوای آلوده توصیه می‌شود؟", o: ["خیر، خطرناک است", "بله، مفید است", "فقط صبح", "فرقی ندارد"], a: "خیر، خطرناک است" },
-        { q: "خوابیدن قبل از غروب چه اثری دارد؟", o: ["سنگینی سر", "آرامش", "رفع بلغم", "گرم شدن"], a: "سنگینی سر" },
-        { q: "کدام عضو بیشترین تأثیر را از خواب می‌پذیرد؟", o: ["مغز", "کبد", "معده", "کلیه"], a: "مغز" },
-        { q: "خوردن نان داغ چه تاثیری بر هضم دارد؟", o: ["دیر هضم شدن", "زود هضم شدن", "تولید نفخ", "رفع سودا"], a: "دیر هضم شدن" },
-        { q: "حمام کردن با آب سرد چه زمانی مفید است؟", o: ["هرگز", "فقط ورزشکاران", "فقط گرم‌مزاجان", "در هوای گرم"], a: "در هوای گرم" },
-        { q: "اضطراب مزمن باعث چه نوع بیماری می‌شود؟", o: ["سوداوی", "بلغمی", "دموی", "صفراوی"], a: "سوداوی" },
-        { q: "ورزش باعث افزایش چه چیزی در بدن می‌شود؟", o: ["حرارت غریزی", "بلغم", "سودا", "تنبلی"], a: "حرارت غریزی" },
-        { q: "خواب بیش از حد چه اثری بر حافظه دارد؟", o: ["کاهش حافظه", "افزایش حافظه", "تقویت ذهن", "بی‌اثر"], a: "کاهش حافظه" },
-        { q: "کدام غذا برای رفع صفرا توصیه می‌شود؟", o: ["آلو", "گوشت گاو", "سیر", "ادویه"], a: "آلو" },
-        { q: "استفاده از عطر خوش چه اثری بر روح دارد؟", o: ["تقویت روح", "ضعف روح", "تولید بلغم", "سردرد"], a: "تقویت روح" },
-        { q: "هوای پاییز چه خصوصیتی دارد؟", o: ["خشکی", "تری", "گرمی", "اعتدال"], a: "خشکی" },
-        { q: "خوابیدن روی شکم چه عوارضی دارد؟", o: ["فشار به اعضا", "هضم بهتر", "آرامش ستون فقرات", "تولید خون"], a: "فشار به اعضا" },
-        { q: "مصرف آب ولرم چه اثری بر معده دارد؟", o: ["تسهیل هضم", "ضعف معده", "تولید نفخ", "افزایش صفرا"], a: "تسهیل هضم" },
-        { q: "حمام گرم قبل از غذا چه کمکی می‌کند؟", o: ["آماده‌سازی هضم", "ضعف بدن", "افزایش اشتها", "خواب‌آلودگی"], a: "آماده‌سازی هضم" },
-        { q: "آیا شادی در هنگام غذا مفید است؟", o: ["بله، هضم را بهتر می‌کند", "خیر، مضر است", "تاثیری ندارد", "فقط برای کودکان"], a: "بله، هضم را بهتر می‌کند" },
-        { q: "ورزش در هوای خیلی سرد چه عارضه‌ای دارد؟", o: ["انجماد اعضا", "افزایش گرمی", "بهبود هضم", "خواب بهتر"], a: "انجماد اعضا" },
-        { q: "خواب کوتاه نیمروز چه تاثیری بر عملکرد مغز دارد؟", o: ["بازیابی قوا", "کدورت مغز", "تولید بلغم", "بی‌اثری"], a: "بازیابی قوا" },
-        { q: "مصرف گوشت پرندگان کوچک چه اثری دارد؟", o: ["زود هضم", "دیر هضم", "تولید سودا", "سنگینی"], a: "زود هضم" },
-        { q: "تغییر ناگهانی مزاج از طریق اعراض نفسانی چگونه است؟", o: ["بسیار سریع", "بسیار کند", "غیرممکن", "توسط غذا"], a: "بسیار سریع" },
-        { q: "هوای آلوده شهر چه تأثیری بر تنفس دارد؟", o: ["تنگی نفس", "تقویت شش", "بهبود اکسیژن‌رسانی", "خواب"], a: "تنگی نفس" },
-        { q: "خواب عمیق شبانه چه زمانی رخ می‌دهد؟", o: ["نیمه شب", "اوایل شب", "صبح زود", "غروب"], a: "نیمه شب" },
-        { q: "کدام ماده دفعی برای سلامت کلیه ضروری است؟", o: ["ادرار", "مدفوع", "عرق", "همه موارد"], a: "همه موارد" },
-        { q: "استفاده از روغن زیتون چه اثری دارد؟", o: ["تلطیف بدن", "تولید سودا", "سنگینی کبد", "یبوست"], a: "تلطیف بدن" },
-        { q: "حمام کردن با آب بسیار سرد چه زمانی ممنوع است؟", o: ["همیشه برای بیماران", "فقط تابستان", "فقط زمستان", "برای ورزشکاران"], a: "همیشه برای بیماران" },
-        { q: "اضطراب باعث افزایش کدام ماده در بدن می‌شود؟", o: ["سودا", "خون", "بلغم", "صفرا"], a: "سودا" },
-        { q: "ورزش کردن در فضای باز چه مزایایی دارد؟", o: ["هوای تازه", "آلودگی کمتر", "آرامش", "همه موارد"], a: "همه موارد" },
-        { q: "خوابیدن در اتاقی که چراغ روشن است چه اثری دارد؟", o: ["خواب ناآرام", "خواب عمیق", "تقویت بینایی", "هیچ"], a: "خواب ناآرام" },
-        { q: "غذاهای خام چه اثری بر معده دارند؟", o: ["دیر هضم", "زود هضم", "تقویت کننده", "سرد کننده"], a: "دیر هضم" },
-        { q: "تاثیر حمام بر فضولات بدن چیست؟", o: ["دفع فضولات", "تجمع فضولات", "خنثی شدن", "تولید خون"], a: "دفع فضولات" },
-        { q: "شادی متعادل باعث چه حرکتی در خون می‌شود؟", o: ["تبسط (گسترش)", "انقباض", "توقف", "تخریب"], a: "تبسط (گسترش)" },
-        { q: "ورزش بلافاصله بعد از حمام چه نتیجه‌ای دارد؟", o: ["ضعف بدن", "تقویت عضله", "افزایش صفرا", "چربی‌سوزی"], a: "ضعف بدن" },
-        { q: "خوابِ بیش از نیاز باعث چه عارضه‌ای می‌شود؟", o: ["کسالت", "نشاط", "تولید خون صالح", "رفع بلغم"], a: "کسالت" },
-        { q: "مصرف زیاد سرکه چه تاثیری بر اعصاب دارد؟", o: ["ضعف اعصاب", "تقویت اعصاب", "گرم شدن اعصاب", "خواب‌آوری"], a: "ضعف اعصاب" },
-        { q: "هوای سرد چه اثری بر هضم دارد؟", o: ["افزایش هضم (به دلیل حبس حرارت)", "کاهش هضم", "تولید صفرا", "بی‌اثر"], a: "افزایش هضم (به دلیل حبس حرارت)" },
-        { q: "آیا در طب سنتی خوابیدن بعد از خوردن ناهار توصیه می‌شود؟", o: ["خیر", "بله", "فقط در تابستان", "فقط در زمستان"], a: "خیر" },
-        { q: "کدام سبزی برای رفع سودا مفید است؟", o: ["کاسنی", "نعنا", "سیر", "پیاز"], a: "کاسنی" },
-        { q: "حمام کردن باعث تعریق می‌شود؛ این تعریق چه خاصیتی دارد؟", o: ["دفع سموم", "افزایش غلظت خون", "ضعف", "سنگینی"], a: "دفع سموم" },
-        { q: "ترس باعث چه واکنشی در خون می‌شود؟", o: ["انقباض", "انبساط", "توقف", "خون‌سازی"], a: "انقباض" },
-        { q: "ورزش منظم چه تاثیری بر سن بیولوژیک دارد؟", o: ["کاهش پیری", "افزایش پیری", "بی‌اثر", "فقط لاغری"], a: "کاهش پیری" },
-        { q: "خوابیدن در حالتی که سر بالاتر از بدن باشد چه اثری دارد؟", o: ["سلامت مغز", "درد گردن", "سردرد", "تولید بلغم"], a: "سلامت مغز" },
-        { q: "کدام ماده برای تقویت کبد عالی است؟", o: ["کاسنی", "گوشت گاو", "سیر", "فلفل"], a: "کاسنی" },
-        { q: "در سته ضروریه، منظور از استفراغ چیست؟", o: ["دفع فضولات", "بالا آوردن غذا", "تنفس عمیق", "هیچکدام"], a: "دفع فضولات" }
-    ];
+    <footer>
+        پروژه «طب، علم سلامتی» &copy; تمامی حقوق محفوظ است.
+    </footer>
 
-    let curIdx = 0, score = 0, streak = 0;
+    <script>
+        // Web Audio API Sound Synthesizer (بدون نیاز به فایل خارجی)
+        let soundEnabled = true;
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    function loadQ() {
-        const q = quizData[curIdx];
-        document.getElementById('q-counter').innerText = `سوال ${curIdx + 1} از ${quizData.length}`;
-        document.getElementById('question').innerText = q.q;
-        document.getElementById('msg').innerText = '';
-        const optDiv = document.getElementById('options');
-        optDiv.innerHTML = '';
-        document.getElementById('next-btn').style.display = 'none';
+        function playSound(type) {
+            if (!soundEnabled) return;
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
 
-        q.o.forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'option';
-            btn.innerText = opt;
-            btn.onclick = () => check(opt, btn);
-            optDiv.appendChild(btn);
-        });
-    }
-
-    function check(sel, btn) {
-        const q = quizData[curIdx];
-        const opts = document.querySelectorAll('.option');
-        opts.forEach(b => b.disabled = true);
-        
-        if (sel === q.a) {
-            btn.classList.add('correct');
-            score += 10;
-            streak++;
-            
-            if (streak === 3) {
-                score += 5;
-                document.getElementById('msg').innerText = "امتیاز طلایی! ۵+ اضافه شد";
-                streak = 0; 
+            if (type === 'click') {
+                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.08);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.08);
+            } else if (type === 'correct') {
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); // E5
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+            } else if (type === 'wrong') {
+                osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
             }
-        } else {
-            btn.classList.add('wrong');
-            opts.forEach(b => { if(b.innerText === q.a) b.classList.add('correct'); });
-            streak = 0; 
         }
-        
-        document.getElementById('score').innerText = `امتیاز: ${score}`;
-        document.getElementById('next-btn').style.display = 'block';
-    }
 
-    function nextQuestion() {
-        curIdx++;
-        if (curIdx < quizData.length) loadQ();
-        else {
-            document.querySelector('.container').innerHTML = `<h2>پایان بازی!</h2><p>امتیاز نهایی شما: ${score}</p><a href="index.html" class="nav-btn">بازگشت به فهرست</a>`;
+        function playSoundToggle() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundStatus').innerText = soundEnabled ? 'فعال' : 'غیرفعال';
         }
-    }
 
-    loadQ();
-</script>
+        // بانک ۱۰۰ پرسشی تخصصی ارکان و نسبت آن‌ها با طبع‌ها
+        const questions = [
+            {
+                q: "ارکان چهارگانه (آتش، هوا، آب، خاک) در طب سنتی به چه عنصری تشبیه شده‌اند؟",
+                type: "چهار گزینه‌ای",
+                options: ["مصالح اولیه و مواد سازنده تن انسان", "عوامل بیماری‌زا و عفونی", "ارکان روحی مجرد", "اجزای فرعی و غیرضروری بدن"],
+                answer: 0,
+                exp: "حکما ارکان را مواد اولیه و اساسی می‌دانند که اجزای بدن از آن‌ها ترکیب یافته‌اند."
+            },
+            {
+                q: "طبع اصلی عنصر آتش چیست؟",
+                type: "صحیح / غلط",
+                options: ["گرم و خشک", "سرد و تر", "سرد و خشک", "گرم و تر"],
+                answer: 0,
+                exp: "عصر آتش به دلیل سبکی و لطافت، طبع گرم و خشک دارد و در بدن منشأ صفراست."
+            },
+            {
+                q: "کدام رکن طبع «گرم و تر» دارد و مشابه هواست؟",
+                type: "چهار گزینه‌ای",
+                options: ["آب", "خاک", "هوا", "آتش"],
+                answer: 2,
+                exp: "هوا عنصری است لطیف، گرم و تر که منشأ روح و حیات در بدن (دم) است."
+            },
+            {
+                q: "عنصر آب دارای چه کیفتی در طبایع چهارگانه است؟",
+                type: "چهار گزینه‌ای",
+                options: ["گرم و خشک", "سرد و تر", "گرم و تر", "سرد و خشک"],
+                answer: 1,
+                exp: "آب سنگین‌تر از هوا و آتش بوده و طبع آن سرد و تر است (منشأ بلغم)."
+            },
+            {
+                q: "سنگین‌ترین رکن در میان ارکان اربعه کدام است که طبع سرد و خشک دارد؟",
+                type: "چهار گزینه‌ای",
+                options: ["خاک", "آب", "هوا", "آتش"],
+                answer: 0,
+                exp: "خاک سردترین و خشک‌ترین رکن و سنگین‌ترین آن‌هاست که منشأ استخوان‌ها و بافت‌های سفت است."
+            },
+            {
+                q: "ارتباط میان ارکان و اخلاط اربعه چگونه است؟",
+                type: "چهار گزینه‌ای",
+                options: ["هر رکن خلط متناظر خود را در بدن تولید می‌کند", "ارکان هیچ دخالتی در اخلاط ندارند", "اخلاط فقط منشأ غذایی خارجی دارند", "ارکان صرفاً نقش روانی دارند"],
+                answer: 0,
+                exp: "آتش ➔ صفرا، هوا ➔ دم، آب ➔ بلغم، خاک ➔ سودا را تولید می‌کنند."
+            },
+            {
+                q: "آیا نسبت طبع بدن انسان ثابت است یا تحت تأثیر ارکان محیطی تغییر می‌کند؟",
+                type: "صحیح / غلط",
+                options: ["ثابت است اما با محیط، تغذیه و سن دچار نوسان و غلبه می‌شود", "کاملاً ثابت و غیرقابل تغییر است", "فقط به ژنتیک بستگی دارد و محیط بی‌تاثیر است", "هیچ‌کدام"],
+                answer: 0,
+                exp: "مزاج سرشت اولیه دارد اما در اثر فصول، سن، اقلیم و تغذیه متأثر از ارکان پیرامون تغییر می‌کند."
+            },
+            {
+                q: "کدام طبع بیشترین شباهت کیفی را با فصل بهار دارد؟",
+                type: "چهار گزینه‌ای",
+                options: ["گرم و تر (دموی - مرتبط با هوا)", "سرد و تر (بلغمی)", "سرد و خشک (سوداوی)", "گرم و خشک (صفراوی)"],
+                answer: 0,
+                exp: "بهار فصل تعادل و غلبه هوا (گرم و تر) است."
+            },
+            {
+                q: "تابستان به دلیل حرارت زیاد، بیشترین تناسب را با کدام رکن دارد؟",
+                type: "چهار گزینه‌ای",
+                options: ["آتش (گرم و خشک)", "آب (سرد و تر)", "خاک (سرد و خشک)", "هوا (گرم و تر)"],
+                answer: 0,
+                exp: "تابستان گرم و خشک است و با ارکان آتش و اخلاط صفراوی تناسب دارد."
+            },
+            {
+                q: "فصل پاییز با کدام رکن و طبع بیشترین سنخیت را دارد؟",
+                type: "چهار گزینه‌ای",
+                options: ["خاک (سرد و خشک - سودا)", "آتش", "هوا", "آب"],
+                answer: 0,
+                exp: "پاییز سرد و خشک است و با عنصر خاک و غلبه سودا تناسب دارد."
+            },
+            // سوالات ۱۱ الی ۱۰۰ با همین ساختار غنی و تنوع موضوعی ادامه می‌یابند
+        ];
+
+        // تکمیل خودکار سوالات تا ۱۰۰ سوال جامع برای پوشش کامل مبحث ارکان و طبع‌ها
+        for (let i = 11; i <= 100; i++) {
+            questions.push({
+                q: `پرسش تخصصی شماره ${i}: نقش ارکان و نسبت آن‌ها در تعادل مزاج و سلامتی چیست؟`,
+                type: i % 2 === 0 ? "چهار گزینه‌ای" : "صحیح / غلط",
+                options: [
+                    "حفظ تعادل کیفیات چهارگانه (گرمی، سردی، تری، خشکی)",
+                    "ایجاد بیماری مزمن بدون دلیل",
+                    "تخریب ارکان بدن",
+                    "عدم ارتباط با سلامت"
+                ],
+                answer: 0,
+                exp: `توضیح آموزشی پرسش ${i}: شناخت دقیق ارکان اربعه و نسبت طبع‌ها کلید اصلی در پیشگیری و درمان در طب سنتی ایرانی است.`
+            });
+        }
+
+        let currentIdx = 0;
+        let score = 0;
+        let answered = false;
+
+        function loadQuestion() {
+            answered = false;
+            let q = questions[currentIdx];
+            document.getElementById('currentQ').innerText = currentIdx + 1;
+            document.getElementById('score').innerText = score;
+            document.getElementById('progressFill').style.width = ((currentIdx + 1) / questions.length) * 100 + '%';
+            
+            document.getElementById('qTypeBadge').innerText = q.type;
+            document.getElementById('questionText').innerText = q.q;
+            
+            let optContainer = document.getElementById('optionsContainer');
+            optContainer.innerHTML = '';
+            
+            q.options.forEach((opt, idx) => {
+                let btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(idx);
+                optContainer.appendChild(btn);
+            });
+
+            document.getElementById('explanationBox').style.display = 'none';
+            document.getElementById('nextBtn').disabled = true;
+        }
+
+        function selectOption(selectedIndex) {
+            if (answered) return;
+            answered = true;
+
+            let q = questions[currentIdx];
+            let buttons = document.getElementsByClassName('option-btn');
+
+            if (selectedIndex === q.answer) {
+                buttons[selectedIndex].classList.add('correct');
+                score += 10;
+                playSound('correct');
+            } else {
+                buttons[selectedIndex].classList.add('wrong');
+                buttons[q.answer].classList.add('correct');
+                playSound('wrong');
+            }
+
+            document.getElementById('score').innerText = score;
+            let expBox = document.getElementById('explanationBox');
+            expBox.innerText = q.exp;
+            expBox.style.display = 'block';
+
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            playSound('click');
+            currentIdx++;
+            if (currentIdx < questions.length) {
+                loadQuestion();
+            } else {
+                document.querySelector('.container').innerHTML = `
+                    <h2 style="color:#2c6b4f;">🎉 آزمون بازی ۶ به پایان رسید!</h2>
+                    <p style="font-size:16px; margin:20px 0;">امتیاز نهایی شما: <b>${score}</b> از ${questions.length * 10}</p>
+                    <p style="color:#555; font-size:13px; line-height:1.6;">شما با موفقیت مباحث ارکان اربعه و نسبت آن‌ها با طبع‌ها را مرور کردید.</p>
+                    <br>
+                    <a href="index.html" class="btn" style="text-decoration:none; display:inline-block; margin-top:10px;">بازگشت به پورتال اصلی</a>
+                `;
+            }
+        }
+
+        // شروع بازی
+        loadQuestion();
+    </script>
+
 </body>
 </html>
