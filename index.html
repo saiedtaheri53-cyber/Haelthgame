@@ -3,35 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پورتال بازی‌های سلامت</title>
+    <title>دانشنامه جامع «طب، علم سلامتی» | پورتال ۱۰۰ بازی سلامت</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: Tahoma, sans-serif; }
-        body { background-color: #f4f7f6; color: #333; padding: 20px; text-align: center; }
-        header { margin-bottom: 30px; }
-        h1 { color: #2c3e50; font-size: 1.5rem; margin-bottom: 10px; }
-        .games-container { display: flex; flex-direction: column; gap: 15px; max-width: 500px; margin: 0 auto; }
-        .game-btn { background-color: #27ae60; color: white; padding: 15px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: block; }
-        .game-btn:hover { background-color: #219653; }
-        footer { margin-top: 40px; font-size: 0.8rem; color: #95a5a6; }
+        * { box-sizing: border-box; }
+        body {
+            font-family: Tahoma, sans-serif;
+            background: linear-gradient(135deg, #f0f7f4, #d8e8de);
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            color: #2c3e50;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 { color: #2c6b4f; margin-bottom: 5px; font-size: 22px; }
+        p.subtitle { color: #555; font-size: 13px; margin-bottom: 20px; line-height: 1.6; }
+        
+        .box {
+            background: #f9fbf9;
+            border: 1px solid #e1eee6;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            text-align: right;
+        }
+        .box h3 { margin-top: 0; color: #2c6b4f; font-size: 15px; text-align: center; margin-bottom: 12px; }
+        
+        .controls-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input[type="number"] {
+            width: 100px;
+            padding: 10px;
+            font-size: 15px;
+            text-align: center;
+            border: 2px solid #2c6b4f;
+            border-radius: 8px;
+            outline: none;
+        }
+        
+        select {
+            width: 70%;
+            padding: 10px;
+            font-size: 12px;
+            border: 2px solid #d97706;
+            border-radius: 8px;
+            outline: none;
+            background: white;
+            color: #333;
+        }
+
+        .btn {
+            background: #2c6b4f;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .btn:hover { background: #1e4a36; }
+        
+        .btn-secondary { background: #d97706; }
+        .btn-secondary:hover { background: #b45309; }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .quick-btn {
+            background: #e8f4ed;
+            border: 1px solid #2c6b4f;
+            color: #2c6b4f;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .quick-btn:hover {
+            background: #2c6b4f;
+            color: white;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>🌿 پورتال بازی‌های سلامت</h1>
-    </header>
+    <div class="container">
+        <h1>دانشنامه جامع «طب، علم سلامتی»</h1>
+        <p class="subtitle">پورتال مرجع ۱۰۰ بازی آموزشی: مبانی طب سنتی، سته ضروریه، مزاج‌شناسی، خودمراقبتی و قوانین هستی</p>
 
-    <main class="games-container">
-        <a href="game1.html" class="game-btn">بازی ۱</a>
-        <a href="game2.html" class="game-btn">بازی ۲</a>
-        <a href="game3.html" class="game-btn">بازی ۳</a>
-        <a href="game4.html" class="game-btn">بازی ۴</a>
-        <a href="game23.html" class="game-btn">بازی ۲۳</a>
-    </main>
+        <!-- بخش اول: ورود مستقیم با شماره -->
+        <div class="box">
+            <h3>ورود مستقیم با شماره بازی (۱ الی ۱۰۰)</h3>
+            <div class="controls-row">
+                <input type="number" id="gameNum" min="1" max="100" value="1" placeholder="مثلاً ۱">
+                <button class="btn" onclick="goToGameNumber()">برو به بازی</button>
+            </div>
+        </div>
+
+        <!-- بخش دوم: انتخاب موضوع و دسته‌بندی -->
+        <div class="box">
+            <h3>انتخاب موضوع از فهرست جامع بازی‌ها (۱۰۰ عنوان)</h3>
+            <div class="controls-row">
+                <select id="topicSelect">
+                    <!-- بخش اول: مبانی و ارکان (۱ تا ۲۰) -->
+                    <optgroup label="بخش اول: مبانی، ارکان و اخلاط (۱ تا ۲۰)">
+                        <option value="1">بازی ۱: ارکان اربعه (آتش، هوا، آب، خاک)</option>
+                        <option value="2">بازی ۲: سته ضروریه (اصول شش‌گانه سلامتی)</option>
+                        <option value="3">بازی ۳: امزاج چهارگانه (دموی، بلغمی، صفراوی، سوداوی)</option>
+                        <option value="4">بازی ۴: اخلاط چهارگانه و تولید در بدن</option>
+                        <option value="5">بازی ۵: اعضا و طبقات بدن (مفرد و مرکب)</option>
+                        <option value="6">بازی ۶: ارکان و نسبت آن‌ها با طبع‌ها</option>
+                        <option value="7">بازی ۷: شناخت کیفیات چهارگانه (گرمی، سردی، تری، خشکی)</option>
+                        <option value="8">بازی ۸: طبایع فصل‌های سال</option>
+                        <option value="9">بازی ۹: سنین زندگی و طبایع عمر (کودکی، جوانی، کهولت)</option>
+                        <option value="10">بازی ۱۰: ارکان در خوراکی‌ها و عناصر طبیعی</option>
+                        <option value="11">بازی ۱۱ تا ۲۰: اخلاط غلبه‌یافته، پاکسازی و تنقیح اخلاط</option>
+                    </optgroup>
+
+                    <!-- بخش دوم: سته ضروریه و سبک زندگی (۲۱ تا ۵۰) -->
+                    <optgroup label="بخش دوم: سته ضروریه و سبک زندگی سالم (۲۱ تا ۵۰)">
+                        <option value="21">بازی ۲۱: اصول هوای تنفسی و محیط زندگی</option>
+                        <option value="22">بازی ۲۲: آداب تغذیه سالم و خوردنی‌ها و نوشیدنی‌ها</option>
+                        <option value="23">بازی ۲۳: حرکت و سکون (ورزش و استراحت تعادلی)</option>
+                        <option value="24">بازی ۲۴: احتباس و استفراغ (دفع به موقع مواد زائد)</option>
+                        <option value="25">بازی ۲۵: خواب و بیداری در تنظیم اعصاب و ارکان</option>
+                        <option value="26">بازی ۲۶: اعراض نفسانی (مدیریت هیجانات، استرس و آرامش روحی)</option>
+                        <option value="27">بازی ۲۷ تا ۳۵: آداب خواب، نظافت و بهداشت در سنت اسلامی</option>
+                        <option value="36">بازی ۳۶ تا ۵۰: سبک زندگی توحیدی و تغذیه در سفر و شرایط خاص</option>
+                    </optgroup>
+
+                    <!-- بخش سوم: خودمراقبتی و پیشگیری (۵۱ تا ۷۵) -->
+                    <optgroup label="بخش سوم: خودمراقبتی و پیشگیری پیشرفته (۵۱ تا ۷۵)">
+                        <option value="51">بازی ۵۱: روش‌های پیشگیری از بیماری‌ها پیش از نیاز به درمان</option>
+                        <option value="52">بازی ۵۲: خودمراقبتی در برابر فشارهای روانی روزمره</option>
+                        <option value="53">بازی ۵۳: مراقبت از اعضای رئیسه (قلب، مغز، کبد)</option>
+                        <option value="54">بازی ۵۴: شناخت علائم هشداردهنده بدن و پاسخ طبیعی</option>
+                        <option value="55">بازی ۵۵ تا ۷۵: خودمراقبتی فصول، پوست، مو و مفاصل</option>
+                    </optgroup>
+
+                    <!-- بخش چهارم: قوانین هستی و سنن الهی (۷۶ تا ۱۰۰) -->
+                    <optgroup label="بخش چهارم: قوانین هستی، سنن الهی و سلامت جامع (۷۶ تا ۱۰۰)">
+                        <option value="76">بازی ۷۶: قانون تعادل و زوجیت در جهان هستی و بدن انسان</option>
+                        <option value="77">بازی ۷۷: ارتباط رزق حلال و پاک با سلامت جسم و جان</option>
+                        <option value="78">بازی ۷۸: نقش شکرگزاری، صبر و توکل بر سیستم ایمنی و روانی</option>
+                        <option value="79">بازی ۷۹: سنن الهی حاکم بر صحت، بیماری و طول عمر</option>
+                        <option value="80">بازی ۸۰ تا ۱00: حکمت‌های توحیدی در طب، برکت در عمر و خلیفه‌اللهی</option>
+                    </optgroup>
+                </select>
+                <button class="btn btn-secondary" onclick="openTopicInNewWindow()">مشاهده بازی</button>
+            </div>
+        </div>
+
+        <!-- بخش دسترسی سریع به بازی‌های کلیدی آماده -->
+        <div class="box">
+            <h3>دسترسی سریع به بازی‌های اصلی فعال</h3>
+            <div class="quick-grid">
+                <button class="quick-btn" onclick="openGame(1)">بازی ۱: ارکان اربعه</button>
+                <button class="quick-btn" onclick="openGame(2)">بازی ۲: سته ضروریه</button>
+                <button class="quick-btn" onclick="openGame(3)">بازی ۳: مزاج‌شناسی</button>
+                <button class="quick-btn" onclick="openGame(5)">بازی ۵: اخلاط و امزاج</button>
+            </div>
+        </div>
+    </div>
 
     <footer>
-        پروژه طب، علم سلامتی &copy; ۱۴۰۵
+        پروژه «طب، علم سلامتی» &copy; تمامی حقوق محفوظ است.
     </footer>
+
+    <script>
+        function goToGameNumber() {
+            let num = parseInt(document.getElementById('gameNum').value);
+            if (num >= 1 && num <= 100) {
+                window.location.href = `game${num}.html`;
+            } else {
+                alert('لطفاً عددی بین ۱ تا ۱۰۰ وارد کنید.');
+            }
+        }
+
+        function openTopicInNewWindow() {
+            let num = document.getElementById('topicSelect').value;
+            window.open(`game${num}.html`, '_blank');
+        }
+
+        function openGame(num) {
+            window.location.href = `game${num}.html`;
+        }
+    </script>
 
 </body>
 </html>
