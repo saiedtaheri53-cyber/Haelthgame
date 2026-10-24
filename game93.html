@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آزمون هویت مزاجی | پورتال سلامت</title>
+    <style>
+        :root {
+            --primary-color: #2c5f2d;
+            --secondary-color: #97bc62;
+            --accent-color: #f4a261;
+            --bg-color: #f0f4f0;
+            --text-color: #333;
+        }
+
+        body { font-family: 'Tahoma', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        #quiz-container { background: white; width: 90%; max-width: 500px; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+
+        .progress-bar { width: 100%; height: 8px; background: #e0e0e0; border-radius: 4px; margin-bottom: 25px; }
+        #progress { width: 0%; height: 100%; background: var(--secondary-color); border-radius: 4px; transition: width 0.4s ease; }
+
+        .option-btn { width: 100%; padding: 15px; margin: 8px 0; border: 2px solid #eee; border-radius: 12px; background: none; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; text-align: right; }
+        .option-btn:hover { border-color: var(--secondary-color); background-color: #f9fff9; }
+
+        #result-area { display: none; }
+        .btn-main { background-color: var(--primary-color); color: white; padding: 15px 30px; border: none; border-radius: 25px; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 20px; }
+        
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <div id="quiz-area">
+        <h1>هویت‌سنجی مزاج</h1>
+        <div class="progress-bar"><div id="progress"></div></div>
+        <h3 id="question-text">در حال بارگذاری...</h3>
+        <div id="options-container"></div>
+    </div>
+
+    <div id="result-area" class="fade-in">
+        <h2>مزاج اصلی شما: <span id="result-title" style="color:var(--primary-color)"></span></h2>
+        <p id="result-desc"></p>
+        <a href="Main_Menu_Game_Library.html" class="btn-main">ورود به کتابخانه بازی‌ها</a>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        { q: "ساختار بدنی شما چگونه است؟", 
+          options: [ {t: "درشت هیکل و عضلانی", v: "دم"}, {t: "متوسط و خشک", v: "صفرا"}, {t: "چاق و نرم", v: "بلغم"}, {t: "لاغر و استخوانی", v: "سودا"} ] },
+        { q: "رنگ پوست شما به کدام نزدیک‌تر است؟", 
+          options: [ {t: "سفید و شفاف", v: "بلغم"}, {t: "گندمی مایل به زرد", v: "صفرا"}, {t: "سرخ و گلگون", v: "دم"}, {t: "تیره یا سبزه", v: "سودا"} ] },
+        { q: "وضعیت موهای شما چگونه است؟", 
+          options: [ {t: "پرپشت، ضخیم و تیره", v: "دم"}, {t: "کم‌حجم و نازک", v: "صفرا"}, {t: "نرم و لخت", v: "بلغم"}, {t: "زبر و خشک", v: "سودا"} ] },
+        { q: "طعم مورد علاقه شما کدام است؟", 
+          options: [ {t: "شیرینی (عسل، شیره)", v: "دم"}, {t: "ترشی و سرکه", v: "صفرا"}, {t: "شوری و تندی", v: "سودا"}, {t: "ملس و کم‌مزه", v: "بلغم"} ] },
+        { q: "دمای بدن شما معمولاً چگونه است؟", 
+          options: [ {t: "همیشه احساس گرما دارم", v: "صفرا"}, {t: "معمولاً احساس سرما می‌کنم", v: "بلغم"}, {t: "دمای بدنم معتدل است", v: "دم"}, {t: "سرمایی هستم", v: "سودا"} ] },
+        { q: "خواب شما چگونه است؟", 
+          options: [ {t: "عمیق و طولانی", v: "بلغم"}, {t: "سبک و با خواب‌های زیاد", v: "صفرا"}, {t: "سنگین و راحت", v: "دم"}, {t: "دیر خوابیدن و بی‌قراری", v: "سودا"} ] },
+        { q: "واکنش شما به استرس چیست؟", 
+          options: [ {t: "خشم و تندی", v: "صفرا"}, {t: "اضطراب و فکر زیاد", v: "سودا"}, {t: "بی‌تفاوتی و آرامش", v: "بلغم"}, {t: "هیجان‌زدگی", v: "دم"} ] },
+        { q: "عملکرد گوارش شما چگونه است؟", 
+          options: [ {t: "بسیار سریع و گرسنگی زودرس", v: "صفرا"}, {t: "کند و دیر هضم", v: "بلغم"}, {t: "معتدل و منظم", v: "دم"}, {t: "نفخ و خشکی در دفع", v: "سودا"} ] },
+        { q: "سرعت عمل شما در کارها چقدر است؟", 
+          options: [ {t: "سریع و عجول", v: "صفرا"}, {t: "کند و با تأمل", v: "سودا"}, {t: "متناسب و دقیق", v: "دم"}, {t: "آرام و صبور", v: "بلغم"} ] },
+        { q: "وضعیت تشنگی شما چگونه است؟", 
+          options: [ {t: "همیشه تشنه‌ام", v: "صفرا"}, {t: "کم تشنه می‌شوم", v: "بلغم"}, {t: "تشنگی متوسط", v: "دم"}, {t: "خشکی دهان", v: "سودا"} ] }
+    ];
+
+    let currentQ = 0;
+    let scores = { "دم": 0, "صفرا": 0, "بلغم": 0, "سودا": 0 };
+
+    function renderQ() {
+        if(currentQ >= questions.length) { showResult(); return; }
+        const q = questions[currentQ];
+        document.getElementById('question-text').innerText = q.q;
+        document.getElementById('progress').style.width = `${(currentQ/questions.length)*100}%`;
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        q.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt.t;
+            btn.onclick = () => { scores[opt.v]++; currentQ++; renderQ(); };
+            container.appendChild(btn);
+        });
+    }
+
+    function showResult() {
+        document.getElementById('quiz-area').style.display = 'none';
+        document.getElementById('result-area').style.display = 'block';
+        const top = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+        const desc = {
+            "دم": "مزاج شما متمایل به گرم و تر است. تعادل در خون و آرامش روانی ویژگی شماست.",
+            "صفرا": "مزاج شما متمایل به گرم و خشک است. دقت و تیزبینی در کنار فعالیت بالا دارید.",
+            "بلغم": "مزاج شما متمایل به سرد و تر است. آرامش و صبوری نقطه قوت شماست.",
+            "سودا": "مزاج شما متمایل به سرد و خشک است. تفکر عمیق و نظم، خصیصه شماست."
+        };
+        document.getElementById('result-title').innerText = top;
+        document.getElementById('result-desc').innerText = desc[top];
+    }
+    renderQ();
+</script>
+</body>
+</html>

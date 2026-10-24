@@ -1,0 +1,12 @@
+# Notice: in .game002_Sitteh_Zaroorieh.html, answer is an integer index!
+# e.g.: { w: "...", options: ["چهار اصل", "پنج اصل", "شش اصل", "هفت اصل"], answer: 2, h: "..." }
+# Let's inspect the answer types in .game002_Sitteh_Zaroorieh.html
+import json, re
+
+raw_q = Path('/mnt/data/.game002_Sitteh_Zaroorieh.html').read_text(encoding='utf-8')
+# Find all occurrences of answer:
+answers = re.findall(r'answer:\s*([^,\}
+]+)', raw_q)
+print("Total questions found:", len(answers))
+print("Sample answers:", answers[:10])
+print("Unique answer representations:", set(answers))

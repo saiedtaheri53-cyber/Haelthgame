@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آزمون سته ضروریه</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background: #f0f2f5; padding: 15px; margin: 0; }
+        .box { background: white; max-width: 400px; margin: auto; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
+        .btn { display: block; width: 100%; padding: 12px; margin: 8px 0; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; background: #3498db; color: white; }
+        .opt { background: #f9f9f9; color: #333; border: 1px solid #ddd; }
+        .correct { background: #2ecc71 !important; color: white; }
+        .wrong { background: #e74c3c !important; color: white; }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h3 id="q-text">در حال بارگذاری...</h3>
+    <div id="options"></div>
+    <p id="status">امتیاز: ۰</p>
+</div>
+
+<script>
+    const questions = [
+        {q: "هوای محیط اولین اصل از سته ضروریه است؟", a: "بله"},
+        {q: "آیا پرخوری از اصول سته است؟", a: "خیر"},
+        {q: "خواب و بیداری جزو اصول سته است؟", a: "بله"}
+        // سوالات را در اینجا به همین صورت اضافه کنید تا به ۱۰۰ برسد
+    ];
+
+    let cur = 0, score = 0;
+
+    function loadQ() {
+        if(cur >= questions.length) { 
+            document.body.innerHTML = `<div class='box'><h2>پایان</h2><p>امتیاز: ${score}</p><button class='btn' onclick='location.reload()'>شروع مجدد</button></div>`;
+            return;
+        }
+        document.getElementById('q-text').innerText = questions[cur].q;
+        const optDiv = document.getElementById('options');
+        optDiv.innerHTML = '';
+        ["بله", "خیر"].forEach(o => {
+            let b = document.createElement('button');
+            b.className = 'btn opt';
+            b.innerText = o;
+            b.onclick = () => {
+                if(o === questions[cur].a) { score++; b.classList.add('correct'); }
+                else { b.classList.add('wrong'); }
+                setTimeout(() => { cur++; loadQ(); }, 500);
+            };
+            optDiv.appendChild(b);
+        });
+    }
+    loadQ();
+</script>
+</body>
+</html>
