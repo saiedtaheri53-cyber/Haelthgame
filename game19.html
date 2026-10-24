@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>بازی ۳۱: حکمت‌واژه (ذخیره خوارزمشاهی)</title>
+    <style>
+        body { font-family: 'Tahoma', sans-serif; background-color: #fcfaf0; display: flex; justify-content: center; padding: 20px; }
+        .card { background: #fffdf5; padding: 20px; border-radius: 20px; border: 2px solid #556b2f; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+        .header { background: #2e5a27; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+        .stats { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 0.9em; color: #333; }
+        .question-box { background: #fff8e1; border: 1px solid #d4af37; padding: 15px; border-radius: 10px; margin-bottom: 20px; min-height: 80px; text-align: center; }
+        .slots { display: flex; justify-content: center; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; }
+        .slot { width: 40px; height: 40px; border: 2px solid #556b2f; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-weight: bold; background: white; }
+        .letters { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+        .letter-btn { padding: 10px 15px; background: #e0e0e0; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .controls { display: flex; justify-content: center; gap: 10px; }
+        button { padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; }
+        .btn-confirm { background: #2e5a27; color: white; }
+        .btn-clear { background: #d32f2f; color: white; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <h3>حکمت‌واژه | ذخیره خوارزمشاهی</h3>
+            <p style="font-size: 0.8em;">آزمون هوشمندی در واژگان و مبانی طب کهن</p>
+        </div>
+        <div class="stats">
+            <span id="level">مرحله: 1 از 100</span>
+            <span id="score">امتیاز: 0</span>
+        </div>
+        <div class="question-box" id="q-text"></div>
+        <div class="slots" id="slots"></div>
+        <div class="letters" id="letters"></div>
+        <div class="controls">
+            <button class="btn-clear" onclick="clearInput()">پاک‌کردن</button>
+            <button class="btn-confirm" onclick="checkAnswer()">ثبت پاسخ</button>
+        </div>
+    </div>
+
+    <script>
+        const gameData = [
+            {q: "گیاهی پیچنده و بی‌برگ؛ دافع بلغم و سودا و نافع برای وسواس.", a: "افتیمون"},
+            {q: "مشهورترین مصلح برای دفع سردی و رطوبت در بدن.", a: "زنجبیل"},
+            {q: "دارویی که قلب را تقویت کرده و فرح‌بخش است.", a: "گلاب"},
+            {q: "ماده‌ای که در طب سنتی برای تنقیه روده استفاده می‌شود.", a: "روغن_بادام"},
+            {q: "نام دیگر 'ملیسا' که در طب سنتی برای اعصاب نافع است.", a: "بادرنجبویه"}
+        ];
+        
+        // تولید خودکار ۱۰۰ سوال نمونه برای هماهنگی
+        for(let i=6; i<=100; i++) {
+            gameData.push({q: `سوال علمی شماره ${i} در طب سنتی ایران`, a: "پزشکی"});
+        }
+
+        let currentIdx = 0, score = 0, userInput = [];
+
+        function initLevel() {
+            userInput = [];
+            const q = gameData[currentIdx];
+            document.getElementById('q-text').innerText = q.q;
+            document.getElementById('level').innerText = `مرحله: ${currentIdx + 1} از 100`;
+            
+            const slots = document.getElementById('slots');
+            slots.innerHTML = "";
+            for(let i=0; i<q.a.length; i++) {
+                const s = document.createElement('div');
+                s.className = 'slot';
+                s.id = 's-' + i;
+                slots.appendChild(s);
+            }
+
+            const letters = document.getElementById('letters');
+            letters.innerHTML = "";
+            const shuffled = (q.a + "ابپتثجح").split('').sort(() => Math.random() - 0.5);
+            shuffled.forEach(l => {
+                const b = document.createElement('button');
+                b.className = 'letter-btn';
+                b.innerText = l;
+                b.onclick = () => addLetter(l);
+                letters.appendChild(b);
+            });
+        }
+
+        function addLetter(l) {
+            if(userInput.length < gameData[currentIdx].a.length) {
+                userInput.push(l);
+                document.getElementById('s-' + (userInput.length - 1)).innerText = l;
+            }
+        }
+
+        function clearInput() {
+            userInput = [];
+            document.querySelectorAll('.slot').forEach(s => s.innerText = "");
+        }
+
+        function checkAnswer() {
+            if(userInput.join('') === gameData[currentIdx].a) {
+                alert("صحیح بود!");
+                score += 10;
+                document.getElementById('score').innerText = `امتیاز: ${score}`;
+                if(currentIdx < 99) { currentIdx++; initLevel(); }
+            } else {
+                alert("پاسخ اشتباه است.");
+            }
+        }
+        initLevel();
+    </script>
+</body>
+</html>
+game31.html
