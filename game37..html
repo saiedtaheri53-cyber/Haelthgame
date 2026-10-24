@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دانش‌نامه جامع طب</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background-color: #e8f5e9; display: flex; justify-content: center; padding: 20px; }
+        .box { width: 100%; max-width: 500px; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .header { display: flex; justify-content: space-between; font-weight: bold; color: #2e7d32; margin-bottom: 20px; }
+        .question { font-size: 1.2rem; margin-bottom: 20px; min-height: 80px; }
+        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #a5d6a7; border-radius: 12px; cursor: pointer; text-align: right; background: white; transition: 0.3s; }
+        .btn:hover { background: #c8e6c9; }
+        .correct { background: #81c784 !important; border-color: #2e7d32 !important; color: white; }
+        .wrong { background: #e57373 !important; border-color: #c62828 !important; color: white; }
+    </style>
+</head>
+<body>
+<div class="box">
+    <div class="header">
+        <span id="counter">سوال 1 از 100</span>
+        <span>امتیاز: <span id="score">0</span></span>
+    </div>
+    <div id="question" class="question">در حال بارگذاری...</div>
+    <div id="options"></div>
+</div>
+
+<script>
+    // --- تنظیمات ضد قفل ---
+    const VERSION = "v100_final_2026";
+    
+    // --- دیتابیس ۱۰۰ سوال (شما می‌توانید متن سوالات را اینجا تغییر دهید) ---
+    const db = Array.from({length: 100}, (_, i) => ({
+        q: "سوال شماره " + (i + 1) + ": (متن سوال را در اینجا جایگزین کنید)",
+        o: ["گزینه ۱", "گزینه ۲", "گزینه ۳", "گزینه ۴"],
+        a: "گزینه ۱"
+    }));
+
+    // --- مدیریت حافظه (برای جلوگیری از گیر کردن در سوالات) ---
+    if (localStorage.getItem('game_version') !== VERSION) {
+        localStorage.clear();
+        localStorage.setItem('game_version', VERSION);
+    }
+
+    let state = JSON.parse(localStorage.getItem('game_state')) || { idx: 0, score: 0, answered: {} };
+
+    function save() { localStorage.setItem('game_state', JSON.stringify(state)); }
+
+    function render() {
+        let q = db[state.idx];
+        document.getElementById('counter').innerText = `سوال ${state.idx + 1} از 100`;
+        document.getElementById('question').innerText = q.q;
+        document.getElementById('score').innerText = state.score;
+        let container = document.getElementById('options');
+        container.innerHTML = '';
+        
+        q.o.forEach(o => {
+            let btn = document.createElement('button');
+            btn.className = 'btn';
+            btn.innerText = o;
+            
+            if (state.answered[state.idx]) {
+                btn.disabled = true;
+                if (o === q.a) btn.className += ' correct';
+                else if (state.answered[state.idx] === o) btn.className += ' wrong';
+            }
+
+            btn.onclick = () => {
+                if (!state.answered[state.idx]) {
+                    state.answered[state.idx] = o;
+                    if (o === q.a) state.score += 10;
+                    save();
+                    setTimeout(render, 500); // مکث کوتاه برای نمایش رنگ
+                }
+            };
+            container.appendChild(btn);
+        });
+    }
+    render();
+</script>
+</body>
+</html>

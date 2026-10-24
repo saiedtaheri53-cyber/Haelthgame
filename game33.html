@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111827"><title>بازی دوم | ستهٔ ضروریه</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1220;--panel:#131e30;--panel2:#19263a;--gold:#f5c451;--gold2:#ffe49a;--text:#f4f6fb;--muted:#aab5c7;--green:#48d597;--red:#ff7777;--line:#2a3850}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#1b2b43 0,#0b1220 58%);color:var(--text);font-family:Tahoma,Arial,sans-serif;padding:14px 14px 30px}
+.wrap{max-width:780px;margin:0 auto}.scorebar{position:sticky;top:8px;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;margin:0 auto 22px;border:1px solid #efc24d;border-radius:16px;background:linear-gradient(110deg,#6e4a08,#d89f1a 48%,#f2cc62);color:#241900;box-shadow:0 8px 28px #0008;font-weight:bold}.scorelabel{font-size:14px}.score{font-size:25px;white-space:nowrap}.score small{font-size:13px}.brand{text-align:center;margin:12px 0 20px}.brand h1{font-size:clamp(23px,5vw,34px);margin:0 0 8px}.brand p{color:var(--muted);margin:0}.card{background:linear-gradient(145deg,#172338,#111b2b);border:1px solid var(--line);border-radius:22px;padding:clamp(18px,5vw,32px);box-shadow:0 20px 50px #0004}.meta{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:14px;margin-bottom:16px}.progress{height:7px;background:#263449;border-radius:99px;overflow:hidden;margin-bottom:24px}.progress span{height:100%;display:block;background:linear-gradient(90deg,#e9aa25,#ffe28b);transition:width .25s}.question{font-size:clamp(19px,4vw,25px);line-height:1.9;margin:0 0 22px}.options{display:grid;gap:11px}.option{appearance:none;width:100%;text-align:right;color:var(--text);font:inherit;line-height:1.65;padding:14px 16px;border:1px solid #34435a;border-radius:13px;background:#1b2940;cursor:pointer;transition:.15s}.option:hover:not(:disabled){border-color:var(--gold);background:#24344d;transform:translateY(-1px)}.option:focus-visible,button:focus-visible{outline:3px solid #fff;outline-offset:2px}.option:disabled{cursor:default;opacity:1}.option.correct{border-color:var(--green);background:#123b32}.option.wrong{border-color:var(--red);background:#46282d}.option.reveal{border-color:#d8b44f}.feedback{margin-top:18px;padding:13px 15px;border-radius:12px;line-height:1.8;background:#202d41;color:var(--muted)}.feedback.good{color:#bcf4d7;border:1px solid #27895e}.feedback.bad{color:#ffd0d0;border:1px solid #9d4c52}.feedback[hidden]{display:none}.actions{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:22px}.btn{border:0;border-radius:12px;padding:12px 20px;font:inherit;font-weight:bold;cursor:pointer}.primary{background:linear-gradient(120deg,#e9ac28,#ffe08a);color:#2c2107}.secondary{background:#26354b;color:var(--text);border:1px solid #3c4d64}.portal-row{display:flex;justify-content:flex-start;margin:0 auto 12px}.portal-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;min-height:46px;padding:12px 20px;box-shadow:0 5px 18px #e9ac2844}.portal-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.btn:disabled{opacity:.45;cursor:not-allowed}.autosave{font-size:12px;color:#aab5c7;text-align:center;margin-top:14px}.warning{color:#ffd27a}.done{text-align:center;padding:30px 12px}.done .trophy{font-size:56px}.done h2{font-size:28px;color:var(--gold2)}.done p{line-height:1.9;color:var(--muted)}.done[hidden],#game[hidden]{display:none!important}
+@media(max-width:480px){body{padding:10px}.scorebar{top:5px;margin-bottom:17px}.meta{font-size:12px}.actions{flex-wrap:wrap}.autosave{width:100%;order:3}}
+</style></head><body><div class="wrap">
+<nav class="portal-row" aria-label="پیوندهای ناوبری"><a class="btn primary portal-btn" href="index.html">بازگشت به پورتال</a></nav>
+<div class="scorebar" role="status" aria-live="polite"><span class="scorelabel">امتیاز طلایی شما</span><span class="score"><span id="score">۰</span> <small>⭐ امتیاز</small></span></div>
+<header class="brand"><h1>بازی دوم: ستهٔ ضروریه</h1><p>دانش خود را دربارهٔ اصول شش‌گانهٔ سلامت بسنجید</p></header>
+<main class="card"><section id="game"><div class="meta"><span id="counter"></span><span>هر پاسخ درست: ۱۰ امتیاز</span></div><div class="progress" aria-label="پیشرفت"><span id="progress"></span></div><h2 class="question" id="question"></h2><div class="options" id="options"></div><div class="feedback" id="feedback" hidden aria-live="polite"></div><div class="actions"><button class="btn secondary" id="reset" type="button">شروع دوباره</button><button class="btn primary" id="next" type="button" disabled>پرسش بعدی ←</button></div></section>
+<section class="done" id="done" hidden><div class="trophy">🏆</div><h2>آفرین! بازی تمام شد</h2><p id="result"></p><button class="btn primary" id="playAgain" type="button">بازی دوباره</button></section>
+<div class="autosave" id="saveStatus" aria-live="polite">پیشرفت و امتیاز به‌صورت خودکار روی همین مرورگر ذخیره می‌شود.</div></main></div>
+<script>
+'use strict';
+const questions = [
+    { w: "ستهٔ ضروریه به چند اصل بنیادین اشاره دارد؟", options: ["چهار اصل", "پنج اصل", "شش اصل", "هفت اصل"], answer: 2, h: "«سته» به معنای شش است." },
+    { w: "کدام گزینه یکی از اصول شش‌گانهٔ سلامت در طب سنتی است؟", options: ["هوا", "رنگ چشم", "قد", "گروه خونی"], answer: 0, h: "کیفیت هوای تنفسی از اصول شش‌گانه شمرده می‌شود." },
+    { w: "کدام مورد در شمار اصول ستهٔ ضروریه قرار می‌گیرد؟", options: ["خواب و بیداری", "رنگ مو", "نوع پوشش", "اندازهٔ دست"], answer: 0, h: "تنظیم خواب و بیداری یکی از شش اصل است." },
+    { w: "«حرکت و سکون بدنی» به چه معناست؟", options: ["فعالیت و استراحت جسم", "گفت‌وگو و سکوت", "گرسنگی و سیری", "گرما و سرما"], answer: 0, h: "این اصل به میزان فعالیت جسمی و استراحت مربوط است." },
+    { w: "کدام مورد نمونه‌ای از اعراض نفسانی است؟", options: ["خشم", "نوشیدن آب", "راه‌رفتن", "خوابیدن"], answer: 0, h: "هیجان‌هایی مانند خشم و اندوه در این دسته قرار می‌گیرند." },
+    { w: "«احتباس» در بیان اصول شش‌گانه بیشتر به چه مفهومی اشاره دارد؟", options: ["نگه‌داشتن مواد ضروری در بدن", "افزایش فعالیت بدنی", "تغییر فصل", "کاهش مدت خواب"], answer: 0, h: "احتباس به نگه‌داری آنچه بدن به آن نیاز دارد اشاره می‌کند." },
+    { w: "«استفراغ» در اصطلاح طب سنتی به چه معناست؟", options: ["دفع مواد زائد از بدن", "افزایش خواب", "نگه‌داشتن غذا", "کاهش تنفس"], answer: 0, h: "در این اصطلاح، استفراغ به معنای دفع است، نه الزاماً استفراغ معده." },
+    { w: "کدام جفت، دو اصل از ستهٔ ضروریه را کنار هم آورده است؟", options: ["هوا و خواب‌وبیداری", "رنگ چشم و قد", "گروه خونی و سن", "مو و ناخن"], answer: 0, h: "هوا و خواب‌وبیداری هر دو از اصول شش‌گانه‌اند." },
+    { w: "کدام گزینه دو اصل بدنی از ستهٔ ضروریه را نشان می‌دهد؟", options: ["حرکت‌وسکون و خوردنی‌ونوشیدنی", "خشم و شادی", "رنگ و بو", "شنیدن و دیدن"], answer: 0, h: "فعالیت جسم و خوراک، هر دو در این مجموعه مطرح‌اند." },
+    { w: "در دسته‌بندی ستهٔ ضروریه، خوردنی‌ها و نوشیدنی‌ها به چه چیزی مربوط‌اند؟", options: ["تدبیر خوراک و آشامیدنی", "کیفیت خواب", "هیجان‌های روحی", "هوای محیط"], answer: 0, h: "این اصل به نوع و شیوهٔ مصرف خوراک و نوشیدنی می‌پردازد." },
+    { w: "کدام گزینه نام یکی از شش اصل را درست بیان می‌کند؟", options: ["هوا", "رنگ پوست", "اندازهٔ استخوان", "حافظه"], answer: 0, h: "هوا یکی از اصول شناخته‌شدهٔ ستهٔ ضروریه است." },
+    { w: "کدام مورد در فهرست اصول شش‌گانه جای دارد؟", options: ["اعراض نفسانی", "رنگ لباس", "نوع خط", "قد"], answer: 0, h: "حالت‌های روانی و هیجانی در این دسته‌بندی مطرح‌اند." },
+    { w: "کدام گزینه دربارهٔ ستهٔ ضروریه درست است؟", options: ["مجموعه‌ای از شش عامل مرتبط با تدبیر سلامت است", "فهرستی از شش گیاه دارویی است", "نام شش اندام بدن است", "مجموعه‌ای از شش نوع غذاست"], answer: 0, h: "این عنوان به شش عامل مهم در تدبیر سلامت اشاره دارد." },
+    { w: "کدام مورد جزو اصول ستهٔ ضروریه نیست؟", options: ["رنگ چشم", "هوا", "خواب‌وبیداری", "حرکت‌وسکون"], answer: 0, h: "رنگ چشم در شمار اصول شش‌گانه قرار نمی‌گیرد." },
+    { w: "در میان گزینه‌ها، کدام‌یک به دفع و خارج‌کردن مواد از بدن مربوط است؟", options: ["استفراغ", "احتباس", "خواب", "هوا"], answer: 0, h: "استفراغ در اصطلاح این اصول، مفهوم دفع دارد." },
+    { w: "کدام جفت در اصول شش‌گانه به نگه‌داری و دفع اشاره می‌کند؟", options: ["احتباس و استفراغ", "خواب و بیداری", "گرمی و سردی", "گرسنگی و تشنگی"], answer: 0, h: "این دو مفهوم معمولاً در کنار هم بررسی می‌شوند." },
+    { w: "در پرسش از اصول ستهٔ ضروریه، کدام مورد به حالات روانی مربوط می‌شود؟", options: ["اعراض نفسانی", "خوردنی‌ونوشیدنی", "هوا", "حرکت‌وسکون"], answer: 0, h: "اعراض نفسانی به حالات و هیجان‌های روانی اشاره دارد." },
+    { w: "کدام مورد به تنظیم چرخهٔ استراحت و فعالیت روزانه مربوط است؟", options: ["خواب و بیداری", "احتباس و استفراغ", "هوا و محیط", "خوردنی‌ونوشیدنی"], answer: 0, h: "این اصل، خواب و بیداری را در کنار هم بررسی می‌کند." },
+    { w: "کدام مورد نمونه‌ای از اصل حرکت‌وسکون بدنی است؟", options: ["پیاده‌روی و استراحت", "خشم و شادی", "غذا و نوشیدنی", "تنفس در هوای آزاد"], answer: 0, h: "پیاده‌روی نمونه‌ای از حرکت و استراحت نمونه‌ای از سکون است." },
+    { w: "کدام گزینه، همهٔ مواردش از اصول ستهٔ ضروریه هستند؟", options: ["هوا، خواب‌وبیداری، خوردنی‌ونوشیدنی", "رنگ چشم، قد، رنگ مو", "گیاهان، سنگ‌ها، فلزها", "شنیدن، دیدن، بوییدن"], answer: 0, h: "هر سه مورد در فهرست اصول شش‌گانه جای دارند." },
+    { w: "تأثیر اصلی هوای نامناسب بر بدن چیست؟", options: ["تغییر مزاج", "تغییر رنگ چشم", "بلندتر شدن قد", "تقویت ناخن"], answer: 0, h: "هوا مستقیماً کیفیت روح و اخلاط را تحت تأثیر قرار می‌دهد." },
+    { w: "هوای معتدل در طب سنتی به چه هوایی گفته می‌شود؟", options: ["هوایی که نه سرد است و نه گرم", "هوای کاملاً سرد", "هوای بسیار خشک", "هوای پر از رطوبت"], answer: 0, h: "اعتدال در حرارت و برودت شرط هوای سالم است." },
+    { w: "کدام عامل در کیفیت هوا اثرگذار است؟", options: ["وجود گیاهان و فضای سبز", "رنگ دیوار", "نوع فرش", "تعداد پنجره‌ها"], answer: 0, h: "گیاهان و فضای سبز به تصفیه و اعتدال هوا کمک می‌کنند." },
+    { w: "تأثیر بادهای موسمی بر مزاج چیست؟", options: ["تغییر در رطوبت و حرارت", "تغییر در رنگ مو", "تأثیر بر حافظه", "افزایش قد"], answer: 0, h: "بادها حامل کیفیت‌های محیطی هستند." },
+    { w: "آلودگی هوا در طب سنتی موجب چه تغییری در اخلاط می‌شود؟", options: ["فساد در اخلاط", "تقویت اخلاط", "تعادل اخلاط", "توقف تولید اخلاط"], answer: 0, h: "هوای آلوده موجب فساد کیفیت هوای تنفسی و اخلاط می‌شود." },
+    { w: "کدام فصل برای افراد با مزاج گرم خطرناک‌تر است؟", options: ["تابستان", "زمستان", "پاییز", "بهار"], answer: 0, h: "تابستان به دلیل گرما، مزاج گرم را تشدید می‌کند." },
+    { w: "هوای کوهستانی معمولاً چه خصوصیتی دارد؟", options: ["لطیف و رقیق", "سنگین و غلیظ", "بسیار گرم", "بسیار مرطوب"], answer: 0, h: "هوا در ارتفاعات لطیف‌تر و رقیق‌تر است." },
+    { w: "تنفس در هوای سرد چه تأثیری بر بدن دارد؟", options: ["انقباض و سفتی عروق", "اتساع عروق", "خوشحالی مفرط", "کاهش اشتها"], answer: 0, h: "سرما موجب انقباض و کاهش جریان خون سطحی می‌شود." },
+    { w: "کدام گزینه برای تصفیه هوای اتاق توصیه می‌شود؟", options: ["استفاده از گیاهان خوشبو", "بستن تمام منافذ", "افزایش حرارت اتاق", "استفاده از دود غلیظ"], answer: 0, h: "استفاده از گیاهان خوشبو (عطردرمانی) محیط را مطبوع می‌کند." },
+    { w: "هوای شهرها معمولاً نسبت به حومه چه تفاوتی دارد؟", options: ["آلوده‌تر و غلیظ‌تر", "لطیف‌تر و پاک‌تر", "سردتر", "مرطوب‌تر"], answer: 0, h: "تراکم جمعیت و آلودگی، هوا را غلیظ می‌کند." },
+    { w: "باد شمال معمولاً چه خصوصیتی دارد؟", options: ["سرد و خشک", "گرم و مرطوب", "گرم و خشک", "سرد و مرطوب"], answer: 0, h: "باد شمال در بسیاری از اقلیم‌ها خنک‌کننده است." },
+    { w: "تأثیر رطوبت بیش از حد هوا چیست؟", options: ["ایجاد بلغم و سستی", "خشکی پوست", "افزایش حرارت", "تقویت صفرا"], answer: 0, h: "رطوبت زیاد باعث غلبه بلغم می‌شود." },
+    { w: "هوای خشک چه اثری بر مخاط دارد؟", options: ["خشکی و التهاب", "ترشح بیش از حد", "نرمی مخاط", "خنکی مخاط"], answer: 0, h: "خشکی هوا مخاط را تحریک و ملتهب می‌کند." },
+    { w: "چرا تهویه هوا در طب سنتی اهمیت دارد؟", options: ["جلوگیری از تجمع بخارات زائد", "زیباتر شدن اتاق", "گرم شدن محیط", "کاهش هزینه"], answer: 0, h: "تجمع بخارات زائد در هوای تنفسی مضر است." },
+    { w: "تأثیر تابش مستقیم آفتاب بر بدن در ظهر تابستان چیست؟", options: ["غلبه حرارت", "غلبه برودت", "غلبه رطوبت", "تعادل"], answer: 0, h: "گرما و تابش شدید باعث غلبه حرارت می‌شود." },
+    { w: "کدام گزینه به هوای «لطیف» اشاره دارد؟", options: ["هوایی که زود نفوذ می‌کند", "هوای بسیار غلیظ", "هوای آلوده", "هوای سرد و سنگین"], answer: 0, h: "هوای لطیف رقیق است و به راحتی به اعضا نفوذ می‌کند." },
+    { w: "کدام یک از شرایط محیطی بر کیفیت هوای خواب تأثیر دارد؟", options: ["دمای اتاق", "رنگ پرده", "جنس تخت", "نوع بالش"], answer: 0, h: "دما در خواب بسیار تعیین‌کننده است." },
+    { w: "اثر هوای معطر بر روح و روان چیست؟", options: ["تلطیف روح", "تیره شدن ذهن", "خستگی", "گرسنگی"], answer: 0, h: "رایحه‌های خوش باعث تلطیف روح حیوانی می‌شوند." },
+    { w: "باد صبا در متون طب سنتی نشانه چیست؟", options: ["هوای معتدل و بهاری", "توفان شدید", "سرمای کشنده", "گرما"], answer: 0, h: "باد صبا نماد اعتدال و رویش است." },
+    { w: "هوای غلیظ برای افراد با کدام مزاج مضرتر است؟", options: ["سرد و مرطوب", "گرم و خشک", "گرم و مرطوب", "سرد و خشک"], answer: 0, h: "افراد بلغم‌مزاج به دلیل رطوبت و غلظت بدن، از هوای غلیظ آسیب بیشتری می‌بینند." },
+    { w: "بهترین زمان برای نوشیدن آب چه زمانی است؟", options: ["هنگام تشنگی واقعی", "بلافاصله بعد از غذا", "قبل از خواب", "با معده خالیِ بسیار سرد"], answer: 0, h: "نوشیدن آب باید با نیاز واقعی بدن باشد." },
+    { w: "چرا جویدن کامل غذا توصیه می‌شود؟", options: ["کمک به هضم اولیه", "کاهش سرعت غذا خوردن", "تقویت دندان", "طولانی شدن زمان غذا"], answer: 0, h: "جویدن، اولین مرحله هضم است و بار معده را کم می‌کند." },
+    { w: "مصرف آب یخ چه اثری بر معده دارد؟", options: ["سستی هضم", "تقویت هضم", "کاهش چربی", "افزایش جذب"], answer: 0, h: "سرمای شدید معده را سست و هضم را مختل می‌کند." },
+    { w: "غذاهای غلیظ مانند حلیم چه ویژگی دارند؟", options: ["هضم سخت", "هضم سریع", "جذب سریع", "کم‌کالری"], answer: 0, h: "غذاهای غلیظ دیر هضم می‌شوند و انرژی زیادی برای هضم می‌طلبند." },
+    { w: "کدام غذا برای معده‌های ضعیف مناسب‌تر است؟", options: ["غذاهای سبک و پخته", "غذای خام", "غذاهای بسیار پر ادویه", "غذاهای سرخ‌کردنی"], answer: 0, h: "غذاهای پخته و سبک راحت‌تر هضم می‌شوند." },
+    { w: "مصرف میوه بعد از غذا چه عارضه احتمالی دارد؟", options: ["فساد هضم", "تقویت جذب", "کاهش وزن", "زیبایی پوست"], answer: 0, h: "میوه‌ها سریع هضم می‌شوند و در صورت وجود غذای قبلی در معده، فاسد می‌شوند." },
+    { w: "در طب سنتی، «مصلح» به چه معناست؟", options: ["اصلاح‌کننده طبع غذا", "چاشنی غذا", "ظرف غذا", "زمان غذا"], answer: 0, h: "مصلح ماده‌ای است که عوارض طبعی یک غذا را تعدیل می‌کند." },
+    { w: "مصلحِ ماست چیست؟", options: ["زنیان یا نعنا", "شکر", "روغن", "آب"], answer: 0, h: "ماست سرد است و افزودن مواد گرم مثل نعنا آن را اصلاح می‌کند." },
+    { w: "غذاهای بسیار گرم و پرادویه برای کدام مزاج مضرتر است؟", options: ["گرم", "سرد", "مرطوب", "معتدل"], answer: 0, h: "افراد گرم‌مزاج با مصرف غذای گرم دچار غلبه صفرا می‌شوند." },
+    { w: "اثر اصلی نوشیدن آب بین غذا چیست؟", options: ["اختلال در هضم", "بهبود هضم", "رفع تشنگی", "کاهش کالری"], answer: 0, h: "آب باعث رقیق شدن شیره‌های گوارشی و اختلال در هضم می‌شود." },
+    { w: "کدام غذا طبع «سرد و تر» دارد؟", options: ["خیار", "عسل", "فلفل", "دارچین"], answer: 0, h: "خیار از سردی‌های رایج است." },
+    { w: "غذای «کثیرالغذا» به چه معناست؟", options: ["غذایی که خون زیادی تولید می‌کند", "غذای کم‌حجم", "غذای گیاهی", "غذای پخته"], answer: 0, h: "یعنی ماده غذایی مقوی و خون‌ساز." },
+    { w: "چرا خوردن غذای قبل از گرسنگی توصیه نمی‌شود؟", options: ["باقی ماندن غذای قبلی در معده", "کاهش وزن", "چاقی", "طعم بد غذا"], answer: 0, h: "خوردن روی غذای هضم‌نشده، موجب فساد هضم می‌شود." },
+    { w: "خاصیت اصلی عسل در طب سنتی چیست؟", options: ["محرک و نفوذدهنده", "خنک‌کننده", "سست‌کننده", "سردکننده"], answer: 0, h: "عسل به اعضای بدن نفوذ می‌کند و اخلاط را پاک می‌کند." },
+    { w: "مصرف زیاد نمک چه اثری دارد؟", options: ["خشکی و تشنگی", "افزایش رطوبت", "کاهش اشتها", "آرامش"], answer: 0, h: "نمک محرک است و موجب تشنگی می‌شود." },
+    { w: "کدام مورد هضم را تسریع می‌کند؟", options: ["پیاده‌روی سبک بعد از غذا", "خوابیدن", "نوشیدن آب سرد", "سکون مطلق"], answer: 0, h: "پیاده‌روی بسیار سبک (قدم زدن) به هضم کمک می‌کند." },
+    { w: "اثر غذای بسیار چرب بر کبد چیست؟", options: ["انسداد و سنگینی", "پاکسازی", "خوشحالی", "سبکی"], answer: 0, h: "چربی‌های زیاد کبد را می‌پوشانند و مجاری را می‌بندند." },
+    { w: "غذای سرد برای چه کسی مفید است؟", options: ["گرم‌مزاج", "سردمزاج", "بلغم‌مزاج", "افراد مسن"], answer: 0, h: "غذای سرد حرارت صفرا را تعدیل می‌کند." },
+    { w: "ترشی‌ها در طب سنتی معمولاً چه اثری دارند؟", options: ["سرد و خشک", "گرم و تر", "گرم و خشک", "سرد و تر"], answer: 0, h: "ترشی‌ها معمولاً سرد و خشک هستند و عصب را تضعیف می‌کنند." },
+    { w: "کدام یک از لبنیات طبع گرم دارد؟", options: ["پنیر کهنه", "شیر تازه", "ماست", "پنیر تازه"], answer: 0, h: "پنیر کهنه به دلیل تخمیر و گذشت زمان، طبع گرمی پیدا می‌کند." },
+    { w: "بهترین زمان برای بیداری در طب سنتی چه هنگام است؟", options: ["صبح زود (طلوع فجر)", "ظهر", "نیمه‌شب", "غروب"], answer: 0, h: "بیداری در صبح، انرژی را در بدن می‌گستراند." },
+    { w: "خواب زیاد چه اثری بر رطوبت بدن دارد؟", options: ["افزایش رطوبت", "کاهش رطوبت", "خشکی مفرط", "تعادل"], answer: 0, h: "خوابِ زیاد باعث تجمع بلغم و رطوبت می‌شود." },
+    { w: "خوابیدن با معده پر چه عارضه‌ای دارد؟", options: ["فساد هضم و تولید بخارات", "کاهش وزن", "افزایش قد", "بهبود حافظه"], answer: 0, h: "هضم در خواب کند است و معده پر موجب بخارات مضر می‌شود." },
+    { w: "خوابیدن در چه وضعیتی در طب سنتی توصیه نمی‌شود؟", options: ["بلافاصله بعد از غذا", "در رختخواب", "بعد از هضم غذا", "در تاریکی"], answer: 0, h: "خوابِ بلافاصله بعد از غذا، هضم را تباه می‌کند." },
+    { w: "خواب نیمروز (قیلوله) برای چه کسانی مفید است؟", options: ["افراد صفراوی", "افراد بلغم‌مزاج", "افراد بسیار پرخواب", "بیماران قلبی"], answer: 0, h: "خواب قیلوله برای رفع گرمای صفرا در روزهای گرم مفید است." },
+    { w: "خواب صبحگاهی (بعد از طلوع) چه اثری دارد؟", options: ["سستی بدن و بدبویی دهان", "تقویت حافظه", "کاهش وزن", "افزایش شادی"], answer: 0, h: "خوابِ صبحگاه موجب کسالت و تضعیف قوا می‌شود." },
+    { w: "خواب بیش از حد چه اثری بر ذهن دارد؟", options: ["کندذهنی و فراموشی", "تقویت حافظه", "تیزی هوش", "خلاقیت"], answer: 0, h: "تجمع رطوبت ناشی از خواب زیاد، مغز را کند می‌کند." },
+    { w: "خوابیدن در چه جهتی توصیه می‌شود؟", options: ["به پهلوی راست ابتدا و سپس چپ", "فقط به پشت", "فقط روی شکم", "ایستاده"], answer: 0, h: "پهلوی راست شروعِ هضم و چپ راحتی قلب است." },
+    { w: "اثر بیداری مفرط چیست؟", options: ["خشکی بدن و لاغری", "افزایش وزن", "افزایش رطوبت", "قوی شدن عضلات"], answer: 0, h: "بیداری بیش از حد، رطوبات اصلی را خشک می‌کند." },
+    { w: "خوابیدن بلافاصله پس از حمام گرم چه خطری دارد؟", options: ["تولید رطوبت‌های فاسد", "تقویت عضلات", "افزایش قد", "کاهش وزن"], answer: 0, h: "بدن بعد از حمام باز است و خواب باعث نفوذ رطوبت به اعضا می‌شود." },
+    { w: "آیا خوابیدن در روز برای همه مفید است؟", options: ["خیر، خواب روز مضر است", "بله، برای همه مفید است", "فقط در زمستان مفید است", "فقط برای کودکان"], answer: 0, h: "خواب روز در بیشتر مواقع موجب سستی است." },
+    { w: "خواب معتدل چگونه خوابی است؟", options: ["خوابی که شخص را تازه کند", "خواب طولانی", "خواب بسیار کوتاه", "خواب در روز"], answer: 0, h: "خواب معتدل خوابی است که بدن را بازسازی کند." },
+    { w: "بیدار ماندن در شب چه اثری بر صفرا دارد؟", options: ["افزایش صفرا", "کاهش صفرا", "تعادل صفرا", "توقف صفرا"], answer: 0, h: "بیداری شب موجب سوختن اخلاط و افزایش صفرا می‌شود." },
+    { w: "کم‌خوابی چه اثری بر اعصاب دارد؟", options: ["تحریک‌پذیری و ضعف", "تقویت اعصاب", "نرمی اعصاب", "شادی"], answer: 0, h: "کم‌خوابی باعث خشکی اعصاب و تحریک‌پذیری می‌شود." },
+    { w: "خوابِ سبک برای چه کسانی توصیه می‌شود؟", options: ["بلغم‌مزاج‌ها", "صفراوی‌ها", "سوداوی‌ها", "کودکان"], answer: 0, h: "بلغم‌مزاج‌ها نباید زیاد بخوابند تا بدنشان مرطوب‌تر نشود." },
+    { w: "بهترین حالت برای خواب در طب سنتی چیست؟", options: ["آرامش جسم و روان", "خواب همراه با اضطراب", "خوابیدن با صدای بلند", "خوابیدن با نور زیاد"], answer: 0, h: "آرامش کامل شرط خواب صحیح است." },
+    { w: "اثر خواب بر حرارت غریزی چیست؟", options: ["حرارت را به درون می‌برد (حفظ می‌کند)", "حرارت را دفع می‌کند", "حرارت را از بین می‌برد", "بی‌اثر است"], answer: 0, h: "خواب حرارت را به سمت درون بدن جمع می‌کند تا هضم انجام شود." },
+    { w: "چرا خوابِ عصر مضر است؟", options: ["تجمع اخلاط فاسد", "خوشحالی", "تقویت انرژی", "کاهش بلغم"], answer: 0, h: "خواب عصر موجب تجمع بخارات و کسالت است." },
+    { w: "خوابیدن روی زمین سفت چه اثری دارد؟", options: ["مانع تجمع رطوبت اضافی", "نرمی بدن", "خواب عمیق‌تر", "افزایش گرمی"], answer: 0, h: "بستر سفت مانع از تجمع رطوبت در بدن می‌شود." },
+    { w: "تأثیر خواب بر خستگی چیست؟", options: ["رفع خستگی و بازسازی قوا", "ایجاد خستگی بیشتر", "بدون اثر", "تغییر رنگ پوست"], answer: 0, h: "خواب کارکرد اصلی‌اش رفع خستگی و انرژی‌دهی است." },
+    { w: "ورزش معتدل در طب سنتی چه اثری دارد؟", options: ["افزایش حرارت غریزی و هضم", "تضعیف عضلات", "افزایش چربی", "کند شدن هضم"], answer: 0, h: "ورزش حرارت را به حد مطلوب می‌رساند." },
+    { w: "اثر خشم شدید بر بدن چیست؟", options: ["افزایش سریع حرارت صفرا", "کاهش دما", "آرامش کبد", "تولید بلغم"], answer: 0, h: "خشم ناگهانی خون را به سمت قلب و سر می‌راند." },
+    { w: "استفراغ در ستهٔ ضروریه به چه معناست؟", options: ["دفع مواد زائد", "حالت تهوع", "خوردن بیش از حد", "خوابیدن"], answer: 0, h: "استفراغ اصطلاحاً به معنای هر نوع دفع فضولات است." },
+    { w: "احتباس یعنی چه؟", options: ["نگه داشتن مواد مفید در بدن", "دفع مواد", "ورزش کردن", "خوابیدن"], answer: 0, h: "احتباس به معنای حبس و نگه داشتن چیزهای مورد نیاز است." },
+    { w: "ورزشِ شدید قبل از غذا چه ضرری دارد؟", options: ["تحلیل قوای اصلی", "چاقی", "بهبود هضم", "افزایش قد"], answer: 0, h: "ورزش شدید قبل از غذا، رطوبات ضروری را می‌سوزاند." },
+    { w: "غم و اندوه طولانی چه اثری بر اعضا دارد؟", options: ["ضعف قلب و کبد (سوداوی)", "تقویت بدن", "افزایش انرژی", "بهبود هضم"], answer: 0, h: "غم اندوه، بدن را سرد و خشک (سوداوی) می‌کند." },
+    { w: "کدام گزینه از مصادیق «استفراغ» است؟", options: ["عرق کردن", "خوابیدن", "خشم", "خوردن"], answer: 0, h: "عرق کردن راهی برای دفع فضولات است." },
+    { w: "ورزش برای چه زمانی توصیه می‌شود؟", options: ["بعد از هضم غذا", "قبل از غذا", "بلافاصله بعد از غذا", "هنگام گرسنگی مفرط"], answer: 0, h: "ورزش باید زمانی باشد که معده سبک است." },
+    { w: "تأثیر شادیِ معتدل بر بدن چیست؟", options: ["تلطیف روح و تقویت قلب", "تضعیف قلب", "تولید بلغم", "سردی بدن"], answer: 0, h: "شادی معتدل خون را به سطح پوست می‌آورد." },
+    { w: "ورزش در حمام چه تأثیری دارد؟", options: ["تحلیل زیاد قوا", "کاهش حرارت", "تقویت استخوان", "بدون اثر"], answer: 0, h: "ورزش در حمام به دلیل گرمای محیط، بدن را سریع تحلیل می‌برد." },
+    { w: "ترس ناگهانی چه اثری بر بدن دارد؟", options: ["سردی و لرزش (عقب‌نشینی خون)", "گرمی", "شادی", "تقویت"], answer: 0, h: "ترس خون را به عمق می‌کشد و سطح بدن سرد می‌شود." },
+    { w: "احتباسِ مدفوع چه عارضه‌ای دارد؟", options: ["مسمومیت بدن و برگشت بخارات", "کاهش وزن", "افزایش انرژی", "خوشحالی"], answer: 0, h: "دفع نکردن فضولات، سموم را در بدن برمی‌گرداند." },
+    { w: "ورزش برای کدام مزاج مناسب‌تر است؟", options: ["بلغم‌مزاج (برای تحلیل رطوبت)", "صفراوی (ممکن است شدید شود)", "دموی", "سوداوی"], answer: 0, h: "بلغم‌مزاج‌ها بیشترین نیاز را به ورزش برای دفع رطوبت دارند." },
+    { w: "کدام ورزش برای تقویت کلی بدن توصیه شده است؟", options: ["ورزش معتدل و مداوم", "ورزش بسیار شدید", "ورزش نامنظم", "ورزش فقط در شب"], answer: 0, h: "اعتدال و استمرار در ورزش کلید سلامت است." },
+    { w: "تأثیر اعراض نفسانی بر هضم چیست؟", options: ["اختلال شدید در هضم", "بهبود هضم", "تغییر طعم غذا", "تغییر کالری"], answer: 0, h: "هیجانات شدید بلافاصله هضم معده را متوقف می‌کنند." },
+    { w: "منظور از «حرکت بدنی» در ستهٔ ضروریه چیست؟", options: ["فعالیت‌های ارادی جسمانی", "حرکتِ خون", "حرکتِ غذا", "خوابیدن"], answer: 0, h: "منظور هر نوع حرکت فیزیکی و ورزشی است." },
+    { w: "استفراغِ بیش از حد چه اثری دارد؟", options: ["تضعیف قوای جسمانی", "تقویت قوا", "افزایش چربی", "افزایش قد"], answer: 0, h: "دفعِ بیش از حد، موجب ضعف و لاغری مفرط می‌شود." },
+    { w: "کدام فعالیت از دستهٔ «سکون» است؟", options: ["استراحت بعد از فعالیت", "دویدن", "پریدن", "کار سخت"], answer: 0, h: "استراحت و بی‌حرکتی، سکون محسوب می‌شود." },
+    { w: "آیا اعراض نفسانی قابل کنترل هستند؟", options: ["بله، با تدبیر و تمرین", "خیر، غیرممکن است", "فقط با دارو", "فقط با خواب"], answer: 0, h: "طب سنتی بر مدیریت هیجانات (تدبیر نفس) تأکید دارد." },
+    { w: "نتیجه‌گیری کلی ستهٔ ضروریه چیست؟", options: ["تعادل در تمام عوامل برای حفظ سلامت", "فقط خوردن و خوابیدن", "فقط ورزش کردن", "فقط دوری از استرس"], answer: 0, h: "سلامت نتیجهٔ رعایتِ تعادل در هر شش اصل است." }
+];
+(function(){
+ const KEY='game002_sitteh_zaroorieh_progress_v1';
+ const fresh=()=>({index:0,score:0,answered:false,selected:null,correct:false});
+ let state=fresh(); let storageOK=true;
+ const $=id=>document.getElementById(id);
+ const fa=n=>new Intl.NumberFormat('fa-IR').format(n);
+ function validState(x){return x&&Number.isInteger(x.index)&&x.index>=0&&x.index<=questions.length&&Number.isFinite(x.score)&&x.score>=0&&typeof x.answered==='boolean'&&(x.selected===null||Number.isInteger(x.selected))&&typeof x.correct==='boolean'}
+ function save(){
+   const data=JSON.stringify({version:1,index:state.index,score:state.score,answered:state.answered,selected:state.selected,correct:state.correct});
+   try{localStorage.setItem(KEY,data);storageOK=true;$('saveStatus').textContent='✓ پیشرفت و امتیاز شما ذخیره شد؛ بعداً از همین‌جا ادامه می‌دهید.';$('saveStatus').classList.remove('warning')}
+   catch(e){storageOK=false;$('saveStatus').textContent='ذخیره‌سازی این مرورگر در دسترس نیست؛ لطفاً داده‌های مرورگر را مسدود نکنید.';$('saveStatus').classList.add('warning')}
+ }
+ function load(){try{const raw=localStorage.getItem(KEY);if(!raw)return;const d=JSON.parse(raw);if(d.version===1&&validState(d)){state={index:d.index,score:Math.floor(d.score),answered:d.answered,selected:d.selected,correct:d.correct};if(state.index<questions.length&&state.answered&&(state.selected===null||state.selected<0||state.selected>=questions[state.index].options.length)){state.answered=false;state.selected=null;state.correct=false}}}catch(e){storageOK=false;state=fresh()}}
+ function render(){
+  $('score').textContent=fa(state.score);
+  if(state.index>=questions.length){$('game').hidden=true;$('done').hidden=false;$('result').textContent='امتیاز نهایی شما: '+fa(state.score)+' از '+fa(questions.length*10)+' امتیاز. این نتیجه نیز ذخیره شده است.';return}
+  $('game').hidden=false;$('done').hidden=true;
+  const q=questions[state.index];$('counter').textContent='پرسش '+fa(state.index+1)+' از '+fa(questions.length);
+  $('progress').style.width=((state.index+(state.answered?1:0))/questions.length*100)+'%';$('question').textContent=q.w;
+  const box=$('options');box.replaceChildren();
+  q.options.forEach((text,i)=>{const b=document.createElement('button');b.type='button';b.className='option';b.textContent=fa(i+1)+') '+text;
+   if(state.answered){b.disabled=true;if(i===q.answer)b.classList.add('correct');else if(i===state.selected)b.classList.add('wrong')}
+   b.addEventListener('click',()=>answer(i));box.appendChild(b)});
+  const fb=$('feedback');fb.hidden=!state.answered;fb.className='feedback '+(state.correct?'good':'bad');
+  if(state.answered)fb.textContent=(state.correct?'پاسخ درست است! ۱۰ امتیاز طلایی گرفتید. ':'پاسخ درست: '+q.options[q.answer]+'؛ ') + q.h;
+  $('next').disabled=!state.answered;$('next').textContent=state.index===questions.length-1?'نمایش نتیجه ←':'پرسش بعدی ←';
+ }
+ function answer(i){if(state.answered||state.index>=questions.length)return;const q=questions[state.index];state.answered=true;state.selected=i;state.correct=i===q.answer;if(state.correct)state.score+=10;save();render()}
+ function next(){if(!state.answered)return;state.index++;state.answered=false;state.selected=null;state.correct=false;save();render()}
+ function reset(){if(state.index||state.score){if(!confirm('همهٔ پیشرفت و امتیاز ذخیره‌شده پاک و بازی از ابتدا شروع شود؟'))return}state=fresh();save();render()}
+ $('next').addEventListener('click',next);$('reset').addEventListener('click',reset);$('playAgain').addEventListener('click',()=>{state=fresh();save();render()});
+ window.addEventListener('pagehide',save);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')save()});
+ load();render();if(!storageOK)$('saveStatus').textContent='ذخیره‌سازی این مرورگر در دسترس نیست؛ لطفاً داده‌های مرورگر را مسدود نکنید.';
+})();
+</script></body></html>

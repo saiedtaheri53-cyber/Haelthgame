@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پورتال بازی‌های سلامت</title>
+    <style>
+        :root { --main-green: #2e7d32; --gold: #ffd700; --danger: #d32f2f; --blue: #1976d2; }
+        body { font-family: Tahoma, sans-serif; background: #f0f4f0; margin: 0; padding: 15px; text-align: center; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .stats { display: flex; flex-direction: column; gap: 5px; margin-bottom: 15px; font-weight: bold; color: var(--main-green); font-size: 0.9em; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 15px; }
+        button { padding: 12px; border: none; border-radius: 8px; background: var(--main-green); color: white; cursor: pointer; font-size: 13px; transition: 0.2s; }
+        button:active { transform: scale(0.97); }
+        .gold-btn { background: var(--gold); color: black; font-weight: bold; }
+        .contact-btn { background: #d84315; grid-column: span 2; } /* رنگ جدید برای دکمه تماس */
+        #question-box { margin-bottom: 15px; min-height: 80px; padding: 15px; border: 2px solid var(--main-green); border-radius: 10px; font-weight: bold; display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="stats">
+        <span id="counter">سوال: ۱/۱۰۰</span>
+        <span id="game-score">امتیاز این بازی: ۰</span>
+        <span id="gold-score" style="color: #b8860b;">امتیاز طلایی (کل پروژه): ۰</span>
+    </div>
+
+    <div id="question-box">بارگذاری سوالات...</div>
+    <div id="options" class="grid"></div>
+
+    <div class="grid" style="margin-top: 15px;">
+        <button onclick="prev()">قبلی</button>
+        <button onclick="next()">بعدی</button>
+        <button onclick="showAnswer()">جواب</button>
+        <button class="gold-btn" onclick="showHint()">راهنما</button>
+        <button onclick="resetGame()" style="background: var(--danger);">شروع مجدد</button>
+        <button onclick="goHome()">بازگشت</button>
+        <button class="contact-btn" onclick="contact()">ارتباط با سازنده (ایتا/ایمیل)</button>
+    </div>
+</div>
+
+<script>
+    let gameScore = parseInt(localStorage.getItem('gameScore')) || 0;
+    let goldScore = parseInt(localStorage.getItem('goldScore')) || 0;
+    let currentQ = parseInt(localStorage.getItem('currentQ')) || 0;
+
+    const questions = [
+        { q: "آیا آتش گرم و خشک است؟", a: ["بله", "خیر"], correct: 0 },
+        { q: "ارکان اربعه کدامند؟", a: ["آب، باد، خاک، آتش", "سرد، گرم، تر، خشک"], correct: 0 }
+    ];
+
+    function updateUI() {
+        document.getElementById('game-score').innerText = "امتیاز این بازی: " + gameScore;
+        document.getElementById('gold-score').innerText = "امتیاز طلایی (کل): " + goldScore;
+        document.getElementById('counter').innerText = "سوال: " + (currentQ + 1) + "/100";
+        document.getElementById('question-box').innerText = questions[currentQ].q;
+        
+        const optDiv = document.getElementById('options');
+        optDiv.innerHTML = '';
+        questions[currentQ].a.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(idx);
+            optDiv.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(idx) {
+        if(idx === questions[currentQ].correct) {
+            gameScore++;
+            goldScore++;
+            localStorage.setItem('gameScore', gameScore);
+            localStorage.setItem('goldScore', goldScore);
+            updateUI();
+            alert("صحیح!");
+            next();
+        } else {
+            alert("اشتباه بود!");
+        }
+    }
+
+    function next() {
+        if(currentQ < questions.length - 1) {
+            currentQ++;
+            localStorage.setItem('currentQ', currentQ);
+            updateUI();
+        }
+    }
+
+    function prev() {
+        if(currentQ > 0) {
+            currentQ--;
+            updateUI();
+        }
+  Pashke  }
+
+    function resetGame() {
+        gameScore = 0;
+        currentQ = 0;
+        localStorage.setItem('gameScore', 0);
+        localStorage.setItem('currentQ', 0);
+        updateUI();
+    }
+
+    function showHint() { alert("راهنما: ارکان اربعه اساس خلقت هستند."); }
+    function showAnswer() { alert("جواب صحیح: " + questions[currentQ].a[questions[currentQ].correct]); }
+    function goHome() { alert("بازگشت به فهرست اصلی..."); }
+
+    function contact() {
+        let choice = confirm("برای ارسال نظر، روش مورد نظر خود را انتخاب کنید:\n\nتایید (OK): ورود به ایتا\nانصراف (Cancel): ارسال ایمیل");
+        if (choice) {
+            // اینجا آیدی خود را به جای YOUR_EITAA_ID بنویسید
+            window.location.href = "https://eitaa.com/YOUR_EITAA_ID"; 
+        } else {
+            // ایمیل شما اینجا قرار دارد
+            window.location.href = "mailto:saiedtaheri53@gmail.com?subject=نظر در مورد بازی سلامت";
+        }
+    }
+
+    updateUI();
+</script>
+
+</body>
+</html>
