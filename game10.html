@@ -1,489 +1,109 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>حکمت‌سنج مزاج، ارکان و اخلاط</title>
-  <style>
-    :root {
-      --primary: #15803d;
-      --primary-dark: #14532d;
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --correct: #16a34a;
-      --wrong: #dc2626;
-    }
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-      font-family: system-ui, -apple-system, Tahoma, sans-serif;
-    }
-    body {
-      width: 100%;
-      min-height: 100vh;
-      background-color: var(--bg);
-      color: #1f2937;
-      display: flex;
-      justify-content: center;
-      padding: 12px;
-    }
-    .container {
-      width: 100%;
-      max-width: 580px;
-      background: var(--card-bg);
-      border-radius: 18px;
-      padding: 18px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-      border: 1.5px solid #dcfce7;
-      display: flex;
-      flex-direction: column;
-      height: fit-content;
-    }
-    .header {
-      text-align: center;
-      margin-bottom: 12px;
-    }
-    .header h1 {
-      font-size: 1.25rem;
-      color: var(--primary-dark);
-      font-weight: 800;
-    }
-    .stats {
-      display: flex;
-      justify-content: space-between;
-      font-size: 1rem;
-      font-weight: bold;
-      margin-bottom: 10px;
-      background: #ecfdf5;
-      padding: 10px 14px;
-      border-radius: 12px;
-      color: #166534;
-      border: 1px solid #bbf7d0;
-    }
-    .prog-track {
-      background: #e5e7eb;
-      height: 8px;
-      border-radius: 999px;
-      overflow: hidden;
-      margin-bottom: 16px;
-    }
-    .prog-bar {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #22c55e, #15803d);
-      transition: width 0.3s ease;
-    }
-    .qbox {
-      font-size: 1.15rem;
-      font-weight: 800;
-      line-height: 1.7;
-      margin-bottom: 16px;
-      color: #111827;
-      min-height: 52px;
-    }
-    .options-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-    .btn-opt {
-      width: 100%;
-      background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 12px;
-      padding: 14px 16px;
-      font-size: 1.05rem;
-      text-align: right;
-      cursor: pointer;
-      font-weight: 600;
-      color: #334155;
-      line-height: 1.4;
-      transition: all 0.2s ease;
-    }
-    .btn-opt:active:not([disabled]) {
-      background: #f0fdf4;
-      border-color: var(--primary);
-    }
-    .btn-opt.correct {
-      background: #dcfce7 !important;
-      border-color: var(--correct) !important;
-      color: #14532d !important;
-      font-weight: bold;
-    }
-    .btn-opt.wrong {
-      background: #fee2e2 !important;
-      border-color: var(--wrong) !important;
-      color: #7f1d1d !important;
-      font-weight: bold;
-    }
-    .feedback {
-      display: none;
-      padding: 12px 14px;
-      border-radius: 10px;
-      font-size: 1rem;
-      margin-bottom: 14px;
-      line-height: 1.6;
-    }
-    .feedback.correct {
-      display: block;
-      background: #ecfdf5;
-      color: #065f46;
-      border: 1px solid #a7f3d0;
-    }
-    .feedback.wrong {
-      display: block;
-      background: #fef2f2;
-      color: #991b1b;
-      border: 1px solid #fecaca;
-    }
-    .action-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 4px;
-    }
-    .btn-next {
-      background: var(--primary);
-      color: #ffffff;
-      border: none;
-      border-radius: 10px;
-      padding: 12px 22px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      display: none;
-      margin-right: auto;
-    }
-    .btn-reset {
-      background: transparent;
-      border: none;
-      color: #64748b;
-      font-size: 0.9rem;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-    .result-screen {
-      display: none;
-      text-align: center;
-      padding: 16px 8px;
-    }
-    .result-score {
-      font-size: 2.4rem;
-      font-weight: 800;
-      color: var(--primary);
-      margin: 14px 0;
-    }
-    .btn-act {
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      text-decoration: none;
-      display: block;
-      width: 100%;
-      margin: 8px 0;
-    }
-    .btn-out {
-      background: white;
-      color: var(--primary-dark);
-      border: 1.5px solid var(--primary);
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-weight: bold;
-      font-size: 1rem;
-      text-decoration: none;
-      display: block;
-      width: 100%;
-      margin: 8px 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آزمون هویت مزاجی | پورتال سلامت</title>
+    <style>
+        :root {
+            --primary-color: #2c5f2d;
+            --secondary-color: #97bc62;
+            --accent-color: #f4a261;
+            --bg-color: #f0f4f0;
+            --text-color: #333;
+        }
+
+        body { font-family: 'Tahoma', sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+
+        #quiz-container { background: white; width: 90%; max-width: 500px; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+
+        .progress-bar { width: 100%; height: 8px; background: #e0e0e0; border-radius: 4px; margin-bottom: 25px; }
+        #progress { width: 0%; height: 100%; background: var(--secondary-color); border-radius: 4px; transition: width 0.4s ease; }
+
+        .option-btn { width: 100%; padding: 15px; margin: 8px 0; border: 2px solid #eee; border-radius: 12px; background: none; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; text-align: right; }
+        .option-btn:hover { border-color: var(--secondary-color); background-color: #f9fff9; }
+
+        #result-area { display: none; }
+        .btn-main { background-color: var(--primary-color); color: white; padding: 15px 30px; border: none; border-radius: 25px; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 20px; }
+        
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
 <body>
 
-<div class="container">
-  <div id="quiz-screen">
-    <div class="header">
-      <h1>حکمت‌سنج مزاج، ارکان و اخلاط</h1>
+<div id="quiz-container">
+    <div id="quiz-area">
+        <h1>هویت‌سنجی مزاج</h1>
+        <div class="progress-bar"><div id="progress"></div></div>
+        <h3 id="question-text">در حال بارگذاری...</h3>
+        <div id="options-container"></div>
     </div>
-    <div class="stats">
-      <span id="qc">پرسش ۱</span>
-      <span id="sc">امتیاز: ۰</span>
-    </div>
-    <div class="prog-track"><div class="prog-bar" id="pb"></div></div>
-    <div class="qbox" id="qt">در حال بارگذاری پرسش‌ها...</div>
-    <div class="options-grid" id="og"></div>
-    <div class="feedback" id="fb"></div>
-    <div class="action-row">
-      <button class="btn-reset" onclick="confirmReset()">شروع از ابتدا</button>
-      <button class="btn-next" id="bn" onclick="nextQ()">پرسش بعدی</button>
-    </div>
-  </div>
 
-  <div class="result-screen" id="res-screen">
-    <h2>پایان آزمون حکمت‌سنجی</h2>
-    <div class="result-score" id="fs">۰ / ۱۰۰</div>
-    <p id="fe" style="color:#374151; font-size:1.05rem; line-height:1.6;"></p>
-    <div style="margin-top:20px;">
-      <button class="btn-act" onclick="restart()">آزمون مجدد</button>
-      <a href="index.html" class="btn-out">بازگشت به پورتال</a>
+    <div id="result-area" class="fade-in">
+        <h2>مزاج اصلی شما: <span id="result-title" style="color:var(--primary-color)"></span></h2>
+        <p id="result-desc"></p>
+        <a href="Main_Menu_Game_Library.html" class="btn-main">ورود به کتابخانه بازی‌ها</a>
     </div>
-  </div>
 </div>
 
 <script>
-const rawQuestions = [
-  {q:"رکن آتش دارای کدام کیفیت است؟", c:"گرم و خشک", w:["گرم و تر","سرد و خشک","سرد و تر"], f:"آتش گرم و خشک و در بالاترین مرتبه لطافت است."},
-  {q:"رکن هوا دارای چه کیفیتی است؟", c:"گرم و تر", w:["گرم و خشک","سرد و تر","سرد و خشک"], f:"هوا گرم و تر و دارای نفوذ و انتشار است."},
-  {q:"کیفیت اصلی رکن آب چیست؟", c:"سرد و تر", w:["سرد و خشک","گرم و تر","گرم و خشک"], f:"آب سرد و تر و مایه انعطاف است."},
-  {q:"سنگین‌ترین رکن پایدارکننده شکل چیست؟", c:"خاک (ارض)", w:["آب","هوا","آتش"], f:"خاک سرد و خشک و مایه ثبات و حفظ صورت است."},
-  {q:"خلط دم (خون) معادل کدام کیفیت است؟", c:"گرم و تر", w:["گرم و خشک","سرد و خشک","سرد و تر"], f:"دم گرم و تر و مایه‌بخش تغذیه اندام‌هاست."},
-  {q:"خلط صفرا چه کیفیتی دارد؟", c:"گرم و خشک", w:["گرم و تر","سرد و تر","سرد و خشک"], f:"صفرا گرم و خشک و لطیف‌کننده خون برای عروق باریک است."},
-  {q:"خلط بلغم چه کیفیتی دارد؟", c:"سرد و تر", w:["گرم و تر","سرد و خشک","گرم و خشک"], f:"بلغم سرد و تر و مایع مفاصل و ذخیره غذایی است."},
-  {q:"خلط سودا دارای کدام کیفیت است؟", c:"سرد و خشک", w:["سرد و تر","گرم و خشک","گرم و تر"], f:"سودا سرد و خشک و رسوب دهنده و مایه استحکام استخوان است."},
-  {q:"مزاج فصل بهار چیست؟", c:"معتدل مایل به گرم و تر", w:["گرم و خشک","سرد و خشک","سرد و تر"], f:"بهار معتدل و شبیه مزاج خلط دم است."},
-  {q:"مزاج فصل تابستان چیست؟", c:"گرم و خشک", w:["گرم و تر","سرد و تر","سرد و خشک"], f:"تابستان گرم و خشک (صفراوی) است."},
-  {q:"مزاج فصل پاییز چیست؟", c:"سرد و خشک", w:["سرد و تر","گرم و خشک","گرم و تر"], f:"پاییز سرد و خشک (سوداوی) است."},
-  {q:"مزاج فصل زمستان چیست؟", c:"سرد و تر", w:["سرد و خشک","گرم و تر","گرم و خشک"], f:"زمستان سرد و تر (بلغم‌زا) است."},
-  {q:"مزاج دوران جوانی چیست؟", c:"گرم و خشک", w:["گرم و تر","سرد و تر","سرد و خشک"], f:"جوانی دوره غلبه حرارت و خشکی (صفرا) است."},
-  {q:"مزاج سن رشد و کودکی چیست؟", c:"گرم و تر", w:["گرم و خشک","سرد و خشک","سرد و تر"], f:"کودکی اوج رطوبت و حرارت غریزی است."},
-  {q:"سن کهولت و پیری به کدام سمت می‌رود؟", c:"سرد و خشک", w:["گرم و تر","گرم و خشک","سرد و تر"], f:"پیری دوران افول حرارت غریزی و غلبه سردی و خشکی است."},
-  {q:"مزه ترش چه طبعی دارد؟", c:"سرد و خشک", w:["گرم و خشک","سرد و تر","گرم و تر"], f:"ترشی قابض و سرد و خشک است."},
-  {q:"مزه تند (حریف) نشانه چیست؟", c:"گرم و خشک شدید", w:["سرد و خشک","سرد و تر","گرم و تر"], f:"تندی اوج حرارت و خشکی است."},
-  {q:"مزه شیرین عموماً دلالت بر چیست؟", c:"گرم و تر", w:["سرد و خشک","سرد و تر","گرم و خشک"], f:"شیرینی متمایل به اعتدال و گرمی و تری است."},
-  {q:"طعم تلخ چه کیفیتی دارد؟", c:"گرم و خشک", w:["سرد و تر","سرد و خشک","گرم و تر"], f:"تلخی گرم و خشک و زداینده فضولات است."},
-  {q:"مزه بی‌مزه (تفه) علامت چیست؟", c:"سرد و تر", w:["گرم و خشک","سرد و خشک","گرم و تر"], f:"بی‌مزگی ناشی از غلبه بلغم و رطوبت است."},
-  {q:"منشأ اصلی حرارت غریزی و روح حیوانی کدام عضو است؟", c:"قلب", w:["کبد","مغز","معده"], f:"قلب گرم‌ترین عضو و معدن روح حیوانی است."},
-  {q:"محل تولید اخلاط چهارگانه کجاست؟", c:"کبد", w:["قلب","معده","طحال"], f:"کبد محل تبدیل کیموس معدی به اخلاط چهارگانه است."},
-  {q:"مزاج طبیعی مغز برای ادراک چگونه است؟", c:"سرد و تر", w:["گرم و خشک","گرم و تر","سرد و خشک"], f:"مغز نیازمند رطوبت و انعطاف جهت پذیرش صور حسی است."},
-  {q:"سرد و خشک‌ترین بافت بدن چیست؟", c:"استخوان", w:["چربی","عضله","پوست"], f:"استخوان به دلیل تراکم بالا، سرد و خشک‌ترین بافت است."},
-  {q:"چربی بدن (شحم) چه طبعی دارد؟", c:"سرد و تر", w:["گرم و خشک","سرد و خشک","گرم و تر"], f:"چربی‌ها دارای برودت و رطوبت متراکم هستند."},
-  {q:"نبض افراد دموی‌مزاج چگونه است؟", c:"عظیم، ممتلی و قوی", w:["صغیر و کند","باریک و سخت","نرم و بی‌رمق"], f:"نبض دموی پر، کشیده و قدرتمند است."},
-  {q:"پوست صفراوی‌ها معمولاً چه رنگی است؟", c:"گرم، خشک و متمایل به زردی", w:["سرد و سفید","سرد و تیره","گلگون و مرطوب"], f:"صفراوی‌ها رنگ زرد کهربایی و پوست گرم دارند."},
-  {q:"کسالت صبحگاهی و پرخوابی نشانه غلبه کدام خلط است؟", c:"بلغم", w:["صفرا","سودا","دم"], f:"رطوبت و سردی بلغم موجب سنگینی و خواب زیاد می‌شود."},
-  {q:"وسواس فکری و دیر به خواب رفتن علامت چیست؟", c:"غلبه سودا", w:["غلبه بلغم","غلبه دم","اعتدال مزاج"], f:"خشکی و برودت سودا فکر را آشفته و خواب را کم می‌کند."},
-  {q:"تلخی دهان صبحگاهی و تشنگی شدید علامت چیست؟", c:"غلبه صفرا", w:["غلبه بلغم","غلبه سودا","ضعف هاضمه"], f:"حرارت و خشکی صفرا سبب تلخی و عطش مفرط است."},
-  {q:"سنگینی سر و خمیازه مکرر نشانه چیست؟", c:"غلبه دم", w:["غلبه سودا","غلبه صفرا","غلبه رطوبت"], f:"امتلاء خون باعث سنگینی سر و کشیدگی بدن می‌شود."},
-  {q:"کدام حبوبات سرد و خشک است؟", c:"عدس", w:["نخود","لوبیا","باقلا"], f:"عدس قابض و سودازاست."},
-  {q:"طبیعت نخود چیست؟", c:"گرم و تر", w:["سرد و تر","سرد و خشک","گرم و خشک"], f:"نخود خون‌ساز عالی و گرم و تر است."},
-  {q:"زنجبیل دارای چه طبعی است؟", c:"گرم و خشک", w:["سرد و خشک","سرد و تر","گرم و تر"], f:"زنجبیل هاضم و مقوی معده سرد است."},
-  {q:"کاسنی چه طبع و اثری دارد؟", c:"سرد و تر - تعدیل کبد", w:["گرم و خشک","سرد و خشک","گرم و تر"], f:"کاسنی مفتح و خنک‌کننده کبد است."},
-  {q:"ماست تازه چه کیفیتی دارد؟", c:"سرد و تر", w:["گرم و خشک","گرم و تر","سرد و خشک"], f:"ماست سرد و تر است و مصلح آن نعناع و پونه است."},
-  {q:"مصلح غذایی چیست؟", c:"تعدیل‌کننده عوارض و اصلاح‌کننده هضم", w:["طعم‌دهنده صرف","داروی مسهل","غذای مکمل"], f:"مصلح، تیزی و افراط طبع غذا را تعدیل می‌کند."},
-  {q:"مصلح ماهی چیست؟", c:"خرما و گردو", w:["ماست","دوغ","آبغوره"], f:"ماهی سرد و تر است و با گرمیجات اصلاح می‌شود."},
-  {q:"گوشت گوسفند دارای چه طبعی است؟", c:"گرم و تر", w:["سرد و خشک","سرد و تر","گرم و خشک"], f:"گوشت گوسفندی صالح‌ترین گوشت با طبع گرم و تر است."},
-  {q:"گوشت گاو چه ویژگی مزاجی دارد؟", c:"سرد و خشک و غلیظ", w:["گرم و تر و لطیف","گرم و خشک","معتدل زود هضم"], f:"گوشت گاو دیرهضم و سودازاست."},
-  {q:"عسل طبیعی چه کیفیتی دارد؟", c:"گرم و خشک", w:["سرد و تر","سرد و خشک","معتدل"], f:"عسل جلادهنده و زداینده بلغم لزج است."},
-  {q:"هندوانه دارای چه طبعی است؟", c:"سرد و تر", w:["گرم و خشک","گرم و تر","سرد و خشک"], f:"هندوانه برودت‌زا و تسکین‌دهنده عطش است."},
-  {q:"خرما دارای چه طبعی است؟", c:"گرم و تر", w:["سرد و تر","سرد و خشک","سرد"], f:"خرما انرژی‌بخش و گرم و تر است."},
-  {q:"انگور رسیده شیرین چه طبعی دارد؟", c:"گرم و تر", w:["سرد و خشک","سرد و تر","گرم و خشک"], f:"انگور غذای مطلق و خونساز است."},
-  {q:"لیموترش چه طبعی دارد؟", c:"سرد و خشک", w:["گرم و تر","گرم و خشک","سرد و تر"], f:"لیموترش قاطع صفرا و حرارت است."},
-  {q:"سرکه انگور طبیعی چه طبعی دارد؟", c:"سرد و خشک", w:["گرم و تر","سرد و تر","گرم"], f:"سرکه نفوذکننده و سرد و خشک است."},
-  {q:"سکنجبین از ترکیب چه چیزهایی ساخته می‌شود؟", c:"سرکه و عسل (یا شکر)", w:["روغن و ماست","نمک و فلفل","شیره و آرد"], f:"سکنجبین ترکیبی معتدل از سرکه و عسل است."},
-  {q:"آب یخ ناشتا چه آسیبی به کبد می‌زند؟", c:"ایجاد کبد چرب و شوک برودتی", w:["تقویت هضم","تصفیه صفرا","افزایش اشتها"], f:"آب یخ ناگهان کبد گرم را سرد و مسدود می‌کند."},
-  {q:"سته ضروریه یعنی چه؟", c:"شش اصل ضروری برای حفظ سلامت", w:["شش داروی ترکیبی","شش عضو بدن","شش طعم غذا"], f:"هوا، غذا، حرکت، خواب، استفراغ و حالات روحی شش اصل هستند."},
-  {q:"سریع‌ترین اثر روحی بر مزاج مربوط به کدام است؟", c:"اعراض نفسانی (شادی، خشم و...)", w:["تغییر فصل","ورزش","نوع خواب"], f:"حالات روحی فوراً حرارت غریزی را جابجا می‌کنند."},
-  {q:"ورزش معتدل چه کمکی به بدن می‌کند؟", c:"تقویت حرارت غریزی و دفع سموم", w:["سرد کردن اندام‌ها","تخریب عضلات","تولید خلط فاسد"], f:"ورزش چراغ حرارت غریزی را روشن نگه می‌دارد."},
-  {q:"خواب روز و هنگام غروب چه عارضه‌ای دارد؟", c:"ازدیاد بلغم و تباهی چهره", w:["تقویت حافظه","کاهش صفرا","تقویت گوارش"], f:"خواب غروب موجب خمودگی و فساد هضم است."},
-  {q:"تعریق و ادرار جزء کدام اصل سته ضروریه است؟", c:"استفراغ و احتباس", w:["اعراض نفسانی","ماکول و مشروب","حرکت و سکون"], f:"خروج مواد زاید از اصول استفراغ است."},
-  {q:"مزاج جبلی چیست؟", c:"مزاج سرشتی و مادرزادی اولیه", w:["مزاج بیمار موقت","مزاجی که روزانه عوض شود","مزاج ناشی از دارو"], f:"مزاج جبلی سرشت پایه و اصلی هر فرد است."},
-  {q:"نرمی پوست و موهای لخت نشانه چیست؟", c:"غلبه رطوبت", w:["غلبه خشکی","غلبه حرارت شدید","غلبه برودت خشک"], f:"رطوبت مایه نرمی بافت‌ها و تارهای موست."},
-  {q:"موهای مجعد و زبر نشانه چیست؟", c:"مزاج گرم و خشک", w:["مزاج سرد و تر","رطوبت بالا","ضعف حرارت"], f:"حرارت و خشکی باعث پیچش مو می‌شود."},
-  {q:"مصلح نفخ حبوبات چیست؟", c:"زیره و آویشن", w:["گشنیز","غوره","سماق"], f:"زیره بادشکن و گرم‌کننده است."},
-  {q:"طبیعت سیاهدانه چیست؟", c:"گرم و خشک", w:["سرد و تر","سرد و خشک","معتدل"], f:"سیاهدانه مقطع اخلاط لزج و گرم و خشک است."},
-  {q:"اسطوخودوس به چه صفت مشهور است؟", c:"جاروب مغز از بلغم و سودا", w:["سردکننده کبد","خواب‌آور بی اثر","مولد خلط دم"], f:"اسطوخودوس پاک‌کننده مغز از فضولات بارد است."},
-  {q:"خوردن ماهی و ماست با هم چه خطری دارد؟", c:"برودت شدید و ضعف هضم و برص", w:["تقویت معده","سریع الهضم بودن","افزایش صفرا"], f:"ترکیب دو طبع سرد و تر کبد و اعصاب را سست می‌کند."},
-  {q:"کدام سبزی ضد بلغم ریه و معده است؟", c:"نعناع و آویشن", w:["کاهو","اسفناج","گشنیز"], f:"نعناع گرم و خشک و زداینده لزوجات است."},
-  {q:"کاهو چه طبعی دارد؟", c:"سرد و تر", w:["گرم و خشک","سرد و خشک","گرم و تر"], f:"کاهو مسکن حرارت و خواب‌آور است."},
-  {q:"مصلح کاهو چیست؟", c:"سکنجبین", w:["ماست","سرکه خالی","آب یخ"], f:"سکنجبین برودت کاهو را می‌شکند."},
-  {q:"روغن زیتون طبیعی چه کیفیتی دارد؟", c:"گرم و تر مایل به اعتدال", w:["سرد و تر","سرد و خشک","منجمد"], f:"روغن زیتون سالم و مایل به گرماست."},
-  {q:"کره حیوانی چه طبعی دارد؟", c:"گرم و تر", w:["سرد و خشک","سرد و تر","گرم و خشک"], f:"کره حیوانی مقوی و نرم‌کننده است."},
-  {q:"سیر و پیاز تند چه مزاجی دارند؟", c:"گرم و خشک", w:["سرد و خشک","سرد و تر","گرم و تر"], f:"سیر و پیاز تند و مفتح و شدیداً گرم و خشک هستند."},
-  {q:"خیار چه طبعی دارد؟", c:"سرد و تر", w:["گرم و خشک","سرد و خشک","گرم و تر"], f:"خیار سرد و تر و فرونشاننده عطش است."},
-  {q:"نمک طبیعی طعام چه خاصیتی دارد؟", c:"گرم و خشک و هاضم", w:["سرد و تر","سرد و خشک","خنک"], f:"نمک طبیعی برطرف‌کننده بلغم و تحریک‌کننده هضم است."},
-  {q:"چشیدن نمک قبل غذا چه مزیتی دارد؟", c:"تحریک ترشحات هاضمه و ضدعفونی", w:["سرد کردن معده","ضعف گوارش","افزایش خواب"], f:"نمک هضم را بیدار و فعال می‌کند."},
-  {q:"کدام مغز دانه سرد و خشک است؟", c:"شاه‌بلوط خام", w:["بادام","پسته","گردو"], f:"بلوط قابض و سرد و خشک است."},
-  {q:"بادام درختی شیرین چه مزاجی دارد؟", c:"گرم و تر مایل به اعتدال", w:["سرد و تر","سرد و خشک","گرم و خشک"], f:"بادام تقویت‌کننده مغز و گرم و تر است."},
-  {q:"گردو چه طبعی دارد؟", c:"گرم و خشک", w:["سرد و تر","سرد و خشک","گرم و تر"], f:"گردو گرم و خشک و مصلح پنیر است."},
-  {q:"پنیر تازه بدون مصلح چه طبعی دارد؟", c:"سرد و تر", w:["گرم و خشک","گرم و تر","سرد و خشک"], f:"پنیر تازه سرد و تر و نیازمند گردوست."},
-  {q:"زعفران چه اثری در بدن دارد؟", c:"مفرح قلب و هدایت‌کننده دارو", w:["سردکننده کبد","سودازا","خواب‌آور بدون نشاط"], f:"زعفران مقوی روح و شادی‌بخش است."},
-  {q:"دارچین دارای چه طبعی است؟", c:"گرم و خشک", w:["سرد و خشک","سرد و تر","گرم و تر"], f:"دارچین گرم‌کننده عضلات و هاضم است."},
-  {q:"هل چه خاصیتی دارد؟", c:"گرم و خشک و مقوی فم معده", w:["سرد و تر","سرد و خشک","معتدل"], f:"هل مقوی دهانه معده و خوشبوکننده است."},
-  {q:"گلاب مرغوب دارای چه کیفیتی است؟", c:"مرکب‌القوی و مقوی روح و قلب", w:["گرم و خشک شدید","سرد و خشک شدید","بلغم‌زا"], f:"گلاب آرام‌بخش قلب و مغز است."},
-  {q:"تخم شربتی در آب چه خاصیتی دارد؟", c:"لعاب مرطوب و تسکین تشنگی", w:["افزایش حرارت","سودازایی","تخریب معده"], f:"لعاب دانه‌ها تسکین‌دهنده حرارت و خشکی است."},
-  {q:"کدام گوشت پرنده لطیف‌تر و گرم‌تر است؟", c:"کبک و بلدرچین", w:["غاز پیر","شترمرغ یخ‌زده","اردک باتلاقی"], f:"پرندگان کوچک کوهی گوشت گرم و سبکی دارند."},
-  {q:"ماهی دودی و شور چه خلطی تولید می‌کند؟", c:"سودای سوخته", w:["دم صالح","بلغم پاک","صفرا سبک"], f:"نمک زیاد و دود باعث تولید سوداست."},
-  {q:"حجامت برای تعدیل کدام خلط کاربرد دارد؟", c:"تعدیل دم و کاهش حرارت", w:["دفع سودای عمقی","رفع بلغم سفت","کاهش وزن"], f:"حجامت حرارت و غلیان خون را کاهش می‌دهد."},
-  {q:"فصد (رگ‌زدن) برای چه موردی است؟", c:"کاهش حجم عمومی خون در امتلاء", w:["فقط سردرد ساده","درمان فوری کم‌خونی","تقویت حافظه"], f:"فصد برای تخلیه عمومی عروق استفاده می‌شود."},
-  {q:"زالودرمانی در چه مواردی موثر است؟", c:"رفع احتقان عروق ریز موضعی", w:["تخلیه معده","کاهش سودای مغز","درمان چاقی"], f:"زالو با بزاق خود جریان مویرگی را باز می‌کند."},
-  {q:"چرا مصرف زیاد سرکه برای اعصاب مضر است؟", c:"به علت نفوذ برودت و خشکی به عصب", w:["افزایش چربی خون","تولید جوش صفراوی","ایجاد پرخوابی"], f:"بافت عصبی از سردی و خشکی آسیب می‌بیند."},
-  {q:"بهترین زمان صرف غذا چیست؟", c:"هنگام اشتهای واقعی پس از تخلیه وعده قبل", w:["سر ساعت بدون میل","هر وقت در دسترس بود","روزی یک بار"], f:"ورود غذا روی غذای هضم‌نشده سبب فساد کیموس است."},
-  {q:"آب خنک زدن به پا پس از حمام چه فایده‌ای دارد؟", c:"بستن منافذ و حفظ حرارت غریزی", w:["ایجاد سرماخوردگی","سرد شدن استخوان","تولید بلغم"], f:"آب خنک منافذ را منقبض و حرارت را درون بدن نگه می‌دارد."},
-  {q:"بوییدن گل‌های معطر گرم چه تاثیری دارد؟", c:"تقویت روح نفسانی و رفع خمودگی مغز", w:["سردرد حتمی","کاهش حافظه","تولید عفونت"], f:"روایح گرم مغز سرد را سرحال می‌کنند."},
-  {q:"مصلح سردی گوشت گاو چیست؟", c:"سیر، دارچین و زنجبیل", w:["ماست","دوغ","خیار"], f:"ادویه‌های گرم سنگینی گوشت گاو را مهار می‌کنند."},
-  {q:"انار شیرین چه طبعی دارد؟", c:"معتدل مایل به سردی و تری", w:["گرم و خشک","سرد و خشک","بسیار گرم"], f:"انار شیرین مصفای کبد و خونساز است."},
-  {q:"نوشیدن آب بین لقمه‌های غذا چه ضرری دارد؟", c:"رقیق شدن شیره هاضمه و خام ماندن هضم", w:["تسریع هضم","جلوگیری از رفلاکس","تقویت معده"], f:"آب وسط غذا حرارت هضم را خاموش می‌کند."},
-  {q:"آویشن چه اثری بر معده دارد؟", c:"تقویت هاضمه و دفع لزوجات", w:["شل کردن معده","سودازایی","زخم سرد"], f:"آویشن گرم و خشک و تقویت‌کننده معده است."},
-  {q:"خاکشیر با آب جوش چه اثری دارد؟", c:"ملین و بازکننده روده‌ها", w:["قابض شدید","سردکننده کبد","سنگ‌ساز"], f:"خاکشیر با آب گرم ملین است."},
-  {q:"زردچوبه دارای چه خاصیتی است؟", c:"گرم و خشک و مفتح سدد کبد", w:["سرد و تر","سرد و خشک","خنک‌کننده"], f:"زردچوبه بازکننده گرفتگی‌های کبدی است."},
-  {q:"خوردن شام سنگین نزدیک خواب چه عارضه‌ای دارد؟", c:"کابوس، بوی بد دهان و سنگینی سر", w:["خواب راحت","تقویت قلب","افزایش هوش"], f:"صعود بخارات خام هضم‌نشده خواب را آشفته می‌کند."},
-  {q:"علامت اعتدال اخلاط چیست؟", c:"رنگ گلگون، خواب معتدل و نشاط", w:["بی‌خوابی زیاد","سفیدی بی‌رمق","زردی چشم"], f:"سلامت نشانه توازن چهار خلط است."},
-  {q:"کیموس معدی چیست؟", c:"غذای هضم‌شده در معده برای کبد", w:["خون خالص","صفرا","فضله روده"], f:"کیموس حاصل هضم اول است."},
-  {q:"هضم چهارگانه به ترتیب در کجاست؟", c:"معده، کبد، عروق، بافت‌ها", w:["کبد، معده، روده، کلیه","دهان، قلب، ریه، مغز","روده، پوست، مو، استخوان"], f:"چهار مرتبه هضم در این اندام‌ها تکمیل می‌شود."},
-  {q:"هدف غایی مزاج‌شناسی چیست؟", c:"حفظ تندرستی با سبک زندگی درست", w:["دارو درمانی بی‌رویه","رنگ‌شناسی صرف","محرومیت از غذاها"], f:"هدف حفظ تعادل فطری و پیشگیری است."},
-  {q:"قاعده کلی درمان غلبه خلط چیست؟", c:"علاج به ضد کیفیت غالب", w:["علاج به مثل","قطع آب و غذا","سکون مطلق"], f:"اصلاح مزاج با کیفیت متضاد انجام می‌شود."},
-  {q:"حکمت طبیعی چه رابطه‌ای با سلامت دارد؟", c:"انسان را جزئی هماهنگ با عالم آفرینش می‌داند", w:["علمی بی‌ارتباط به جهان","تنها متکی بر داروهای شیمیایی","محدود به تجربیات فردی"], f:"قوانین حاکم بر طبیعت بدن با ارکان عالم پیوند دارد."}
-];
+    const questions = [
+        { q: "ساختار بدنی شما چگونه است؟", 
+          options: [ {t: "درشت هیکل و عضلانی", v: "دم"}, {t: "متوسط و خشک", v: "صفرا"}, {t: "چاق و نرم", v: "بلغم"}, {t: "لاغر و استخوانی", v: "سودا"} ] },
+        { q: "رنگ پوست شما به کدام نزدیک‌تر است؟", 
+          options: [ {t: "سفید و شفاف", v: "بلغم"}, {t: "گندمی مایل به زرد", v: "صفرا"}, {t: "سرخ و گلگون", v: "دم"}, {t: "تیره یا سبزه", v: "سودا"} ] },
+        { q: "وضعیت موهای شما چگونه است؟", 
+          options: [ {t: "پرپشت، ضخیم و تیره", v: "دم"}, {t: "کم‌حجم و نازک", v: "صفرا"}, {t: "نرم و لخت", v: "بلغم"}, {t: "زبر و خشک", v: "سودا"} ] },
+        { q: "طعم مورد علاقه شما کدام است؟", 
+          options: [ {t: "شیرینی (عسل، شیره)", v: "دم"}, {t: "ترشی و سرکه", v: "صفرا"}, {t: "شوری و تندی", v: "سودا"}, {t: "ملس و کم‌مزه", v: "بلغم"} ] },
+        { q: "دمای بدن شما معمولاً چگونه است؟", 
+          options: [ {t: "همیشه احساس گرما دارم", v: "صفرا"}, {t: "معمولاً احساس سرما می‌کنم", v: "بلغم"}, {t: "دمای بدنم معتدل است", v: "دم"}, {t: "سرمایی هستم", v: "سودا"} ] },
+        { q: "خواب شما چگونه است؟", 
+          options: [ {t: "عمیق و طولانی", v: "بلغم"}, {t: "سبک و با خواب‌های زیاد", v: "صفرا"}, {t: "سنگین و راحت", v: "دم"}, {t: "دیر خوابیدن و بی‌قراری", v: "سودا"} ] },
+        { q: "واکنش شما به استرس چیست؟", 
+          options: [ {t: "خشم و تندی", v: "صفرا"}, {t: "اضطراب و فکر زیاد", v: "سودا"}, {t: "بی‌تفاوتی و آرامش", v: "بلغم"}, {t: "هیجان‌زدگی", v: "دم"} ] },
+        { q: "عملکرد گوارش شما چگونه است؟", 
+          options: [ {t: "بسیار سریع و گرسنگی زودرس", v: "صفرا"}, {t: "کند و دیر هضم", v: "بلغم"}, {t: "معتدل و منظم", v: "دم"}, {t: "نفخ و خشکی در دفع", v: "سودا"} ] },
+        { q: "سرعت عمل شما در کارها چقدر است؟", 
+          options: [ {t: "سریع و عجول", v: "صفرا"}, {t: "کند و با تأمل", v: "سودا"}, {t: "متناسب و دقیق", v: "دم"}, {t: "آرام و صبور", v: "بلغم"} ] },
+        { q: "وضعیت تشنگی شما چگونه است؟", 
+          options: [ {t: "همیشه تشنه‌ام", v: "صفرا"}, {t: "کم تشنه می‌شوم", v: "بلغم"}, {t: "تشنگی متوسط", v: "دم"}, {t: "خشکی دهان", v: "سودا"} ] }
+    ];
 
-const STORAGE_KEY = "healthgame_temperament_state";
-let questions = [];
-let idx = 0, score = 0, ans = false;
+    let currentQ = 0;
+    let scores = { "دم": 0, "صفرا": 0, "بلغم": 0, "سودا": 0 };
 
-function initApp() {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    try {
-      const data = JSON.parse(saved);
-      if (data && data.questions && data.questions.length === rawQuestions.length && data.idx < rawQuestions.length) {
-        questions = data.questions;
-        idx = data.idx;
-        score = data.score;
-        render();
-        return;
-      }
-    } catch (e) {
-      console.error(e);
+    function renderQ() {
+        if(currentQ >= questions.length) { showResult(); return; }
+        const q = questions[currentQ];
+        document.getElementById('question-text').innerText = q.q;
+        document.getElementById('progress').style.width = `${(currentQ/questions.length)*100}%`;
+        const container = document.getElementById('options-container');
+        container.innerHTML = '';
+        q.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt.t;
+            btn.onclick = () => { scores[opt.v]++; currentQ++; renderQ(); };
+            container.appendChild(btn);
+        });
     }
-  }
-  buildNewGame();
-}
 
-function buildNewGame() {
-  questions = rawQuestions.map(item => {
-    let opts = [item.c, ...item.w];
-    for (let i = opts.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [opts[i], opts[j]] = [opts[j], opts[i]];
+    function showResult() {
+        document.getElementById('quiz-area').style.display = 'none';
+        document.getElementById('result-area').style.display = 'block';
+        const top = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+        const desc = {
+            "دم": "مزاج شما متمایل به گرم و تر است. تعادل در خون و آرامش روانی ویژگی شماست.",
+            "صفرا": "مزاج شما متمایل به گرم و خشک است. دقت و تیزبینی در کنار فعالیت بالا دارید.",
+            "بلغم": "مزاج شما متمایل به سرد و تر است. آرامش و صبوری نقطه قوت شماست.",
+            "سودا": "مزاج شما متمایل به سرد و خشک است. تفکر عمیق و نظم، خصیصه شماست."
+        };
+        document.getElementById('result-title').innerText = top;
+        document.getElementById('result-desc').innerText = desc[top];
     }
-    return {
-      q: item.q,
-      o: opts,
-      a: opts.indexOf(item.c),
-      f: item.f
-    };
-  });
-  idx = 0;
-  score = 0;
-  saveProgress();
-  render();
-}
-
-function saveProgress() {
-  const state = {
-    questions: questions,
-    idx: idx,
-    score: score
-  };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-function render() {
-  ans = false;
-  if (idx >= questions.length) {
-    showEnd();
-    return;
-  }
-  
-  document.getElementById("quiz-screen").style.display = "block";
-  document.getElementById("res-screen").style.display = "none";
-  
-  const cur = questions[idx];
-  document.getElementById("qc").innerText = "پرسش " + (idx + 1) + " از " + questions.length;
-  document.getElementById("sc").innerText = "امتیاز: " + score;
-  document.getElementById("pb").style.width = ((idx) / questions.length * 100) + "%";
-  document.getElementById("qt").innerText = (idx + 1) + ". " + cur.q;
-  
-  const og = document.getElementById("og");
-  og.innerHTML = "";
-  const fb = document.getElementById("fb");
-  fb.className = "feedback";
-  fb.style.display = "none";
-  document.getElementById("bn").style.display = "none";
-
-  cur.o.forEach((txt, i) => {
-    const btn = document.createElement("button");
-    btn.className = "btn-opt";
-    btn.innerText = txt;
-    btn.onclick = () => select(i);
-    og.appendChild(btn);
-  });
-}
-
-function select(sel) {
-  if (ans) return;
-  ans = true;
-  const cur = questions[idx];
-  const btns = document.querySelectorAll(".btn-opt");
-  const fb = document.getElementById("fb");
-  
-  btns.forEach((b, i) => {
-    b.disabled = true;
-    if (i === cur.a) b.classList.add("correct");
-  });
-
-  if (sel === cur.a) {
-    score++;
-    fb.className = "feedback correct";
-    fb.innerText = "✓ پاسخ صحیح است! " + cur.f;
-  } else {
-    btns[sel].classList.add("wrong");
-    fb.className = "feedback wrong";
-    fb.innerText = "✗ نادرست! " + cur.f;
-  }
-  fb.style.display = "block";
-  document.getElementById("sc").innerText = "امتیاز: " + score;
-  document.getElementById("bn").style.display = "inline-block";
-  saveProgress();
-}
-
-function nextQ() {
-  idx++;
-  saveProgress();
-  if (idx < questions.length) {
-    render();
-  } else {
-    showEnd();
-  }
-}
-
-function showEnd() {
-  localStorage.removeItem(STORAGE_KEY);
-  document.getElementById("quiz-screen").style.display = "none";
-  document.getElementById("res-screen").style.display = "block";
-  document.getElementById("fs").innerText = score + " / " + questions.length;
-  let p = (score / questions.length) * 100;
-  let desc = p >= 85 ? "عالی! تسلط کامل و عمیقی بر مبانی مزاج و ارکان دارید." : (p >= 60 ? "خوب! دانش پایه‌ای مناسبی دارید؛ با مرور بیشتر استاد خواهید شد." : "نیاز به مطالعه بیشتر مبانی سته ضروریه و اخلاط.");
-  document.getElementById("fe").innerText = desc;
-}
-
-function confirmReset() {
-  if (confirm("آیا مایلید آزمون از ابتدا شروع شود؟ پیشرفت فعلی پاک خواهد شد.")) {
-    restart();
-  }
-}
-
-function restart() {
-  localStorage.removeItem(STORAGE_KEY);
-  buildNewGame();
-}
-
-initApp();
+    renderQ();
 </script>
 </body>
 </html>
