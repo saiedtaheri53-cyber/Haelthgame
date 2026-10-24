@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پورتال بازی‌های سلامت</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background-color: #f4f7f6; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        button { background: #28a745; color: white; border: none; padding: 15px; margin: 10px 0; border-radius: 10px; width: 100%; font-size: 16px; cursor: pointer; }
+        .hidden { display: none; }
+        .contact { margin-top: 20px; font-size: 14px; color: #555; }
+    </style>
+</head>
+<body>
+
+    <!-- صفحه پورتال -->
+    <div id="portal-screen" class="card">
+        <h1>پورتال بازی‌های سلامت</h1>
+        <div id="game-list">
+            <button onclick="loadGame(1)">بازی ۱: ارکان اربعه</button>
+            <button disabled>بازی‌های بعدی (در دست توسعه...)</button>
+        </div>
+        <div class="contact">
+            <p>ارتباط با ما:</p>
+            <p>ایتا: <a href="https://eitaa.com/pazashke">pazashke</a></p>
+            <p>ایمیل: saiedtaheri53@gmail.com</p>
+        </div>
+    </div>
+
+    <!-- صفحه بازی -->
+    <div id="game-screen" class="card hidden">
+        <h2 id="game-title"></h2>
+        <p id="question-text"></p>
+        <div id="options-container"></div>
+        <button onclick="goBack()" style="background: #6c757d;">بازگشت به فهرست</button>
+    </div>
+
+    <script>
+        // داده‌های بازی‌ها
+        const gamesData = {
+            1: {
+                title: "ارکان اربعه",
+                questions: [
+                    {w: "آیا آتش دارای طبع گرم و خشک است؟", options: ["بله", "خیر"], answer: "بله", h: "آتش نماد گرمی و خشکی است."}
+                    // ... ۱۰۰ سوال ارکان اربعه اینجا قرار می‌گیرد
+                ]
+            }
+        };
+
+        let currentGame = null;
+        let currentQIndex = 0;
+
+        function loadGame(id) {
+            currentGame = gamesData[id];
+            document.getElementById('portal-screen').classList.add('hidden');
+            document.getElementById('game-screen').classList.remove('hidden');
+            document.getElementById('game-title').innerText = currentGame.title;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = currentGame.questions[currentQIndex];
+            document.getElementById('question-text').innerText = q.w;
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(opt);
+                container.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(answer) {
+            const q = currentGame.questions[currentQIndex];
+            if(answer === q.answer) alert("آفرین! درست بود.");
+            else alert("اشتباه بود. " + q.h);
+            
+            currentQIndex++;
+            if(currentQIndex < currentGame.questions.length) showQuestion();
+            else alert("بازی تمام شد!");
+        }
+
+        function goBack() {
+            document.getElementById('game-screen').classList.add('hidden');
+            document.getElementById('portal-screen').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

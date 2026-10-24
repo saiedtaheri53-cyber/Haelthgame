@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی سته ضروریه - طب علم سلامتی</title>
+    <style>
+        :root { --primary-color: #27ae60; --dark-color: #2c3e50; --light-bg: #f4f7f6; }
+        body { font-family: Tahoma, Arial, sans-serif; background-color: var(--light-bg); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        #game-container { width: 100%; max-width: 500px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .nav-bar { width: 100%; max-width: 540px; display: flex; justify-content: space-between; margin-bottom: 15px; }
+        button { cursor: pointer; padding: 10px 20px; border: none; border-radius: 8px; font-weight: bold; }
+        .btn-nav { background-color: var(--dark-color); color: white; }
+        .option-btn { display: block; width: 100%; margin: 10px 0; padding: 15px; background: #ecf0f1; border: 2px solid #bdc3c7; border-radius: 10px; text-align: right; transition: 0.3s; }
+        .option-btn:hover { background: #dcdde1; }
+        .correct { background-color: #2ecc71 !important; color: white; border-color: #27ae60; }
+        .wrong { background-color: #e74c3c !important; color: white; border-color: #c0392b; }
+        #score-board { font-size: 1.2em; font-weight: bold; color: var(--primary-color); margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="nav-bar">
+    <button class="btn-nav" onclick="window.location.href='index.html'">خانه</button>
+    <button class="btn-nav" onclick="alert('ارتباط با سازنده: ایتا - ...')">تماس</button>
+</div>
+
+<div id="game-container">
+    <div id="score-board">امتیاز: <span id="score">0</span></div>
+    <h3 id="question-text">در حال بارگذاری سوال...</h3>
+    <div id="options-container"></div>
+</div>
+
+<script>
+    const questions = [
+        { q: "سته ضروریه شامل چند اصل اساسی برای حفظ سلامتی است؟", o: ["۴", "۶", "۸", "۱۲"], a: 1 },
+        { q: "اولین اصل از سته ضروریه چیست؟", o: ["غذا و نوشیدنی", "خواب و بیداری", "هوای محیط", "حرکت و سکون"], a: 2 },
+        { q: "کدام عامل در سته ضروریه به احتباس و دفع مربوط می‌شود؟", o: ["خواب", "غذا", "استفراغ و احتباس", "هوای محیط"], a: 2 },
+        { q: "هوای محیط چه تاثیری بر روح و بدن دارد؟", o: ["تاثیری ندارد", "فقط بر پوست", "تغییر کیفیت مزاجی", "تنها در تابستان مهم است"], a: 2 },
+        { q: "خواب معتدل چه تاثیری بر بدن دارد؟", o: ["هضم غذا را مختل می‌کند", "رطوبت بدن را زیاد می‌کند", "پخت غذا و آرامش اعصاب", "باعث لاغری می‌شود"], a: 2 },
+        // ... اینجا می‌توانید تا ۱۰۰ سوال را ادامه دهید
+        { q: "آیا ورزش شدید بعد از صرف غذای سنگین توصیه می‌شود؟", o: ["بله", "خیر", "بستگی دارد", "فقط در زمستان"], a: 1 }
+    ];
+
+    let currentIdx = parseInt(localStorage.getItem('game002_idx')) || 0;
+    let score = parseInt(localStorage.getItem('game002_score')) || 0;
+
+    function render() {
+        if(currentIdx >= questions.length) {
+            document.getElementById('question-text').innerText = "پایان بازی! امتیاز نهایی: " + score;
+            document.getElementById('options-container').innerHTML = '<button class="btn-nav" onclick="resetGame()">شروع مجدد</button>';
+            return;
+        }
+        const q = questions[currentIdx];
+        document.getElementById('score').innerText = score;
+        document.getElementById('question-text').innerText = (currentIdx + 1) + ". " + q.q;
+        const cont = document.getElementById('options-container');
+        cont.innerHTML = '';
+        q.o.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => check(i, btn);
+            cont.appendChild(btn);
+        });
+    }
+
+    function check(idx, btn) {
+        if(idx === questions[currentIdx].a) {
+            score++;
+            btn.classList.add('correct');
+        } else {
+            btn.classList.add('wrong');
+        }
+        setTimeout(() => {
+            currentIdx++;
+            localStorage.setItem('game002_idx', currentIdx);
+            localStorage.setItem('game002_score', score);
+            render();
+        }, 800);
+    }
+
+    function resetGame() {
+        localStorage.removeItem('game002_idx');
+        localStorage.removeItem('game002_score');
+        currentIdx = 0; score = 0;
+        render();
+    }
+
+    render();
+</script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ارکان اربعه - طب، علم سلامتی</title>
+    <style>
+        :root { --primary: #2c3e50; --accent: #27ae60; --light: #f4f7f6; --secondary: #7f8c8d; }
+        body { font-family: Tahoma, sans-serif; background-color: var(--light); display: flex; justify-content: center; padding: 10px; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+        .q-num { font-size: 0.85rem; color: #777; margin-bottom: 10px; text-align: center; }
+        .question { font-size: 1.1rem; font-weight: bold; margin-bottom: 20px; line-height: 1.6; }
+        .btn { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; text-align: right; background: white; transition: 0.2s; }
+        .btn:hover { background: #eef; }
+        .btn.correct { background: #d4edda !important; border-color: #27ae60; }
+        .btn.wrong { background: #f8d7da !important; border-color: #e74c3c; }
+        .nav-btns { display: flex; justify-content: space-between; margin-top: 20px; gap: 5px; }
+        .nav-btn { flex: 1; padding: 10px; border: none; border-radius: 5px; cursor: pointer; background: var(--primary); color: white; font-size: 0.9rem; }
+        .action-container { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 15px; }
+        .action-btn { padding: 8px; font-size: 0.8rem; cursor: pointer; border-radius: 5px; border: 1px solid #ccc; background: #fff; }
+        .contact-container { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 10px; }
+        .contact-btn { padding: 8px; font-size: 0.8rem; cursor: pointer; border-radius: 5px; border: none; background: #3498db; color: white; text-align: center; text-decoration: none; }
+        .hint-box { margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 5px; font-size: 0.9rem; display: none; color: #856404; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div id="q-num" class="q-num">سوال ۱ از ۱۰۰</div>
+    <div id="q-text" class="question">...</div>
+    <div id="options"></div>
+    
+    <div class="action-container">
+        <button class="action-btn" onclick="showHint()">راهنما</button>
+        <button class="action-btn" onclick="showAnswer()">پاسخ</button>
+        <button class="action-btn" onclick="restartQuiz()">شروع مجدد</button>
+        <button class="action-btn" onclick="goBack()">بازگشت به منو</button>
+    </div>
+    
+    <div class="contact-container">
+        <a href="https://eitaa.com/pazashke" class="contact-btn">ارتباط (ایتا)</a>
+        <a href="mailto:saiedtaheri53@gmail.com" class="contact-btn" style="background:#e67e22">ارتباط (ایمیل)</a>
+    </div>
+    
+    <div id="hint-box" class="hint-box"></div>
+    <div class="nav-btns">
+        <button class="nav-btn" onclick="prevQ()">« قبلی</button>
+        <button class="nav-btn" onclick="nextQ()">بعدی »</button>
+    </div>
+</div>
+
+<script>
+    // [محتوای آرایه سوالات مشابه قبل]
+    const questions = [
+        {"w":"کدام عنصر از عناصر ارکان اربعه، گرم و خشک است؟","options":["آتش","هوا","آب","خاک"],"answer":"آتش","h":"مزاج آن صفراوی است"},
+        {"w":"کدام عنصر از عناصر ارکان اربعه، گرم و تر است؟","options":["هوا","آتش","آب","خاک"],"answer":"هوا","h":"خون با آن هم‌خوان است"},
+        {"w":"کدام عنصر از عناصر ارکان اربعه، سرد و تر است؟","options":["آب","آتش","هوا","خاک"],"answer":"آب","h":"بلغم با آن هم‌خوان است"},
+        {"w":"کدام عنصر از عناصر ارکان اربعه، سرد و خشک است؟","options":["خاک","آتش","هوا","آب"],"answer":"خاک","h":"سودا با آن هم‌خوان است"}
+        // ... (سایر سوالات)
+    ];
+
+    let current = 0;
+    const qNum = document.getElementById('q-num');
+    const qText = document.getElementById('q-text');
+    const opts = document.getElementById('options');
+    const hintBox = document.getElementById('hint-box');
+
+    function shuffleArray(array) {
+        return array.sort(() => Math.random() - 0.5);
+    }
+
+    function render() {
+        const q = questions[current];
+        qNum.innerText = `سوال ${current + 1} از ${questions.length}`;
+        qText.innerText = q.w;
+        hintBox.style.display = 'none';
+        opts.innerHTML = '';
+        
+        // کپی کردن گزینه‌ها برای بر هم زدن بدون تغییر در آرایه اصلی
+        const shuffledOptions = shuffleArray([...q.options]);
+        
+        shuffledOptions.forEach(opt => {
+            const btn = document.createElement('div');
+            btn.className = 'btn';
+            btn.innerText = opt;
+            btn.onclick = () => {
+                if(opt === q.answer) btn.className = 'btn correct';
+                else btn.className = 'btn wrong';
+            };
+            opts.appendChild(btn);
+        });
+    }
+
+    function showHint() { hintBox.innerText = "راهنما: " + questions[current].h; hintBox.style.display = 'block'; }
+    function showAnswer() { 
+        const optsNodes = opts.querySelectorAll('.btn');
+        optsNodes.forEach(n => {
+            if(n.innerText === questions[current].answer) n.className = 'btn correct';
+        });
+    }
+    function restartQuiz() { current = 0; render(); }
+    function goBack() { window.location.href = 'index.html'; }
+    function nextQ() { if(current < questions.length - 1) { current++; render(); } }
+    function prevQ() { if(current > 0) { current--; render(); } }
+    
+    render();
+</script>
+</body>
+</html>
