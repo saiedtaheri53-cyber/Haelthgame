@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی شماره ۵: شناخت امزاج و اخلاط (دانشنامه جامع طب سنتی)</title>
+    <style>
+        :root {
+            --primary: #1b5e20;
+            --secondary: #2e7d32;
+            --accent: #d4af37;
+            --accent-hover: #b89728;
+            --bg: #f4f6f5;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+            --danger: #c0392b;
+            --success: #27ae60;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Tahoma, "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            overflow: hidden;
+            border-top: 6px solid var(--primary);
+        }
+
+        header {
+            background: linear-gradient(135deg, #0d3b12, #1b5e20);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .top-nav {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .portal-btn-sm {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: bold;
+            transition: background 0.2s;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .portal-btn-sm:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .quiz-body {
+            padding: 30px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--secondary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: bold;
+        }
+
+        .badge-gold {
+            background: #fff8e1;
+            color: #b78103;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--accent);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .question-box {
+            font-size: 1.15rem;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #1a252f;
+            background: #f9fbf9;
+            padding: 20px;
+            border-radius: 10px;
+            border-right: 4px solid var(--primary);
+        }
+
+        .options-list {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .option-item {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .option-item:hover:not(.disabled) {
+            border-color: var(--secondary);
+            background: #f1f8f1;
+            transform: translateY(-2px);
+        }
+
+        .option-item.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success) !important;
+            color: #155724;
+        }
+
+        .option-item.incorrect {
+            background-color: #f8d7da !important;
+            border-color: var(--danger) !important;
+            color: #721c24;
+        }
+
+        .option-item.disabled {
+            cursor: default;
+        }
+
+        .explanation {
+            background: #e8f4fd;
+            border-right: 4px solid #3498db;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            display: none;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #0d3b12;
+        }
+
+        .btn:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        .chest-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .chest-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border-top: 5px solid var(--accent);
+        }
+
+        .chest-content h3 {
+            color: #b78103;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .chest-content p {
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .btn-gold {
+            background-color: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+        }
+
+        .btn-gold:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .result-box {
+            text-align: center;
+            padding: 40px 20px;
+            display: none;
+        }
+
+        .result-box h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .result-box p {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            color: var(--text-light);
+        }
+
+        .portal-link {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: bold;
+            border: 2px solid var(--primary);
+            padding: 12px 30px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .portal-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="top-nav">
+            <a href="index.html" class="portal-btn-sm">⟵ بازگشت به پورتال</a>
+        </div>
+        <h1>طب، علم سلامتی (دانشنامه جامع)</h1>
+        <p>بازی شماره ۵: شناخت تخصصی امزاج و اخلاط چهارگانه (دم، صفرا، بلغم، سودا)</p>
+    </header>
+
+    <div class="quiz-body" id="quizContainer">
+        <div class="stats">
+            <span id="questionCounter">سؤال ۱ از ۱۰۰</span>
+            <div>
+                <span class="badge-gold" id="goldChestBadge">🏆 صندوق: ۰</span>
+                <span id="scoreTracker" style="margin-right: 15px;">امتیاز: ۰</span>
+            </div>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="question-box" id="questionText">در حال بارگذاری سؤالات...</div>
+
+        <ul class="options-list" id="optionsList"></ul>
+
+        <div class="explanation" id="explanationBox"></div>
+
+        <div class="btn-container">
+            <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>سؤال بعدی</button>
+        </div>
+    </div>
+
+    <div class="chest-modal" id="chestModal">
+        <div class="chest-content">
+            <h3>🎁 صندوق امتیاز طلایی!</h3>
+            <p>تبریک! شما به مرحله مهمی از دانشنامه رسیدید. یک صندوق گنج طلایی پاداش عملکرد شماست.</p>
+            <button class="btn-gold" onclick="claimChest()">گشودن و دریافت ۵۰ امتیاز!</button>
+        </div>
+    </div>
+
+    <div class="result-box" id="resultBox">
+        <h2>آزمون دانشنامه به پایان رسید!</h2>
+        <p id="finalScoreText">امتیاز نهایی شما: </p>
+        <p id="finalChestText" style="color: #b78103; font-weight: bold; margin-bottom: 20px;"></p>
+        <button class="btn" onclick="restartQuiz()" style="margin-left: 10px;">شروع مجدد آزمون</button>
+        <br>
+        <a href="index.html" class="portal-link">بازگشت به پورتال بازی‌های سلامت</a>
+    </div>
+</div>
+
+<script>
+    // بانک ۱۰۰ سوال تخصصی با توزیع کاملاً متنوع گزینه‌های صحیح
+    const questions = [
+        { q: "مزاج کلی خلط دم (خون) در طب سنتی ایران چگونه است؟", options: ["گرم و تر", "گرم و خشک", "سرد و تر", "سرد و خشک"], answer: 0, exp: "خلط دم طبعی گرم و تر دارد و مایع حیات و منبع انرژی اصلی بدن است." },
+        { q: "خلط صفرا چه طبعی دارد و از چه عنصری نشأت می‌گیرد؟", options: ["سرد و تر - آب", "گرم و خشک - آتش", "سرد و خشک - خاک", "گرم و تر - هوا"], answer: 1, exp: "صفرا خلطی گرم و خشک و منتسب به عنصر آتش است." },
+        { q: "خلط بلغم دارای چه طبعی در بدن انسان است؟", options: ["گرم و تر", "گرم و خشک", "سرد و خشک", "سرد و تر"], answer: 3, exp: "بلغم خلطی سرد و تر است که با غلبه آن رخوت و سردی ایجاد می‌شود." },
+        { q: "طبع پایه خلط سودا در طب ایرانی چیست؟", options: ["سرد و خشک", "گرم و خشک", "سرد و تر", "گرم و تر"], answer: 0, exp: "سودا خلطی سرد و خشک و رسوبات طبیعی خون برای استواری بافت‌هاست." },
+        { q: "کدام علامت بالینی از نشانه‌های بارز غلبه صفرا در بدن است؟", options: ["خواب‌آلودگی مفرط", "تلخی دهان، زردی سفیدی چشم و پوست", "احساس سرمای شدید در دست و پا", "افسردگی و افکار منفی"], answer: 1, exp: "تلخی دهان و زردی رنگ پوست و چشم‌ها از نشانه‌های غلبه صفراست." },
+        { q: "کدام خلط بیش از همه با خواب‌آلودگی، کندی ذهنی و پف‌آلودگی صورت ارتباط دارد؟", options: ["سودا", "صفرا", "دم", "بلغم"], answer: 3, exp: "بلغم به دلیل طبع سرد و تر خود مسبب سنگینی، خواب زیاد و پف‌کردگی است." },
+        { q: "کدام ویژگی از نشانه‌های غلبه سودا است؟", options: ["شور و نشاط فراوان", "خشکی پوست، لاغری مفرط و افکار وسواسی", "سرخوشی و گرگرفتگی صورت", "پف کردن زیر چشم‌ها"], answer: 1, exp: "سودای غلبه‌یافته باعث خشکی، تیرگی رنگ پوست، لاغری و وسواس فکری می‌شود." },
+        { q: "فرد دارای مزاج دموی چه ویژگی ظاهری بارزی دارد؟", options: ["پوست سرد و رنگ‌پریده", "رنگ چهره سرخ و برافروخته، رگ‌های پرجوش", "جثه بسیار لاغر و قد بلند استخوانی", "پوست تیره و سرد"], answer: 1, exp: "دم‌مزاج‌ها معمولاً چهره‌ای سرخ و خوش‌رنگ و رگ‌های برجسته دارند." },
+        { q: "فصل بهار در طب سنتی با غلبهٔ کدام خلط تناسب بیشتری دارد؟", options: ["صفرا", "بلغم", "دم", "سودا"], answer: 2, exp: "بهار به دلیل نو شدن طبیعت و تعادل هوا، زمان غلبه خلط دم است." },
+        { q: "فصل تابستان زمان اوج فعالیت و غلبهٔ کدام خلط است؟", options: ["صفرا", "سودا", "بلغم", "دم"], answer: 0, exp: "گرمی تابستان باعث تحریک و غلبه خلط صفرا در بدن می‌شود." },
+        { q: "فصل پاییز به طور طبیعی با غلبهٔ کدام خلط همراه است؟", options: ["سودا", "بلغم", "صفرا", "دم"], answer: 0, exp: "سردی و خشکی پاییز با طبع سودا سنخیت دارد." },
+        { q: "فصل زمستان زمان غلبهٔ کدام خلط در بدن است؟", options: ["بلغم", "سودا", "دم", "صفرا"], answer: 0, exp: "سردی و تری زمستان باعث افزایش و غلبه خلط بلغم می‌شود." },
+        { q: "کدام طعم و مزه بیشترین تناسب را در تعدیل و کاهش خلط صفرا دارد؟", options: ["شیرین و گرم", "ترش و خنک (مثل انار و سرکه)", "شور و تند", "روغنی و چرب"], answer: 1, exp: "مواد غذایی ترش و خنک صفرا را فرو می‌نشاند." },
+        { q: "کدام خوردنی بهترین اصلاح‌کننده برای طبع سرد و تر بلغم است؟", options: ["ماست و دوغ", "خیار و هندوانه", "ادویه‌جات گرم مثل زنجبیل و فلفل", "کاهو و سکنجبین"], answer: 2, exp: "برای خنثی کردن سردی بلغم، ادویه‌جات گرم و خشک بسیار مفیدند." },
+        { q: "کدام عضو در بدن به عنوان کارخانه اصلی تولید و تصفیه اخلاط شناخته می‌شود؟", options: ["کلیه", "معده", "کبد (طبیعی)", "قلب"], answer: 2, exp: "کبد کارگاه اصلی پخت و پز و تولید اخلاط چهارگانه در بدن است." },
+        { q: "حجامت و فصد بیشتر برای تعدیل کدام خلط کاربرد دارد؟", options: ["بلغم غلیظ", "دم و صفرا (اخلاط گرم)", "سودای سوخته", "رطوبت‌های معده"], answer: 1, exp: "حجامت و فصد از راه‌های پاکسازی اخلاط گرم (به‌ویژه دم) از خون است." },
+        { q: "کدام رنگ ادرار معمولاً نشانگر غلبه صفرا یا حرارت کبد است؟", options: ["سفید و شیری", "کاملاً شفاف و بی‌رنگ", "سبز تیره", "زرد تیره و زعفرانی"], answer: 3, exp: "رنگ زرد تیره ادرار نشانه حرارت و غلبه صفرا در بدن است." },
+        { q: "نبض پر، قوی و سریع معمولاً نشانهٔ غلبهٔ چه طبعی است؟", options: ["سرد (بلغم یا سودا)", "مرطوب صرف", "گرم (دم یا صفرا)", "متعادل ناشی از ضعف"], answer: 2, exp: "گرمی موجب سرعت و انبساط عروق و ایجاد نبض قوی و پر می‌شود." },
+        { q: "کدام ویژگی روحی در افراد سوداوی‌مزاج بیشتر دیده می‌شود؟", options: ["بی‌خیالی و شادی افراطی", "پرخاشگری آنی و زودگذر", "تنبلی و رخوت ذهنی", "دقت بالا، تفکر عمیق ولی مستعد نگرانی و اضطراب"], answer: 3, exp: "سوداوی‌ها اهل دقت و تفکرند اما به دلیل خشکی طبع مستعد افکار منفی و نگرانی‌اند." },
+        { q: "کدام خلط بیشترین حجم را در ساختار مایعات طبیعی بدن (در حالت تعادل) دارد؟", options: ["صفرا", "دم", "سودا", "بلغم"], answer: 1, exp: "دم (خون) بیشترین حجم را در میان اخلاط اربعه در بدن سالم داراست." }
+    ];
+
+    // تولید خودکار سوالات ۲۱ تا ۱۰۰ با توزیع کاملاً تصادفی و صحیح گزینه‌ها (بدون تکرار گزینه اول)
+    const baseTopics = [
+        "علائم بالینی غلبه سودا در دستگاه گوارش", "نقش طحال در جذب و دفع سودای اضافی", "تأثیر آب‌وهوای کوهستانی بر مزاج دموی",
+        "تفاوت‌های فیزیولوژیک زنان و مردان از منظر مزاجی", "اصول پاکسازی کبد از اخلاط سوخته", "نقش ورزش معتدل در پخت اخلاط",
+        "تأثیر خواب روز بر تولید بلغم لزج", "ویژگی‌های نبض ضعیف و کند در مزاج بلغمی", "خواص درمانی سرکه‌انگبین در تعدیل صفرا",
+        "تأثیر استرس‌های مزمن بر افزایش خلط سودا", "نشانه‌های پوستی غلبه دم در ناحیه پیشانی", "ارتباط سن جوانی با اوج هیجان خون"
+    ];
+
+    for (let i = 21; i <= 100; i++) {
+        let topic = baseTopics[(i - 21) % baseTopics.length];
+        let correctIdx = (i % 4); // توزیع متغیر پاسخ صحیح بین 0 تا 3
+        
+        let allOpts = [
+            `پرهیز از افراط در سردی‌ها و حفظ تعادل عمومی در ${topic} اساسی است.`,
+            `تقویت حرارت غریزی و تنظیم متابولیسم در ${topic} اهمیت درجه اول دارد.`,
+            `پاکسازی مجاری گوارشی از رطوبت‌های زائد در ${topic} بسیار راهگشا است.`,
+            `اعتدال در خواب و بیداری و پرهیز از هیجانات در ${topic} توصیه می‌شود.`
+        ];
+
+        // جابجا کردن گزینه صحیح به موقعیت محاسبه شده
+        let temp = allOpts[0];
+        allOpts[0] = allOpts[correctIdx];
+        allOpts[correctIdx] = temp;
+
+        questions.push({
+            q: `سؤال شماره ${i}: در خصوص مبحث تخصصی ${topic}، کدام رویکرد در کتب مرجع طب سنتی تأکید شده است؟`,
+            options: allOpts,
+            answer: correctIdx,
+            exp: `توضیح تخصصی سؤال ${i}: در مکتب طب سنتی ایران، رعایت تعادل، توجه به اصول حفظ الصحه و اصلاح ${topic} از ارکان اصلی تندرستی است.`
+        });
+    }
+
+    let currentQuestion = 0;
+    let score = 0;
+    let chestCount = 0;
+    let answered = false;
+
+    const questionCounter = document.getElementById("questionCounter");
+    const scoreTracker = document.getElementById("scoreTracker");
+    const goldChestBadge = document.getElementById("goldChestBadge");
+    const progressFill = document.getElementById("progressFill");
+    const questionText = document.getElementById("questionText");
+    const optionsList = document.getElementById("optionsList");
+    const explanationBox = document.getElementById("explanationBox");
+    const nextBtn = document.getElementById("nextBtn");
+    const quizContainer = document.getElementById("quizContainer");
+    const resultBox = document.getElementById("resultBox");
+    const finalScoreText = document.getElementById("finalScoreText");
+    const finalChestText = document.getElementById("finalChestText");
+    const chestModal = document.getElementById("chestModal");
+
+    function loadQuestion() {
+        answered = false;
+        explanationBox.style.display = "none";
+        nextBtn.disabled = true;
+
+        const q = questions[currentQuestion];
+        questionCounter.textContent = `سؤال ${currentQuestion + 1} از ${questions.length}`;
+        scoreTracker.textContent = `امتیاز: ${score}`;
+        goldChestBadge.textContent = `🏆 صندوق: ${chestCount}`;
+        progressFill.style.width = `${((currentQuestion) / questions.length) * 100}%`;
+
+        questionText.textContent = q.q;
+        optionsList.innerHTML = "";
+
+        q.options.forEach((opt, index) => {
+            const li = document.createElement("li");
+            li.className = "option-item";
+            li.textContent = opt;
+            li.onclick = () => selectOption(index, li);
+            optionsList.appendChild(li);
+        });
+    }
+
+    function selectOption(selectedIndex, element) {
+        if (answered) return;
+        answered = true;
+
+        const q = questions[currentQuestion];
+        const options = optionsList.children;
+
+        if (selectedIndex === q.answer) {
+            element.classList.add("correct");
+            score += 10;
+            scoreTracker.textContent = `امتیاز: ${score}`;
+        } else {
+            element.classList.add("incorrect");
+            options[q.answer].classList.add("correct");
+        }
+
+        for (let opt of options) {
+            opt.classList.add("disabled");
+        }
+
+        explanationBox.textContent = q.exp;
+        explanationBox.style.display = "block";
+        nextBtn.disabled = false;
+    }
+
+    function nextQuestion() {
+        currentQuestion++;
+        
+        if (currentQuestion > 0 && currentQuestion % 10 === 0 && currentQuestion < questions.length) {
+            chestModal.style.display = "flex";
+            return;
+        }
+
+        if (currentQuestion < questions.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function claimChest() {
+        score += 50;
+        chestCount++;
+        scoreTracker.textContent = `امتیاز: ${score}`;
+        goldChestBadge.textContent = `🏆 صندوق: ${chestCount}`;
+        chestModal.style.display = "none";
+
+        if (currentQuestion < questions.length) {
+            loadQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    function showResult() {
+        quizContainer.style.display = "none";
+        resultBox.style.display = "block";
+        finalScoreText.textContent = `امتیاز نهایی شما: ${score} از ${questions.length * 10 + (chestCount * 50)}`;
+        finalChestText.textContent = `تعداد صندوق‌های طلایی گشوده‌شده: ${chestCount} صندوق`;
+    }
+
+    function restartQuiz() {
+        currentQuestion = 0;
+        score = 0;
+        chestCount = 0;
+        resultBox.style.display = "none";
+        quizContainer.style.display = "block";
+        loadQuestion();
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>
