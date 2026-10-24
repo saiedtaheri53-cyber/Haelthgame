@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی سلامت - سته‌ی ضروریه و نشان طلایی</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; box-sizing: border-box; }
+        .game-card { background: white; width: 100%; max-width: 550px; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .score-bar { display: flex; justify-content: space-between; margin-bottom: 20px; color: #2c3e50; font-weight: bold; font-size: 0.95rem; }
+        #q-text { font-size: 1.15rem; margin-bottom: 12px; color: #333; line-height: 1.6; }
+        #q-connection { font-size: 0.88rem; color: #7f8c8d; font-style: italic; margin-bottom: 20px; border-right: 3px solid #3498db; padding-right: 10px; line-height: 1.5; }
+        .option-btn { display: block; width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #ecf0f1; border-radius: 12px; cursor: pointer; background: #fff; transition: 0.3s; font-size: 1rem; text-align: right; }
+        .option-btn:hover { border-color: #3498db; background: #f1f9ff; }
+        .correct { background: #27ae60 !important; color: white; border-color: #27ae60; }
+        .wrong { background: #e74c3c !important; color: white; border-color: #e74c3c; }
+        .badge-box { background: #fffdf0; border: 2px dashed #f1c40f; padding: 15px; border-radius: 12px; text-align: center; margin: 15px 0; }
+        .gold { color: #d4ac0d; font-weight: bold; font-size: 1.1rem; }
+        .silver { color: #7f8c8d; font-weight: bold; font-size: 1.1rem; }
+        .bronze { color: #d35400; font-weight: bold; font-size: 1.1rem; }
+    </style>
+</head>
+<body>
+
+<div class="game-card" id="game-container">
+    <div class="score-bar">
+        <span id="q-counter">سوال: ۱</span>
+        <span id="score">امتیاز: ۰</span>
+    </div>
+    <div id="q-text"></div>
+    <div id="q-connection"></div>
+    <div id="options"></div>
+</div>
+
+<script>
+    const questions = [
+        { q: "اصلی‌ترین عامل برای هضم بهتر غذا در معده چیست؟", a: "جویدن کامل", o: ["جویدن کامل", "نوشیدن آب یخ", "سریع خوردن"], connection: "هضم اول در دهان آغاز می‌شود." },
+        { q: "خواب زیاد در طول روز باعث چه چیزی در بدن می‌شود؟", a: "افزایش رطوبت", o: ["افزایش رطوبت", "کاهش وزن", "تقویت کبد"], connection: "خواب زیاد حرارت غریزی را کاهش می‌دهد." },
+        { q: "بهترین زمان برای ورزش کردن چه موقع است؟", a: "بعد از هضم غذا", o: ["بعد از هضم غذا", "بلافاصله بعد از غذا", "هنگام گرسنگی شدید"], connection: "ورزش با شکم پر باعث ورود خلط خام به اعضا می‌شود." },
+        { q: "کدام عامل از سته‌ی ضروریه بر کیفیت خون تأثیر مستقیم دارد؟", a: "خوردن و آشامیدن", o: ["خوردن و آشامیدن", "خواب و بیداری", "سکون"], connection: "غذا مواد اولیه خون است." },
+        { q: "هوای سرد در طب سنتی چه خاصیتی دارد؟", a: "قابض و منقبض کننده", o: ["قابض و منقبض کننده", "ملطف و بازکننده", "محلل و گدازنده"], connection: "سرما منافذ بدن را می‌بندد." },
+        { q: "خشم شدید (از اعراض نفسانی) باعث چه می‌شود؟", a: "افزایش حرارت", o: ["افزایش حرارت", "افزایش رطوبت", "کاهش ضربان قلب"], connection: "خشم حرارت را به سطح بدن می‌راند." },
+        { q: "کدام یک از موارد زیر جزء استفراغ‌های (دفعی) طبیعی بدن است؟", a: "عرق", o: ["عرق", "خون‌دماغ", "تب"], connection: "دفع فضولات برای حفظ تعادل مزاج ضروری است." },
+        { q: "نوشیدن آب یخ بلافاصله بعد از ورزش چه عارضه‌ای دارد؟", a: "تضعیف کبد", o: ["تضعیف کبد", "افزایش قدرت", "بهبود هضم"], connection: "آب یخ حرارت غریزی کبد را خاموش می‌کند." },
+        { q: "فصل بهار در طب سنتی چه مزاجی دارد؟", a: "گرم و تر", o: ["گرم و تر", "سرد و خشک", "گرم و خشک"], connection: "بهار فصل رویش و فعالیت اخلاط است." },
+        { q: "کدام خلط در کبد تولید می‌شود؟", a: "دم (خون)", o: ["دم (خون)", "سودا", "صفرا"], connection: "کبد کارخانه اصلی تولید خون است." },
+        { q: "استفاده طولانی‌مدت از هوای آلوده به چه عضوی آسیب می‌زند؟", a: "قلب و ریه", o: ["قلب و ریه", "کلیه", "معده"], connection: "هوا مستقیماً با روح حیوانی در قلب در تماس است." },
+        { q: "کدام فعالیت از سته‌ی ضروریه «احتباس» نامیده می‌شود؟", a: "نگهداشتن فضولات", o: ["نگهداشتن فضولات", "راه رفتن", "شنیدن موسیقی"], connection: "تعادل در نگهداشتن و دفع برای سلامتی لازم است." },
+        { q: "علت اصلی سردردهای ناشی از گرسنگی چیست؟", a: "صعود بخارات به مغز", o: ["صعود بخارات به مغز", "کمبود اکسیژن", "افزایش فشار خون"], connection: "معده خالی بخارات تند تولید می‌کند." },
+        { q: "کدام خلط به 'سیاهی' معروف است؟", a: "سودا", o: ["سودا", "صفرا", "بلغم"], connection: "سودا خلط سنگین و رسوب‌کننده است." },
+        { q: "بهترین حالت خواب در طب سنتی چیست؟", a: "خوابیدن به پهلو", o: ["خوابیدن به پهلو", "خوابیدن روی شکم", "خوابیدن طولانی در روز"], connection: "خواب به پهلو برای هضم بهتر غذا مفید است." },
+        { q: "کدام ورزش برای مزاج‌های سرد و تر مناسب‌تر است؟", a: "ورزش‌های پرتحرک", o: ["ورزش‌های پرتحرک", "ورزش‌های ملایم", "استراحت مطلق"], connection: "حرکت باعث ایجاد حرارت می‌شود." },
+        { q: "مهم‌ترین خلط برای تقویت حرارت بدن کدام است؟", a: "صفرا", o: ["صفرا", "بلغم", "سودا"], connection: "صفرا ذاتا گرم و خشک است." },
+        { q: "افراط در حمام رفتن باعث چه می‌شود؟", a: "تحلیل رطوبت", o: ["تحلیل رطوبت", "چاقی", "افزایش خون"], connection: "حمام بیش از حد بدن را خشک می‌کند." },
+        { q: "به کدام عضو 'رئیسه' می‌گویند؟", a: "قلب", o: ["قلب", "معده", "دست"], connection: "قلب منشأ روح حیوانی است." },
+        { q: "کدام میوه برای تقویت معده در طب سنتی بسیار توصیه شده؟", a: "به", o: ["به", "هندوانه", "خیار"], connection: "به خاصیت قابضه و مقوی معده دارد." }
+    ];
+
+    let current = 0, score = 0;
+
+    function loadQuestion() {
+        if (current >= questions.length) {
+            showResults();
+            return;
+        }
+        const q = questions[current];
+        document.getElementById('q-counter').innerText = `سوال: ${current + 1} از ${questions.length}`;
+        document.getElementById('q-text').innerText = q.q;
+        document.getElementById('q-connection').innerText = "نکته: " + q.connection;
+        const container = document.getElementById('options');
+        container.innerHTML = '';
+        
+        [...q.o].sort(() => Math.random() - 0.5).forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => handleAnswer(opt, btn);
+            container.appendChild(btn);
+        });
+    }
+
+    function handleAnswer(choice, btn) {
+        document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+        if(choice === questions[current].a) {
+            btn.classList.add('correct');
+            score++;
+            document.getElementById('score').innerText = `امتیاز: ${score}`;
+        } else {
+            btn.classList.add('wrong');
+        }
+        setTimeout(() => {
+            current++;
+            loadQuestion();
+        }, 1200);
+    }
+
+    function showResults() {
+        const percentage = (score / questions.length) * 100;
+        let badgeText = "";
+        let badgeClass = "";
+
+        if (percentage >= 90) {
+            badgeText = "🥇 نشان طلایی استاد (درجه یک)";
+            badgeClass = "gold";
+        } else if (percentage >= 75) {
+            badgeText = "🥈 نشان نقره‌ای پژوهشگر (درجه دو)";
+            badgeClass = "silver";
+        } else if (percentage >= 50) {
+            badgeText = "🥉 نشان برنزی فراگیر (درجه سه)";
+            badgeClass = "bronze";
+        } else {
+            badgeText = "🌱 نیاز به مرور بیشتر منابع";
+            badgeClass = "";
+        }
+
+        // ذخیره امتیاز در localStorage
+        const savedRecord = JSON.parse(localStorage.getItem('healthgame_score_0') || '{}');
+        if (!savedRecord.score || score > savedRecord.score) {
+            localStorage.setItem('healthgame_score_0', JSON.stringify({ score: score, total: questions.length, badge: badgeText }));
+        }
+
+        document.getElementById('game-container').innerHTML = `
+            <h2>پایان آزمون</h2>
+            <p>امتیاز نهایی شما: <strong>${score}</strong> از <strong>${questions.length}</strong></p>
+            <div class="badge-box">
+                <p>نشان کسب شده:</p>
+                <div class="${badgeClass}">${badgeText}</div>
+            </div>
+            <button onclick="location.reload()" class="option-btn" style="background: #3498db; color: white; text-align: center;">شروع مجدد آزمون</button>
+        `;
+    }
+
+    loadQuestion();
+</script>
+</body>
+</html>
