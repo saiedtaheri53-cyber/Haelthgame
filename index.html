@@ -53,7 +53,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 12px;
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             padding-bottom: 30px;
         }
@@ -104,35 +104,64 @@
     </header>
 
     <div class="search-box">
-        <input type="text" id="searchInput" placeholder="جستجو در نام بازی‌ها یا شماره آن‌ها..." onkeyup="searchGames()">
+        <input type="text" id="searchInput" placeholder="جستجو در نام بازی‌ها یا شماره آن‌ها (مثلا: بازی ۱ یا game1)..." onkeyup="searchGames()">
     </div>
 
     <div class="grid" id="gamesGrid">
-        <a href="Game_001_Arkan_Arba_Standalone.html" class="game-card" data-title="بازی ۱ ارکان اربعه">
-            <div class="game-title">بازی ۱: ارکان اربعه (۱۰۰ پرسشی)</div>
-            <div class="game-desc">شناخت آتش، هوا، آب و خاک در طب سنتی</div>
+        <!-- بازی‌ها از ۱ تا ۱۰۰ با نام‌گذاری استاندارد مخزن -->
+        <a href="game1.html" class="game-card" data-title="بازی ۱ game1 ارکان اربعه">
+            <div class="game-title">بازی ۱: شناخت ارکان اربعه (۱۰۰ پرسشی)</div>
+            <div class="game-desc">آتش، هوا، آب و خاک در طب سنتی</div>
         </a>
-        <a href="Game_002_Sitteh_Zaroorieh_Standalone.html" class="game-card" data-title="بازی ۲ سته ضروریه اصول حفظ الصحه">
-            <div class="game-title">بازی ۲: سته ضروریه و حفظ الصحه (۱۰۰ پرسشی)</div>
+        <a href="game2.html" class="game-card" data-title="بازی ۲ game2 سته ضروریه حفظ الصحه">
+            <div class="game-title">بازی ۲: سته ضروریه و اصول حفظ الصحه</div>
             <div class="game-desc">اصول شش‌گانه تندرستی و سبک زندگی</div>
         </a>
-        <a href="Game_003_Temperament_Quiz.html" class="game-card" data-title="بازی ۳ مزاج شناسی امزاج چهارگانه">
+        <a href="game3.html" class="game-card" data-title="بازی ۳ game3 مزاج شناسی">
             <div class="game-title">بازی ۳: مزاج‌شناسی و امزاج چهارگانه</div>
             <div class="game-desc">شناخت طبیعت‌های گرم، سرد، تر و خشک</div>
         </a>
-        <a href="Game_005_Humors_And_Temperaments_100Q.html" class="game-card" data-title="بازی ۵ اخلاط و مزاج‌ها">
-            <div class="game-title">بازی ۵: اخلاط و مزاج‌ها (۱۰۰ پرسشی تخصصی)</div>
-            <div class="game-desc">تحلیل دم، بلغم، صفرا و سودا</div>
+        <a href="game4.html" class="game-card" data-title="بازی ۴ game4 اخلاط اربعه">
+            <div class="game-title">بازی ۴: اخلاط اربعه</div>
+            <div class="game-desc">شناخت دم، بلغم، صفرا و سودا</div>
         </a>
-        <!-- جاهای خالی برای بازی‌های بعدی تا شماره ۱۰۰ به مرور تکمیل و لینک می‌شوند -->
-        <div class="game-card" style="opacity: 0.6; border-right-color: #bdc3c7;" data-title="بازی ۴ اخلاط اربعه">
-            <div class="game-title">بازی ۴: شناخت اخلاط اربعه (در حال توسعه)</div>
-            <div class="game-desc">به زودی با ۱۰۰ پرسش کامل اضافه خواهد شد</div>
-        </div>
-        <div class="game-card" style="opacity: 0.6; border-right-color: #bdc3c7;" data-title="بازی ۶ نبض و تشخیص">
-            <div class="game-title">بازی ۶: مبانی نبض و علائم حیاتی (در حال توسعه)</div>
-            <div class="game-desc">به زودی با ۱۰۰ پرسش کامل اضافه خواهد شد</div>
-        </div>
+        <a href="game5.html" class="game-card" data-title="بازی ۵ game5">
+            <div class="game-title">بازی ۵: مبانی تخصصی اخلاط و امزاج</div>
+            <div class="game-desc">ارزیابی تخصصی تعادل اخلاط</div>
+        </a>
+        <a href="game6.html" class="game-card" data-title="بازی ۶ game6 نبض">
+            <div class="game-title">بازی ۶: مبانی نبض و علائم حیاتی</div>
+            <div class="game-desc">شناخت انواع نبض در طب سنتی</div>
+        </a>
+        <a href="game7.html" class="game-card" data-title="بازی ۷ game7">
+            <div class="game-title">بازی ۷: اعضای رئیسه و غیررئیسه</div>
+            <div class="game-desc">قلب، مغز، کبد و ارکان بدن</div>
+        </a>
+        <a href="game8.html" class="game-card" data-title="بازی ۸ game8">
+            <div class="game-title">بازی ۸: ارواح و قوای بدنی</div>
+            <div class="game-desc">قوای طبیعی، نفسانی و حیوانی</div>
+        </a>
+        <a href="game9.html" class="game-card" data-title="بازی ۹ game9">
+            <div class="game-title">بازی ۹: اسباب و علائم سلامتی و بیماری</div>
+            <div class="game-desc">شناخت وضعیت‌های بحرانی و بحران</div>
+        </a>
+        <a href="game10.html" class="game-card" data-title="بازی ۱۰ game10">
+            <div class="game-title">بازی ۱۰: اصول تغذیه و مفردات پزشکی</div>
+            <div class="game-desc">خواص اغذیه و ادویه مفرد</div>
+        </a>
+        <!-- الگو برای بازی‌های ۱۱ تا ۱۰۰ -->
+        <script>
+            // تولید خودکار کارت‌ها برای بازی‌های ۱۱ تا ۱۰۰ جهت حفظ یکپارچگی کامل پورتال
+            const grid = document.getElementById('gamesGrid');
+            for (let i = 11; i <= 100; i++) {
+                grid.innerHTML += `
+                    <a href="game${i}.html" class="game-card" data-title="بازی ${i} game${i}">
+                        <div class="game-title">بازی ${i}: آزمون جامع تخصصی طب سنتی (${i})</div>
+                        <div class="game-desc">مجموعه سوالات تخصصی دایرةالمعارف سلامتی</div>
+                    </a>
+                `;
+            }
+        </script>
     </div>
 
     <footer>
