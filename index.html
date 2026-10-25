@@ -3,220 +3,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دانشنامه جامع «طب، علم سلامتی» | پورتال ۱۰۰ بازی سلامت</title>
+    <title>دانشنامه جامع طب، علم سلامتی</title>
     <style>
-        * { box-sizing: border-box; }
+        :root {
+            --primary-color: #1b4332;
+            --secondary-color: #2d6a4f;
+            --accent-color: #d8f3dc;
+            --gold-color: #ffd700;
+            --text-color: #212529;
+            --bg-color: #f8f9fa;
+        }
         body {
             font-family: Tahoma, sans-serif;
-            background: linear-gradient(135deg, #f0f7f4, #d8e8de);
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
+            padding: 0;
+            direction: rtl;
+        }
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
             padding: 20px;
             text-align: center;
-            color: #2c3e50;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 1.6rem;
+        }
+        .stats-box {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 0.9rem;
+            margin-top: 5px;
         }
         .container {
-            max-width: 720px;
-            margin: 0 auto;
-            background: white;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        h1 { color: #2c6b4f; margin-bottom: 5px; font-size: 22px; }
-        p.subtitle { color: #555; font-size: 13px; margin-bottom: 20px; line-height: 1.6; }
-        
-        .box {
-            background: #f9fbf9;
-            border: 1px solid #e1eee6;
+            max-width: 800px;
+            margin: 20px auto;
             padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            text-align: right;
         }
-        .box h3 { margin-top: 0; color: #2c6b4f; font-size: 15px; text-align: center; margin-bottom: 12px; }
-        
-        .controls-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
+        .portal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
         }
-
-        input[type="number"] {
-            width: 100px;
-            padding: 10px;
-            font-size: 15px;
-            text-align: center;
-            border: 2px solid #2c6b4f;
-            border-radius: 8px;
-            outline: none;
-        }
-        
-        select {
-            width: 70%;
-            padding: 10px;
-            font-size: 12px;
-            border: 2px solid #d97706;
-            border-radius: 8px;
-            outline: none;
+        .game-card {
             background: white;
-            color: #333;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            border-right: 5px solid var(--secondary-color);
         }
-
+        .game-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        .game-card h3 {
+            margin: 0 0 10px 0;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        .game-card p {
+            font-size: 0.85srem;
+            color: #6c757d;
+            margin: 0 0 15px 0;
+        }
         .btn {
-            background: #2c6b4f;
+            background-color: var(--secondary-color);
             color: white;
             border: none;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-size: 14px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-        .btn:hover { background: #1e4a36; }
-        
-        .btn-secondary { background: #d97706; }
-        .btn-secondary:hover { background: #b45309; }
-
-        .quick-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .quick-btn {
-            background: #e8f4ed;
-            border: 1px solid #2c6b4f;
-            color: #2c6b4f;
-            padding: 8px;
+            padding: 8px 20px;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 12px;
+            font-family: Tahoma, sans-serif;
+            font-size: 0.9rem;
+        }
+        .btn:hover {
+            background-color: var(--primary-color);
+        }
+        /* Quiz Interface */
+        #quiz-container {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
             font-weight: bold;
-            transition: 0.2s;
         }
-        .quick-btn:hover {
-            background: #2c6b4f;
-            color: white;
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
         }
-
-        footer {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #666;
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-btn {
+            background: var(--bg-color);
+            border: 2px solid #dee2e6;
+            padding: 12px 15px;
+            border-radius: 8px;
+            text-align: right;
+            cursor: pointer;
+            font-family: Tahoma, sans-serif;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        .option-btn:hover {
+            background: var(--accent-color);
+            border-color: var(--secondary-color);
+        }
+        .option-btn.correct {
+            background: #d4edda !important;
+            border-color: #28a745 !important;
+            color: #155724;
+        }
+        .option-btn.wrong {
+            background: #f8d7da !important;
+            border-color: #dc3545 !important;
+            color: #721c24;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .back-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
+    <header>
+        <h1>دانشنامه جامع طب، علم سلامتی</h1>
+        <div class="stats-box">⭐ صندوقچه طلایی: <span id="global-gold">0</span> سکه</div>
+    </header>
+
     <div class="container">
-        <h1>دانشنامه جامع «طب، علم سلامتی»</h1>
-        <p class="subtitle">پورتال مرجع ۱۰۰ بازی آموزشی: مبانی طب سنتی، سته ضروریه، مزاج‌شناسی، خودمراقبتی و قوانین هستی</p>
-
-        <!-- بخش اول: ورود مستقیم با شماره -->
-        <div class="box">
-            <h3>ورود مستقیم با شماره بازی (۱ الی ۱۰۰)</h3>
-            <div class="controls-row">
-                <input type="number" id="gameNum" min="1" max="100" value="1" placeholder="مثلاً ۱">
-                <button class="btn" onclick="goToGameNumber()">برو به بازی</button>
+        <!-- منوی اصلی پورتال -->
+        <div id="portal-menu">
+            <h2 style="text-align: center; color: var(--primary-color); margin-bottom: 20px;">فهرست بازی‌ها و آزمون‌های تخصصی</h2>
+            <div class="portal-grid" id="games-grid">
+                <!-- کارت‌ها به‌صورت دینامیک بارگذاری می‌شوند -->
             </div>
         </div>
 
-        <!-- بخش دوم: انتخاب موضوع و دسته‌بندی -->
-        <div class="box">
-            <h3>انتخاب موضوع از فهرست جامع بازی‌ها (۱۰۰ عنوان)</h3>
-            <div class="controls-row">
-                <select id="topicSelect">
-                    <!-- بخش اول: مبانی و ارکان (۱ تا ۲۰) -->
-                    <optgroup label="بخش اول: مبانی، ارکان و اخلاط (۱ تا ۲۰)">
-                        <option value="1">بازی ۱: ارکان اربعه (آتش، هوا، آب، خاک)</option>
-                        <option value="2">بازی ۲: سته ضروریه (اصول شش‌گانه سلامتی)</option>
-                        <option value="3">بازی ۳: امزاج چهارگانه (دموی، بلغمی، صفراوی، سوداوی)</option>
-                        <option value="4">بازی ۴: اخلاط چهارگانه و تولید در بدن</option>
-                        <option value="5">بازی ۵: اعضا و طبقات بدن (مفرد و مرکب)</option>
-                        <option value="6">بازی ۶: ارکان و نسبت آن‌ها با طبع‌ها</option>
-                        <option value="7">بازی ۷: شناخت کیفیات چهارگانه (گرمی، سردی، تری، خشکی)</option>
-                        <option value="8">بازی ۸: طبایع فصل‌های سال</option>
-                        <option value="9">بازی ۹: سنین زندگی و طبایع عمر (کودکی، جوانی، کهولت)</option>
-                        <option value="10">بازی ۱۰: ارکان در خوراکی‌ها و عناصر طبیعی</option>
-                        <option value="11">بازی ۱۱ تا ۲۰: اخلاط غلبه‌یافته، پاکسازی و تنقیح اخلاط</option>
-                    </optgroup>
-
-                    <!-- بخش دوم: سته ضروریه و سبک زندگی (۲۱ تا ۵۰) -->
-                    <optgroup label="بخش دوم: سته ضروریه و سبک زندگی سالم (۲۱ تا ۵۰)">
-                        <option value="21">بازی ۲۱: اصول هوای تنفسی و محیط زندگی</option>
-                        <option value="22">بازی ۲۲: آداب تغذیه سالم و خوردنی‌ها و نوشیدنی‌ها</option>
-                        <option value="23">بازی ۲۳: حرکت و سکون (ورزش و استراحت تعادلی)</option>
-                        <option value="24">بازی ۲۴: احتباس و استفراغ (دفع به موقع مواد زائد)</option>
-                        <option value="25">بازی ۲۵: خواب و بیداری در تنظیم اعصاب و ارکان</option>
-                        <option value="26">بازی ۲۶: اعراض نفسانی (مدیریت هیجانات، استرس و آرامش روحی)</option>
-                        <option value="27">بازی ۲۷ تا ۳۵: آداب خواب، نظافت و بهداشت در سنت اسلامی</option>
-                        <option value="36">بازی ۳۶ تا ۵۰: سبک زندگی توحیدی و تغذیه در سفر و شرایط خاص</option>
-                    </optgroup>
-
-                    <!-- بخش سوم: خودمراقبتی و پیشگیری (۵۱ تا ۷۵) -->
-                    <optgroup label="بخش سوم: خودمراقبتی و پیشگیری پیشرفته (۵۱ تا ۷۵)">
-                        <option value="51">بازی ۵۱: روش‌های پیشگیری از بیماری‌ها پیش از نیاز به درمان</option>
-                        <option value="52">بازی ۵۲: خودمراقبتی در برابر فشارهای روانی روزمره</option>
-                        <option value="53">بازی ۵۳: مراقبت از اعضای رئیسه (قلب، مغز، کبد)</option>
-                        <option value="54">بازی ۵۴: شناخت علائم هشداردهنده بدن و پاسخ طبیعی</option>
-                        <option value="55">بازی ۵۵ تا ۷۵: خودمراقبتی فصول، پوست، مو و مفاصل</option>
-                    </optgroup>
-
-                    <!-- بخش چهارم: قوانین هستی و سنن الهی (۷۶ تا ۱۰۰) -->
-                    <optgroup label="بخش چهارم: قوانین هستی، سنن الهی و سلامت جامع (۷۶ تا ۱۰۰)">
-                        <option value="76">بازی ۷۶: قانون تعادل و زوجیت در جهان هستی و بدن انسان</option>
-                        <option value="77">بازی ۷۷: ارتباط رزق حلال و پاک با سلامت جسم و جان</option>
-                        <option value="78">بازی ۷۸: نقش شکرگزاری، صبر و توکل بر سیستم ایمنی و روانی</option>
-                        <option value="79">بازی ۷۹: سنن الهی حاکم بر صحت، بیماری و طول عمر</option>
-                        <option value="80">بازی ۸۰ تا ۱00: حکمت‌های توحیدی در طب، برکت در عمر و خلیفه‌اللهی</option>
-                    </optgroup>
-                </select>
-                <button class="btn btn-secondary" onclick="openTopicInNewWindow()">مشاهده بازی</button>
+        <!-- صفحه آزمون -->
+        <div id="quiz-container">
+            <a class="back-link" onclick="returnToPortal()">← بازگشت به فهرست پورتال</a>
+            <div class="quiz-header">
+                <span id="q-progress">سوال ۱ از ۱۰۰</span>
+                <span id="q-score">امتیاز: ۰</span>
             </div>
-        </div>
-
-        <!-- بخش دسترسی سریع به بازی‌های کلیدی آماده -->
-        <div class="box">
-            <h3>دسترسی سریع به بازی‌های اصلی فعال</h3>
-            <div class="quick-grid">
-                <button class="quick-btn" onclick="openGame(1)">بازی ۱: ارکان اربعه</button>
-                <button class="quick-btn" onclick="openGame(2)">بازی ۲: سته ضروریه</button>
-                <button class="quick-btn" onclick="openGame(3)">بازی ۳: مزاج‌شناسی</button>
-                <button class="quick-btn" onclick="openGame(5)">بازی ۵: اخلاط و امزاج</button>
+            <div class="question-text" id="q-text">در حال بارگذاری سوال...</div>
+            <div class="options-grid" id="q-options">
+                <!-- گزینه‌ها -->
             </div>
         </div>
     </div>
 
-    <footer>
-        پروژه «طب، علم سلامتی» &copy; تمامی حقوق محفوظ است.
-    </footer>
-
     <script>
-        function goToGameNumber() {
-            let num = parseInt(document.getElementById('gameNum').value);
-            if (num >= 1 && num <= 100) {
-                window.location.href = `game${num}.html`;
-            } else {
-                alert('لطفاً عددی بین ۱ تا ۱۰۰ وارد کنید.');
+        // بانک جامع داده‌های بازی‌ها (قابل گسترش تا ۱۰۰ بازی)
+        const gamesData = {
+            1: {
+                title: "بازی ۱: ارکان اربعه",
+                desc: "آشنایی با آتش، هوا، آب و خاک و مزاج‌های بنیادین در طب سنتی.",
+                questions: [
+                    { q: "رکن آتش چه مزاجی دارد؟", options: ["گرم و خشک", "گرم و تر", "سرد و خشک", "سرد و تر"], answer: 0 },
+                    { q: "رکن آب دارای چه کیفیتی است؟", options: ["گرم و خشک", "سرد و تر", "گرم و تر", "سرد و خشک"], answer: 1 },
+                    { q: "سنگین‌ترین رکن در میان ارکان اربعه کدام است؟", options: ["آتش", "هوا", "آب", "خاک"], answer: 3 },
+                    { q: "رکن هوا چه مزاجی دارد؟", options: ["گرم و تر", "سرد و خشک", "سرد و تر", "گرم و خشک"], answer: 0 }
+                ]
+            },
+            2: {
+                title: "بازی ۲: سته ضروریه",
+                desc: "بررسی ۶ اصل ضروری حفظ صحت (هوا، اغذیه، حرکت، خواب، اعراض نفسانی و استفراغ).",
+                questions: [
+                    { q: "کدام مورد جزو سته ضروریه است؟", options: ["هوای محیط", "ورزش و حرکت", "حالت روحی و اعراض نفسانی", "هر سه مورد صحیح است"], answer: 3 },
+                    { q: "تنظیم خواب و بیداری چه تأثیری بر بدن دارد؟", options: ["تحلیل قوای هاضمه", "تعادل اخلاط و آرامش اعصاب", "افزایش بلغم", "ایجاد خشکی مطلق"], answer: 1 },
+                    { q: "احتباس و استفراغ در سته ضروریه به چه معناست؟", options: ["خوردن مواد ترش", "خواب طولانی", "خروج مواد زائد و حفظ مواد مفید", "ورزش سنگین"], answer: 2 }
+                ]
+            }
+        };
+
+        let currentGameId = null;
+        let currentQIndex = 0;
+        let score = 0;
+        let globalGold = parseInt(localStorage.getItem('health_portal_global_gold')) || 0;
+
+        document.getElementById('global-gold').innerText = globalGold;
+
+        function renderPortal() {
+            const grid = document.getElementById('games-grid');
+            grid.innerHTML = '';
+            for (let id in gamesData) {
+                const game = gamesData[id];
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.innerHTML = `
+                    <h3>${game.title}</h3>
+                    <p>${game.desc}</p>
+                    <button class="btn" onclick="startQuiz(${id})">ورود به بازی</button>
+                `;
+                grid.appendChild(card);
             }
         }
 
-        function openTopicInNewWindow() {
-            let num = document.getElementById('topicSelect').value;
-            window.open(`game${num}.html`, '_blank');
+        function startQuiz(id) {
+            currentGameId = id;
+            currentQIndex = 0;
+            score = 0;
+            document.getElementById('portal-menu').style.display = 'none';
+            document.getElementById('quiz-container').style.display = 'block';
+            loadQuestion();
         }
 
-        function openGame(num) {
-            window.location.href = `game${num}.html`;
+        function loadQuestion() {
+            const game = gamesData[currentGameId];
+            if (currentQIndex >= game.questions.length) {
+                finishQuiz();
+                return;
+            }
+            const qData = game.questions[currentQIndex];
+            document.getElementById('q-progress').innerText = `سوال ${currentQIndex + 1} از ${game.questions.length}`;
+            document.getElementById('q-score').innerText = `امتیاز: ${score}`;
+            document.getElementById('q-text').innerText = qData.q;
+
+            const optionsGrid = document.getElementById('q-options');
+            optionsGrid.innerHTML = '';
+            qData.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(idx, qData.answer, btn);
+                optionsGrid.appendChild(btn);
+            });
         }
+
+        function checkAnswer(selectedIdx, correctIdx, btn) {
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(b => b.disabled = true);
+
+            if (selectedIdx === correctIdx) {
+                btn.classList.add('correct');
+                score += 10;
+                globalGold += 5;
+                localStorage.setItem('health_portal_global_gold', globalGold);
+                document.getElementById('global-gold').innerText = globalGold;
+            } else {
+                btn.classList.add('wrong');
+                buttons[correctIdx].classList.add('correct');
+            }
+
+            setTimeout(() => {
+                currentQIndex++;
+                loadQuestion();
+            }, 1200);
+        }
+
+        function finishQuiz() {
+            document.getElementById('quiz-container').innerHTML = `
+                <a class="back-link" onclick="returnToPortal()">← بازگشت به فهرست پورتال</a>
+                <div style="text-align: center; padding: 30px;">
+                    <h2 style="color: var(--primary-color);">🎉 آزمون به پایان رسید!</h2>
+                    <p style="font-size: 1.2rem; margin: 20px 0;">امتیاز شما در این بازی: <strong>${score}</strong></p>
+                    <p style="color: #6c757d;">سکه‌های صندوقچه طلایی شما ذخیره شد.</p>
+                    <button class="btn" onclick="returnToPortal()" style="margin-top: 15px;">بازگشت به پورتال</button>
+                </div>
+            `;
+        }
+
+        function returnToPortal() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('portal-menu').style.display = 'block';
+            // بازنشانی ساختار کوئیز در صورت بازگشت
+            location.reload(); 
+        }
+
+        renderPortal();
     </script>
-
 </body>
 </html>
