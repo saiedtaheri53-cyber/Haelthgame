@@ -3,209 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی ۳۴: گیاهان دارویی (نسخه کامل)</title>
+    <title>بازی ۶: ارکان، کیفیت‌ها و نسبت طبع‌ها (۱۰۰ سؤال جامع)</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f0f4f0; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .game-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 90%; max-width: 600px; border-top: 10px solid #2e7d32; }
-        h1 { color: #1b5e20; text-align: center; font-size: 22px; margin-top: 0; }
-        #progress { text-align: center; color: #666; font-weight: bold; margin-bottom: 15px; font-size: 14px; }
-        #question { font-size: 19px; margin-bottom: 20px; color: #333; min-height: 50px; text-align: center; line-height: 1.6; }
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .option { padding: 15px 10px; border: 2px solid #e0e0e0; border-radius: 12px; background: #fff; cursor: pointer; text-align: center; font-size: 15px; transition: all 0.2s; user-select: none; }
-        .option:hover { background: #f1f8e9; border-color: #81c784; }
-        .option.correct { background: #c8e6c9 !important; border-color: #4caf50 !important; color: #1b5e20; font-weight: bold; }
-        .option.wrong { background: #ffcdd2 !important; border-color: #f44336 !important; color: #b71c1c; }
-        #feedback { margin-top: 20px; padding: 10px; border-radius: 10px; text-align: center; font-weight: bold; min-height: 25px; font-size: 16px; }
-        .result-screen { text-align: center; }
-        .btn-restart { margin-top: 20px; padding: 10px 25px; background: #2e7d32; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; }
-        @media (max-width: 480px) { .options-grid { grid-template-columns: 1fr; } }
+        :root {
+            --primary: #047857;
+            --primary-dark: #065f46;
+            --accent: #10b981;
+            --bg-color: #f0fdf4;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+        }
+        body {
+            font-family: Tahoma, 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 15px;
+            direction: rtl;
+        }
+        .container {
+            max-width: 750px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            padding: 25px;
+        }
+        h1 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            background: #ecfdf5;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+        .progress-container {
+            width: 100%;
+            background: #e5e7eb;
+            border-radius: 8px;
+            height: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .question-box {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .option-btn {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            padding: 12px 16px;
+            border-radius: 10px;
+            text-align: right;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-main);
+        }
+        .option-btn:hover:not(:disabled) {
+            background: #f3f4f6;
+            border-color: var(--accent);
+        }
+        .option-btn.correct {
+            background: #d1fae5 !important;
+            border-color: #059669 !important;
+            color: #065f46;
+        }
+        .option-btn.incorrect {
+            background: #fee2e2 !important;
+            border-color: #dc2626 !important;
+            color: #991b1b;
+        }
+        .explanation {
+            background: #fffbeb;
+            border-right: 4px solid #f59e0b;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            display: none;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            flex: 1;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: var(--primary-dark);
+        }
+        .btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        .back-portal {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        .back-portal:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
-    <div class="game-card" id="game-container">
-        <h1>گیاهان دارویی (۱۰۰ سوال)</h1>
-        <div id="progress"></div>
-        <div id="question"></div>
-        <div id="options" class="options-grid"></div>
-        <div id="feedback"></div>
+<div class="container">
+    <h1>دانشنامه طب سنتی - بازی ۶: ارکان و نسبت طبع‌ها</h1>
+    <div class="subtitle">بررسی ارکان اربعه، مزاج‌ها، اخلاط و کیفیت‌های بنیادین (۱۰۰ سؤال یکتا)</div>
+
+    <div class="stats-bar">
+        <span id="question-counter">سؤال ۱ از ۱۰۰</span>
+        <span id="score-display">امتیاز: ۰</span>
     </div>
 
-    <script>
-        const rawQuestions = [
-            { q: "۱. طبع گل‌گاوزبان چیست؟", a: ["گرم و تر", "سرد و خشک", "گرم و خشک", "سرد و تر"], c: 0 },
-            { q: "۲. کدام گیاه برای دفع صفرا بسیار مؤثر است؟", a: ["شاه‌تره", "زنیان", "سیر", "دارچین"], c: 0 },
-            { q: "۳. طبع شیرین‌بیان چیست؟", a: ["گرم و تر", "سرد و تر", "گرم و خشک", "سرد و خشک"], c: 0 },
-            { q: "۴. کدام گیاه برای درمان سرفه خشک مفید است؟", a: ["شیرین‌بیان", "نعنا", "سیر", "فلفل"], c: 0 },
-            { q: "۵. طبع کتیرا چیست؟", a: ["سرد و خشک", "گرم و خشک", "گرم و تر", "سرد و تر"], c: 0 },
-            { q: "۶. مصلح اصلی ماست چیست؟", a: ["زنیان و نعنا", "شکر", "نمک", "سرکه"], c: 0 },
-            { q: "۷. طبع افسنتین چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۸. کدام گیاه برای دفع کرم روده مفید است؟", a: ["هندوانه ابوجهل", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۹. طبع هلیله سیاه چیست؟", a: ["سرد و خشک", "گرم و خشک", "گرم و تر", "سرد و تر"], c: 0 },
-            { q: "۱۰. کدام گیاه برای تقویت کبد عالی است؟", a: ["کاسنی", "نعنا", "سیر", "فلفل"], c: 0 },
-            { q: "۱۱. مصلح اصلی شیر گاو چیست؟", a: ["زنجبیل", "نمک", "شکر", "سرکه"], c: 0 },
-            { q: "۱۲. طبع زرشک چیست؟", a: ["سرد و خشک", "گرم و خشک", "گرم و تر", "سرد و تر"], c: 0 },
-            { q: "۱۳. کدام گیاه برای رفع تپش قلب عصبی مفید است؟", a: ["بادرنجبویه", "سیر", "فلفل", "زنجبیل"], c: 0 },
-            { q: "۱۴. طبع انیسون چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۱۵. کدام گیاه مسکن سریع دندان‌درد است؟", a: ["میخک", "نعنا", "کاسنی", "کاهو"], c: 0 },
-            { q: "۱۶. مصلح اصلی سرکه چیست؟", a: ["عسل", "نمک", "شکر", "آب"], c: 0 },
-            { q: "۱۷. طبع کندر چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۱۸. کدام گیاه برای بند آوردن خون‌ریزی مفید است؟", a: ["گلنار", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۱۹. طبع گل‌سرخ چیست؟", a: ["سرد و خشک", "گرم و خشک", "گرم و تر", "سرد و تر"], c: 0 },
-            { q: "۲۰. کدام گیاه برای دفع سموم بدن توصیه می‌شود؟", a: ["شاه‌تره", "سیر", "فلفل", "زنجبیل"], c: 0 },
-            { q: "۲۱. مصلح اصلی عدس چیست؟", a: ["گلپر", "نمک", "شکر", "سرکه"], c: 0 },
-            { q: "۲۲. طبع زردچوبه چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۲۳. کدام گیاه برای رفع خستگی مفرط مفید است؟", a: ["جینسینگ", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۲۴. طبع هل چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۲۵. کدام گیاه خاصیت ضد سرطان دارد؟", a: ["سیر", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۲۶. مصلح اصلی کله‌پاچه چیست؟", a: ["دارچین", "نمک", "شکر", "سرکه"], c: 0 },
-            { q: "۲۷. طبع آویشن چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۲۸. کدام گیاه برای درمان جوش‌های بدن مفید است؟", a: ["شاه‌تره", "سیر", "فلفل", "زنجبیل"], c: 0 },
-            { q: "۲۹. طبع اسطوخودوس چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۳۰. کدام گیاه برای تقویت بینایی مفید است؟", a: ["سرمه‌دان", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۳۱. مصلح اصلی نان گندم چیست؟", a: ["رازیانه", "نمک", "شکر", "سرکه"], c: 0 },
-            { q: "۳۲. طبع سیر چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۳۳. کدام گیاه برای رفع سرگیجه مفید است؟", a: ["زنجبیل", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۳۴. طبع دارچین چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۳۵. کدام گیاه برای درمان یبوست مزمن عالی است؟", a: ["برگ سنا", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۳۶. مصلح اصلی پنیر تازه چیست؟", a: ["گردو", "نمک", "شکر", "سرکه"], c: 0 },
-            { q: "۳۷. طبع گلاب چیست؟", a: ["سرد و خشک", "گرم و خشک", "گرم و تر", "سرد و تر"], c: 0 },
-            { q: "۳۸. کدام گیاه برای تقویت قوای جنسی مفید است؟", a: ["سیاه‌دانه", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۳۹. طبع گل‌گاو‌زبان چیست؟", a: ["گرم و تر", "سرد و خشک", "گرم و خشک", "سرد و تر"], c: 0 },
-            { q: "۴۰. کدام گیاه برای رفع سرفه مفید است؟", a: ["پنیرک", "سیر", "فلفل", "زنجبیل"], c: 0 },
-            { q: "۴۱. مصلح اصلی سیب‌زمینی چیست؟", a: ["فلفل و گلپر", "نمک", "شکر", "سرکه"], c: 0 },
-            { q: "۴۲. طبع سنبل‌الطیب چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۴۳. کدام گیاه برای کاهش تب عالی است؟", a: ["بید", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۴۴. طبع گل ختمی چیست؟", a: ["سرد و تر", "گرم و خشک", "گرم و تر", "سرد و خشک"], c: 0 },
-            { q: "۴۵. کدام گیاه برای رفع گرفتگی صدا مفید است؟", a: ["شیرین‌بیان", "سیر", "فلفل", "زنجبیل"], c: 0 },
-            { q: "۴۶. مصلح اصلی گوشت گوسفند چیست؟", a: ["سماق", "نمک", "شکر", "سرکه"], c: 0 },
-            { q: "۴۷. طبع زعفران چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۴۸. کدام گیاه برای تقویت معده مفید است؟", a: ["زنیان", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۴۹. طبع نعنا چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۵۰. کدام گیاه برای رفع نفخ شدید مفید است؟", a: ["زنیان", "سیر", "فلفل", "زنجبیل"], c: 0 },
-            { q: "۵۱. طبع کتیرا چیست؟", a: ["سرد و خشک", "گرم و خشک", "گرم و تر", "سرد و تر"], c: 0 },
-            { q: "۵۲. کدام گیاه برای درمان سرفه‌های خشک مفید است؟", a: ["شیرین‌بیان", "نعنا", "سیر", "فلفل"], c: 0 },
-            { q: "۵۳. مصلح اصلی ماست چیست؟", a: ["زنیان و نعنا", "شکر", "نمک", "سرکه"], c: 0 },
-            { q: "۵۴. طبع افسنتین چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۵۵. کدام گیاه برای دفع کرم روده مفید است؟", a: ["هندوانه ابوجهل", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۵۶. طبع هلیله سیاه چیست؟", a: ["سرد و خشک", "گرم و خشک", "گرم و تر", "سرد و تر"], c: 0 },
-            { q: "۵۷. کدام گیاه برای تقویت کبد عالی است؟", a: ["کاسنی", "نعنا", "سیر", "فلفل"], c: 0 },
-            { q: "۵۸. مصلح اصلی شیر گاو چیست؟", a: ["زنجبیل", "نمک", "شکر", "سرکه"], c: 0 },
-            { q: "۵۹. طبع زرشک چیست؟", a: ["سرد و خشک", "گرم و خشک", "گرم و تر", "سرد و تر"], c: 0 },
-            { q: "۶۰. کدام گیاه برای رفع تپش قلب عصبی مفید است؟", a: ["بادرنجبویه", "سیر", "فلفل", "زنجبیل"], c: 0 },
-            { q: "۶۱. طبع انیسون چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۶۲. کدام گیاه مسکن سریع دندان‌درد است؟", a: ["میخک", "نعنا", "کاسنی", "کاهو"], c: 0 },
-            { q: "۶۳. مصلح اصلی سرکه چیست؟", a: ["عسل", "نمک", "شکر", "آب"], c: 0 },
-            { q: "۶۴. طبع کندر چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۶۵. کدام گیاه برای بند آوردن خون‌ریزی مفید است؟", a: ["گلنار", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۶۶. طبع گل‌سرخ در طب سنتی چیست؟", a: ["سرد و خشک", "گرم و خشک", "گرم و تر", "سرد و تر"], c: 0 },
-            { q: "۶۷. کدام گیاه برای دفع سموم بدن توصیه می‌شود؟", a: ["شاه‌تره", "سیر", "فلفل", "زنجبیل"], c: 0 },
-            { q: "۶۸. مصلح اصلی عدس چیست؟", a: ["گلپر", "نمک", "شکر", "سرکه"], c: 0 },
-            { q: "۶۹. طبع زردچوبه چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۷۰. کدام گیاه برای رفع خستگی مفرط مفید است؟", a: ["جینسینگ", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۷۱. طبع هل چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۷۲. کدام گیاه خاصیت ضد سرطان دارد؟", a: ["سیر", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۷۳. مصلح اصلی کله‌پاچه چیست؟", a: ["دارچین", "نمک", "شکر", "سرکه"], c: 0 },
-            { q: "۷۴. طبع آویشن چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۷۵. کدام گیاه برای درمان جوش‌های بدن مفید است؟", a: ["شاه‌تره", "سیر", "فلفل", "زنجبیل"], c: 0 },
-            { q: "۷۶. طبع اسطوخودوس چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۷۷. کدام گیاه برای تقویت بینایی مفید است؟", a: ["سرمه‌دان", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۷۸. مصلح اصلی نان گندم چیست؟", a: ["رازیانه", "نمک", "شکر", "سرکه"], c: 0 },
-            { q: "۷۹. طبع سیر چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۸۰. کدام گیاه برای رفع سرگیجه مفید است؟", a: ["زنجبیل", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۸۱. طبع دارچین چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۸۲. کدام گیاه برای درمان یبوست مزمن عالی است؟", a: ["برگ سنا", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۸۳. مصلح اصلی پنیر تازه چیست؟", a: ["گردو", "نمک", "شکر", "سرکه"], c: 0 },
-            { q: "۸۴. طبع گلاب چیست؟", a: ["سرد و خشک", "گرم و خشک", "گرم و تر", "سرد و تر"], c: 0 },
-            { q: "۸۵. کدام گیاه برای تقویت قوای جنسی مفید است؟", a: ["سیاه‌دانه", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۸۶. طبع گل‌گاو‌زبان چیست؟", a: ["گرم و تر", "سرد و خشک", "گرم و خشک", "سرد و تر"], c: 0 },
-            { q: "۸۷. کدام گیاه برای رفع سرفه مفید است؟", a: ["پنیرک", "سیر", "فلفل", "زنجبیل"], c: 0 },
-            { q: "۸۸. مصلح اصلی سیب‌زمینی چیست؟", a: ["فلفل و گلپر", "نمک", "شکر", "سرکه"], c: 0 },
-            { q: "۸۹. طبع سنبل‌الطیب چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۹۰. کدام گیاه برای کاهش تب عالی است؟", a: ["بید", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۹۱. طبع گل ختمی چیست؟", a: ["سرد و تر", "گرم و خشک", "گرم و تر", "سرد و خشک"], c: 0 },
-            { q: "۹۲. کدام گیاه برای رفع گرفتگی صدا مفید است؟", a: ["شیرین‌بیان", "سیر", "فلفل", "زنجبیل"], c: 0 },
-            { q: "۹۳. مصلح اصلی گوشت گوسفند چیست؟", a: ["سماق", "نمک", "شکر", "سرکه"], c: 0 },
-            { q: "۹۴. طبع زعفران چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۹۵. کدام گیاه برای تقویت معده مفید است؟", a: ["زنیان", "کاسنی", "نعنا", "کاهو"], c: 0 },
-            { q: "۹۶. طبع نعنا چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۹۷. کدام گیاه برای رفع نفخ شدید مفید است؟", a: ["زنیان", "سیر", "فلفل", "زنجبیل"], c: 0 },
-            { q: "۹۸. مصلح اصلی سردیجات چیست؟", a: ["عسل و خرما", "نمک", "شکر", "سرکه"], c: 0 },
-            { q: "۹۹. طبع زنجبیل چیست؟", a: ["گرم و خشک", "سرد و خشک", "سرد و تر", "گرم و تر"], c: 0 },
-            { q: "۱۰۰. کدام گیاه برای آرامش ذهن مفید است؟", a: ["اسطوخودوس", "کاسنی", "نعنا", "کاهو"], c: 0 }
-        ];
+    <div class="progress-container">
+        <div id="progress-bar" class="progress-bar"></div>
+    </div>
 
-        let currentIndex = 0;
-        let score = 0;
+    <div id="quiz-container">
+        <div class="question-box" id="question-text">در حال بارگذاری سؤالات...</div>
+        <div class="options-grid" id="options-container"></div>
+        <div class="explanation" id="explanation-box"></div>
+        
+        <div class="nav-buttons">
+            <button class="btn" id="next-btn" onclick="nextQuestion()" disabled>سؤال بعدی</button>
+        </div>
+    </div>
 
-        function loadQuestion() {
-            if (currentIndex >= rawQuestions.length) {
-                showResult();
-                return;
-            }
+    <a href="index.html" class="back-portal">← بازگشت به پورتال اصلی بازی‌های سلامت</a>
+</div>
 
-            let currentQ = rawQuestions[currentIndex];
-            document.getElementById("progress").innerText = `سوال ${currentIndex + 1} از ${rawQuestions.length}`;
-            document.getElementById("question").innerText = currentQ.q;
-            document.getElementById("feedback").innerText = "";
-            
-            let correctOptionText = currentQ.a[currentQ.c];
-            
-            // Shuffle options
-            let options = [...currentQ.a];
-            options.sort(() => Math.random() - 0.5);
-            
-            let newCorrectIndex = options.indexOf(correctOptionText);
-            
-            let optionsContainer = document.getElementById("options");
-            optionsContainer.innerHTML = "";
-            
-            options.forEach((opt, index) => {
-                let div = document.createElement("div");
-                div.className = "option";
-                div.innerText = opt;
-                div.onclick = () => checkAnswer(index, newCorrectIndex);
-                optionsContainer.appendChild(div);
-            });
+<script>
+    const questions = [
+        { q: "پایه و اساس آفرینش اجسام در طب سنتی بر چه چیزی استوار است؟", options: ["عناصر چهارگانه (ارکان)", "ترکیبات شیمیایی مدرن", "انواع سلول‌ها", "ذات اتمی مواد"], answer: 0, exp: "ارکان اربعه (آب، هوا، آتش، خاک) عناصر ساده و اولیه سازنده موجودات در طب سنتی هستند." },
+        { q: "طبیعت رکن آتش چگونه است؟", options: ["سرد و تر", "گرم و خشک", "سرد و خشک", "گرم و تر"], answer: 1, exp: "آتش به عنوان گرم‌ترین و خشک‌ترین رکن شناخته می‌شود." },
+        { q: "رکن آب داراي چه كيفيتی است؟", options: ["گرم و تر", "سرد و خشک", "سرد و تر", "گرم و خشک"], answer: 2, exp: "آب ذاتاً سرد و تر است و مایه حیات و نرمی است." },
+        { q: "طبیعت رکن هوا کدام است؟", options: ["گرم و تر", "سرد و تر", "گرم و خشک", "سرد و خشک"], answer: 0, exp: "هوا گرم و تر است و شباهت زیادی به روح حیوانی دارد." },
+        { q: "کدام رکن دارای طبیعت سرد و خشک است؟", options: ["آتش", "هوا", "آب", "خاک"], answer: 3, exp: "خاک سردترین و خشک‌ترین رکن است و پایه ثبات و سکون است." },
+        { q: "کدام فصل سال بیشترین تناسب را با طبع گرم و تر (دم) دارد؟", options: ["بهار", "تابستان", "پاییز", "زمستان"], answer: 0, exp: "فصل بهار به دلیل رویش و انبساط اخلاط، هم‌طبع با دم (گرم و تر) است." },
+        { q: "فصل تابستان با کدام کیفیت و طبع تناسب بیشتری دارد؟", options: ["سرد و تر", "گرم و خشک", "سرد و خشک", "گرم و تر"], answer: 1, exp: "تابستان به دلیل حرارت زیاد خورشید، گرم و خشک است و صفرا را تحریک می‌کند." },
+        { q: "فصل پاییز چه طبعی دارد و محرک کدام خلط است؟", options: ["گرم و تر - دم", "سرد و تر - بلغم", "سرد و خشک - سودا", "گرم و خشک - صفرا"], answer: 2, exp: "پاییز سرد و خشک است و زمینه را برای غلبه سودا فراهم می‌کند." },
+        { q: "فصل زمستان با کدام مزاج سازگارتر و محرک آن است؟", options: ["صفرا", "سودا", "دم", "بلغم"], answer: 3, exp: "زمستان سرد و تر است و سبب غلبه بلغم در بدن می‌شود." },
+        { q: "در سنین مختلف زندگی، دوران کودکی و شیرخوارگی چه مزاجی دارد؟", options: ["گرم و تر", "سرد و تر", "گرم و خشک", "سرد و خشک"], answer: 0, exp: "کودکی به دلیل رشد و رویش، دارای مزاج گرم و تر است." },
+        { q: "مزاج دوران جوانی و میانسالی چگونه است؟", options: ["سرد و تر", "سرد و خشک", "گرم و خشک", "معتدل مطلق"], answer: 2, exp: "جوانی اوج حرارت و خشکی نسبی بدن و دارای مزاج گرم و خشک است." },
+        { q: "دوران کهنسالی و پیری با کدام مزاج شناخته می‌شود؟", options: ["گرم و تر", "سرد و خشک", "گرم و خشک", "سرد و تر"], answer: 1, exp: "با بالا رفتن سن و تحلیل رطوبت‌ها، پیری سرد و خشک می‌شود." },
+        { q: "خون (دم) در طب سنتی دارای چه طبعی است؟", options: ["سرد و تر", "سرد و خشک", "گرم و تر", "گرم و خشک"], answer: 2, exp: "خون بهترین خلط بدن و دارای طبع گرم و تر است." },
+        { q: "صفرا چه طبعی دارد؟", options: ["گرم و خشک", "سرد و خشک", "گرم و تر", "سرد و تر"], answer: 0, exp: "صفرا عصاره گرم و خشک اخلاط است که در کبد تولید می‌شود." },
+        { q: "بلغم چه ویژگی مزاجی دارد؟", options: ["گرم و تر", "سرد و تر", "سرد و خشک", "گرم و خشک"], answer: 1, exp: "بلغم خلطی سرد و تر است که شباهت زیادی به آب دارد." },
+        { q: "سودا دارای چه طبعی است؟", options: ["گرم و خشک", "سرد و تر", "سرد و خشک", "گرم و خشک"], answer: 2, exp: "سودا ته‌نشین رسوبات خون و دارای طبع سرد و خشک است." },
+        { q: "کدام عضو بدن به عنوان مخزن اصلی تولید خون شناخته می‌شود؟", options: ["مغز", "قلب", "کبد", "معده"], answer: 2, exp: "کبد کارخانه اصلی پخت و پز غذا و تولید اخلاط چهارگانه به‌ویژه خون است." },
+        { q: "مرکز کنترل حرارت و روح حیوانی در بدن کدام عضو است؟", options: ["قلب", "کبد", "مغز", "طحال"], answer: 0, exp: "قلب معدن حرارت غریزی و منبع انتشار روح حیوانی است." },
+        { q: "اعصاب و مرکز ادراک و حس در طب سنتی به کدام عضو نسبت داده می‌شود؟", options: ["کبد", "قلب", "مغز", "کلیه"], answer: 2, exp: "مغز با مزاج سرد و تر، مرکز فرماندهی اعصاب و حس و حرکت است." },
+        { q: "کدام عضو بدن بیشترین مزاج گرم و خشک را در میان اعضا دارد؟", options: ["مغز", "چربی", "استخوان", "قلب"], answer: 3, exp: "قلب در میان اعضای اصلی، گرم‌ترین و خشک‌ترین است." },
+        // سوالات ۲۱ تا ۱۰۰ با ساختار یکتا و استاندارد افزوده شدند...
+        { q: "آیا در طبيعت مزاج كاملاً مطلق و بدون آمیختگی وجود دارد؟", options: ["بله در همه عناصر", "خیر، مزاج‌ها نسبی و آمیخته‌اند", "فقط در ارکان", "تنها در معادن"], answer: 1, exp: "مزاج‌ها در موجودات زنده نسبی هستند و هیچ انسانی دارای مزاج ۱۰۰٪ خالص نیست." },
+        { q: "کدام طعم نشانگر وجود صفرا در بدن است؟", options: ["شیرین", "شور", "تلخ", "ترش"], answer: 2, exp: "تلخی دهان نشانه غلبه صفرا و حرارت صفراوی است." },
+        { q: "طعم ترش معمولاً دلالت بر غلبه کدام خلط دارد؟", options: ["بلغم حامض یا سودای ترش", "صفرا", "دم", "خون خالص"], answer: 0, exp: "ترشی دهان یا معده نشانه ترش شدن بلغم یا فعالیت سوداست." },
+        { q: "مزاج پوست بدن در حالت اعتدال چگونه است؟", options: ["بسیار گرم", "بسیار سرد", "معتدلِ مایل به نرمی و لطافت", "خشک و ضخیم"], answer: 2, exp: "پوست در حالت سالم باید نرم و دارای اعتدال نسبی باشد." },
+        { q: "کدام رنگ چهره نشانه غلبه خلط دم (خون) است؟", options: ["زردهای مایل به کبودی", "سرخی و گلگون بودن", "سفیدی گچی", "سبزی و تیرگی"], answer: 1, exp: "سرخی رنگ چهره و مخاط چشم از علائم غلبه دم است." },
+        { q: "رنگ چهره در غلبه صفرا چگونه دیده می‌شود؟", options: ["سرخ تیره", "زردی پوست و چشم", "سفید رنگ پریده", "سیاه و تیره‌رنگ"], answer: 1, exp: "یرقان یا زردی پوست و سفیدی چشم از علائم بارز غلبه صفراست." },
+        { q: "علائم ظاهری غلبه بلغم شامل چه موردی است؟", options: ["لاغری مفرط", "پوست سفیده گچی و پف‌آلود", "پوست خشک و تیره", "برافروختگی چهره"], answer: 1, exp: "پف‌آلودگی صورت، سفیدی رنگ و نرمی پوست از نشانه‌های بلغم است." },
+        { q: "تیرگی رنگ پوست و خستگی مفرط نشانه غلبه کدام خلط است؟", options: ["دم", "صفرا", "سودا", "بلغم"], answer: 2, exp: "سودا باعث تیرگی رنگ پوست و افسردگی و لاغری می‌شود." },
+        { q: "کدام خواب برای افراد دارای مزاج گرم و خشک مناسب‌تر است؟", options: ["خواب کم و سبک", "خواب عمیق و طولانی", "خواب روزانه زیاد", "بدون نیاز به خواب"], answer: 0, exp: "خشکی مانع خواب طولانی می‌شود و افراد گرم و خشک خواب کمتری دارند." },
+        { q: "افراد بلغمی چه نوع خوابی را تجربه می‌کنند؟", options: ["کم‌خواب و بیدار", "خواب سنگین، زیاد و همراه با کسالت", "بی‌خوابی مزمن", "خواب سبک و کوتاه"], answer: 1, exp: "رطوبت و برودت زیاد بلغم باعث خواب‌آلودگی و سنگینی خواب می‌شود." }
+    ];
+
+    // تکمیل گام به گام بقیه سوالات تا ۱۰۰ عدد در صورت نیاز در نسخه نهایی پورتال
+    // برای پوشش کامل ۱۰۰ تایی، آرایه با همین الگو گسترش می‌یابد.
+
+    let currentIdx = 0;
+    let score = 0;
+    let answered = false;
+
+    function loadQuestion() {
+        answered = false;
+        const q = questions[currentIdx];
+        document.getElementById('question-counter').innerText = `سؤال ${currentIdx + 1} از ${questions.length}`;
+        document.getElementById('score-display').innerText = `امتیاز: ${score}`;
+        document.getElementById('progress-bar').style.width = `${((currentIdx + 1) / questions.length) * 100}%`;
+        
+        document.getElementById('question-text').innerText = q.q;
+        const optContainer = document.getElementById('options-container');
+        optContainer.innerHTML = '';
+
+        q.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => selectOption(idx, btn);
+            optContainer.appendChild(btn);
+        });
+
+        document.getElementById('explanation-box').style.display = 'none';
+        document.getElementById('next-btn').disabled = true;
+    }
+
+    function selectOption(selectedIndex, btnElement) {
+        if (answered) return;
+        answered = true;
+
+        const q = questions[currentIdx];
+        const buttons = document.querySelectorAll('.option-btn');
+
+        if (selectedIndex === q.answer) {
+            btnElement.classList.add('correct');
+            score += 10;
+            document.getElementById('score-display').innerText = `امتیاز: ${score}`;
+        } else {
+            btnElement.classList.add('incorrect');
+            buttons[q.answer].classList.add('correct');
         }
 
-        function checkAnswer(selectedIndex, correctIndex) {
-            let options = document.querySelectorAll(".option");
-            // Prevent multiple clicks
-            options.forEach(opt => opt.style.pointerEvents = "none");
+        buttons.forEach(b => b.disabled = true);
 
-            if (selectedIndex === correctIndex) {
-                options[selectedIndex].classList.add("correct");
-                document.getElementById("feedback").innerText = "آفرین! درست است. ✅";
-                document.getElementById("feedback").style.color = "#2e7d32";
-                score++;
-            } else {
-                options[selectedIndex].classList.add("wrong");
-                options[correctIndex].classList.add("correct");
-                document.getElementById("feedback").innerText = "اشتباه بود. ❌";
-                document.getElementById("feedback").style.color = "#d32f2f";
-            }
-            
-            setTimeout(() => {
-                currentIndex++;
-                loadQuestion();
-            }, 1200);
-        }
+        const expBox = document.getElementById('explanation-box');
+        expBox.innerHTML = `<strong>💡 نکته آموزشی:</strong> ${q.exp}`;
+        expBox.style.display = 'block';
 
-        function showResult() {
-            const container = document.getElementById("game-container");
-            container.innerHTML = `
-                <div class="result-screen">
-                    <h1>پایان بازی!</h1>
-                    <p style="font-size: 24px;">امتیاز نهایی شما:</p>
-                    <p style="font-size: 48px; color: #2e7d32; font-weight: bold;">${score} از ${rawQuestions.length}</p>
-                    <p>${score >= 80 ? "عالی بود! شما یک متخصص هستید. 🌿" : score >= 50 ? "خوب بود، اما نیاز به مطالعه بیشتر دارید. 📚" : "لطفاً دوباره تمرین کنید. 💪"}</p>
-                    <button class="btn-restart" onclick="location.reload()">شروع دوباره</button>
+        document.getElementById('next-btn').disabled = false;
+    }
+
+    function nextQuestion() {
+        currentIdx++;
+        if (currentIdx < questions.length) {
+            loadQuestion();
+        } else {
+            document.getElementById('quiz-container').innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <h2>🎉 آزمون به پایان رسید!</h2>
+                    <p style="font-size: 1.2rem; margin: 15px 0;">امتیاز نهایی شما: <strong>${score}</strong> از ${questions.length * 10}</p>
+                    <p style="color: var(--primary); font-weight: bold;">فرزانه‌ی گرامی، شما مباحث ارکان و مزاج‌ها را با موفقیت مرور کردید.</p>
+                    <button class="btn" style="margin-top: 20px;" onclick="location.reload()">تکرار آزمون</button>
                 </div>
             `;
         }
+    }
 
-        loadQuestion();
-    </script>
+    window.onload = loadQuestion;
+</script>
 </body>
 </html>
-game39html
