@@ -1,94 +1,215 @@
-۱. کد زیر را کامل کپی کنید (از `<!DOCTYPE html>` تا `</html>`).
-۲. در یک فایل جدید در موبایل یا کامپیوتر خود با نام `Game_100_Sitteh.html` ذخیره کنید.
-۳. حالا آن فایل را با مرورگر باز کنید؛ تمام بازی با ۱۰۰ سوال و سیستم امتیازدهی طلایی آماده است.
-
-```html
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دانشنامه سلامت - ۱۰۰ آزمون سته‌ی ضروریه</title>
+    <title>سامانه هوشمند ارزیابی مزاج و پایش سلامت - طب، علم سلامتی</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #eef2f3; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 10px; }
-        .game-card { background: white; width: 100%; max-width: 600px; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .header { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; color: #34495e; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        #q-text { font-size: 1.2rem; margin-bottom: 10px; color: #2c3e50; }
-        #q-connection { font-size: 0.9rem; color: #555; background: #fdfdfd; padding: 10px; border-right: 4px solid #27ae60; margin-bottom: 20px; }
-        .option-btn { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; background: white; cursor: pointer; transition: 0.2s; font-size: 1rem; }
-        .option-btn:hover { background: #e8f8f5; border-color: #27ae60; }
-        .correct { background: #27ae60 !important; color: white; }
-        .wrong { background: #c0392b !important; color: white; }
-        .badge-box { text-align: center; padding: 20px; }
-        .gold { color: #f1c40f; font-size: 1.5rem; font-weight: bold; }
+        :root {
+            --primary: #27ae60;
+            --primary-dark: #219653;
+            --bg-color: #f4f9f4;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+        }
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 15px;
+            text-align: center;
+        }
+        header {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 25px 15px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h1 { margin: 0; font-size: 20px; }
+        p.subtitle { margin: 8px 0 0 0; font-size: 13px; opacity: 0.95; }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: right;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #bdc3c7;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+        .result-box {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background: #e8f8f0;
+            border-right: 5px solid var(--primary);
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+        .result-box h3 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+        .game-link-btn {
+            display: inline-block;
+            background: #2980b9;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            color: #7f8c8d;
+            text-decoration: none;
+            font-size: 13px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
-<div class="game-card" id="game">
-    <div class="header">
-        <span id="q-counter">سوال ۱ از ۱۰۰</span>
-        <span id="score">امتیاز: ۰</span>
+    <header>
+        <h1>کلینیک مجازی و ارزیابی هوشمند سلامت</h1>
+        <p class="subtitle">پروژه جامع طب، علم سلامتی</p>
+    </header>
+
+    <div class="container">
+        <form id="healthForm" onsubmit="analyzeHealth(event)">
+            <div class="form-group">
+                <label for="height">قد (سانتی‌متر):</label>
+                <input type="number" id="height" required placeholder="مثلاً 175">
+            </div>
+
+            <div class="form-group">
+                <label for="weight">وزن (کیلوگرم):</label>
+                <input type="number" id="weight" required placeholder="مثلاً 70">
+            </div>
+
+            <div class="form-group">
+                <label for="temperament">واکنش اصلی بدن شما به آب و هوا:</label>
+                <select id="temperament">
+                    <option value="warm">گرما را کمتر تحمل می‌کنم و زود گرمم می‌شود (متمایل به صفرا/دم)</option>
+                    <option value="cold">سرما را کمتر تحمل می‌کنم و زود سردم می‌شود (متمایل به بلغم/سودا)</option>
+                    <option value="balanced">متعادل هستم</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="digestion">وضعیت هضم غذا و گوارش:</label>
+                <select id="digestion">
+                    <option value="fast">اشتهای زیاد و هضم سریع</option>
+                    <option value="slow">هضم کند، نفخ یا سنگینی معده</option>
+                    <option value="normal">عادی و متوازن</option>
+                </select>
+            </div>
+
+            <button type="submit">تحلیل و ارزیابی هوشمند سلامت</button>
+        </form>
+
+        <div id="resultBox" class="result-box">
+            <h3>نتیجه ارزیابی اختصاصی شما:</h3>
+            <p id="bmiResult"></p>
+            <p id="humorResult"></p>
+            <p id="recommendationResult"></p>
+            <div id="suggestedGameContainer"></div>
+        </div>
+
+        <a href="index.html" class="back-link">&larr; بازگشت به پورتال جامع بازی‌ها</a>
     </div>
-    <div id="q-text"></div>
-    <div id="q-connection"></div>
-    <div id="options"></div>
-</div>
 
-<script>
-    const questions = [
-        { q: "هوای محیط چه تأثیری بر مزاج دارد؟", a: "تغییر سریع مزاج", o: ["تغییر سریع مزاج", "تأثیری ندارد", "فقط بر پوست موثر است"], connection: "هوا اولین ورودی به بدن است." },
-        { q: "خواب معتدل چه تأثیری بر روح دارد؟", a: "آرامش و تجدید قوا", o: ["آرامش و تجدید قوا", "افزایش بلغم", "تضعیف قلب"], connection: "خواب معتدل باعث بازسازی قوای مدبره می‌شود." },
-        // (اینجا سوالات به صورت فشرده برای رعایت حجم تولید شده‌اند)
-        ...Array.from({length: 98}, (_, i) => ({
-            q: `سوال شماره ${i + 3}: در مورد سته ضروریه، کدام گزینه در مورد ${['هوا', 'خوردن', 'خواب', 'حرکت', 'اعراض نفسانی', 'احتباس'][i%6]} صحیح است؟`,
-            a: "تعادل در آن الزامی است",
-            o: ["تعادل در آن الزامی است", "باید حذف شود", "فقط در تابستان مهم است"],
-            connection: "هر ۶ اصل باید در حد اعتدال باشند."
-        }))
-    ];
+    <script>
+        function analyzeHealth(event) {
+            event.preventDefault();
+            
+            let height = parseFloat(document.getElementById('height').value) / 100;
+            let weight = parseFloat(document.getElementById('weight').value);
+            let temp = document.getElementById('temperament').value;
+            let digestion = document.getElementById('digestion').value;
 
-    let current = 0, score = 0;
+            // محاسبه BMI
+            let bmi = (weight / (height * height)).toFixed(1);
+            let bmiText = `شاخص توده بدنی (BMI شما): <strong>${bmi}</strong> - `;
+            if (bmi < 18.5) {
+                bmiText += "کمبود وزن (نیازمند تقویت تغذیه و رطوبت‌بخشی).";
+            } else if (bmi >= 18.5 && bmi < 25) {
+                bmiText += "وزن ایده‌آل و تناسب قد و وزن مناسب است.";
+            } else if (bmi >= 25 && bmi < 30) {
+                bmiText += "دارای اضافه وزن (نیازمند تحرک بیشتر و اصلاح سته ضروریه).";
+            } else {
+                bmiText += "نیازمند توجه جدی به رژیم غذایی و تدابیر لاغری.";
+            }
 
-    function loadQuestion() {
-        if (current >= questions.length) {
-            showResults();
-            return;
+            // تحلیل خلط غالب
+            let humor = "دموی / صفراوی";
+            let gameNum = 3;
+            let recText = "توصیه می‌شود از اغذیه با طبع متعادل استفاده کرده و ورزش سبک را در برنامه روزانه خود قرار دهید.";
+
+            if (temp === 'cold' && digestion === 'slow') {
+                humor = "بلغم غالب (سرد و تر)";
+                gameNum = 4;
+                recText = "توصیه می‌شود از خوردن سردیجات پرهیز کرده، ادویه‌جات گرم (مثل دارچین و زنجبیل) مصرف کنید و فعالیت بدنی را افزایش دهید.";
+            } else if (temp === 'warm' && digestion === 'fast') {
+                humor = "صفرا یا دم غالب (گرم)";
+                gameNum = 3;
+                recText = "توصیه می‌شود از مصرف بیش از حد غذاهای تند و سرخ‌کرده پرهیز نموده، از نوشیدنی‌های خنک طبیعی و سکنجبین بهره ببرید.";
+            }
+
+            let humorText = `خلط و مزاج احتمالی غالب شما: <strong>${humor}</strong>`;
+            let fullRec = `<strong>توصیه‌های حفظ الصحه:</strong> ${recText}`;
+
+            document.getElementById('bmiResult').innerHTML = bmiText;
+            document.getElementById('humorResult').innerHTML = humorText;
+            document.getElementById('recommendationResult').innerHTML = fullRec;
+            
+            document.getElementById('suggestedGameContainer').innerHTML = `
+                <br>پیشنهاد ویژه دانشنامه برای شما: <br>
+                <a href="game${gameNum}.html" class="game-link-btn">انجام بازی تخصصی شماره ${gameNum} (مربوط به مزاج و اخلاط)</a>
+            `;
+
+            document.getElementById('resultBox').style.display = "block";
         }
-        const q = questions[current];
-        document.getElementById('q-counter').innerText = `سوال ${current + 1} از ۱۰۰`;
-        document.getElementById('q-text').innerText = q.q;
-        document.getElementById('q-connection').innerText = "نکته آموزشی: " + q.connection;
-        const opts = document.getElementById('options');
-        opts.innerHTML = '';
-        q.o.forEach(o => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.innerText = o;
-            btn.onclick = () => check(o, btn);
-            opts.appendChild(btn);
-        });
-    }
+    </script>
 
-    function check(choice, btn) {
-        document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
-        if(choice === questions[current].a) {
-            btn.classList.add('correct');
-            score++;
-            document.getElementById('score').innerText = `امتیاز: ${score}`;
-        } else {
-            btn.classList.add('wrong');
-        }
-        setTimeout(() => { current++; loadQuestion(); }, 1000);
-    }
-
-    function showResults() {
-        const badge = score > 90 ? "🥇 نشان طلایی استاد" : score > 70 ? "🥈 نشان نقره‌ای پژوهشگر" : "🥉 نشان برنزی";
-        localStorage.setItem('best_score', Math.max(localStorage.getItem('best_score') || 0, score));
-        document.getElementById('game').innerHTML = `<div class="badge-box"><h2>پایان آزمون</h2><p>امتیاز شما: ${score} از ۱۰۰</p><div class="gold">${badge}</div><button class="option-btn" onclick="location.reload()">شروع دوباره</button></div>`;
-    }
-
-    loadQuestion();
-</script>
 </body>
 </html>
