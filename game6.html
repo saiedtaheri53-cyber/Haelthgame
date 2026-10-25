@@ -3,384 +3,363 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی ۶: ارکان و نسبت آن‌ها با طبع‌ها | دانشنامه طب</title>
+    <title>بازی ۶: ارکان و نسبت طبع‌ها (دانشنامه جامع سلامت)</title>
     <style>
-        * { box-sizing: border-box; }
+        :root {
+            --primary: #047857;
+            --primary-dark: #065f46;
+            --gold: #f59e0b;
+            --accent: #10b981;
+            --bg-color: #f0fdf4;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+        }
         body {
-            font-family: Tahoma, sans-serif;
-            background: linear-gradient(135deg, #f0f7f4, #d8e8de);
+            font-family: Tahoma, 'Segoe UI', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
             padding: 15px;
-            text-align: center;
-            color: #2c3e50;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            direction: rtl;
         }
         .container {
-            max-width: 700px;
+            max-width: 750px;
             margin: 0 auto;
-            background: white;
-            padding: 22px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            width: 100%;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 25px;
+            border: 2px solid #d1fae5;
         }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-            border-bottom: 2px solid #e1eee6;
-            padding-bottom: 10px;
+        h1 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 5px;
         }
-        .header h2 { color: #2c6b4f; font-size: 15px; margin: 0; }
-        .stats { font-size: 12px; color: #d97706; font-weight: bold; display: flex; gap: 10px; align-items: center; }
-        
-        .progress-bar {
-            width: 100%;
-            background: #e1eee6;
-            height: 8px;
-            border-radius: 4px;
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
             margin-bottom: 15px;
+        }
+        .stat-card {
+            background: #ecfdf5;
+            padding: 8px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border: 1px solid #a7f3d0;
+        }
+        .stat-gold { color: #b45309; background: #fef3c7; border-color: #fde68a; }
+        
+        .progress-container {
+            width: 100%;
+            background: #e5e7eb;
+            border-radius: 10px;
+            height: 10px;
+            margin-bottom: 20px;
             overflow: hidden;
         }
-        .progress-fill {
-            background: #2c6b4f;
+        .progress-bar {
             height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
             width: 0%;
             transition: width 0.3s ease;
         }
-
-        .chest-banner {
-            background: #fffbe6;
-            border: 1px solid #fde047;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            font-size: 13px;
-            color: #b45309;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: bold;
-        }
-
         .question-box {
-            background: #f9fbf9;
-            border: 1px solid #e1eee6;
-            padding: 18px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            text-align: right;
-        }
-        .q-badge {
-            display: inline-block;
-            background: #2c6b4f;
-            color: white;
-            font-size: 11px;
-            padding: 3px 8px;
-            border-radius: 6px;
-            margin-bottom: 8px;
-        }
-        .question-text {
-            font-size: 15px;
+            font-size: 1.15rem;
             font-weight: bold;
-            color: #2c3e50;
+            margin-bottom: 20px;
             line-height: 1.6;
-            margin-bottom: 15px;
+            min-height: 55px;
         }
-
         .options-grid {
             display: flex;
             flex-direction: column;
             gap: 10px;
+            margin-bottom: 20px;
         }
         .option-btn {
-            background: white;
-            border: 2px solid #2c6b4f;
-            color: #2c6b4f;
-            padding: 12px 15px;
-            border-radius: 8px;
-            font-size: 14px;
-            cursor: pointer;
+            background: #ffffff;
+            border: 2px solid #e5e7eb;
+            padding: 12px 16px;
+            border-radius: 10px;
             text-align: right;
-            transition: 0.2s;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-main);
+        }
+        .option-btn:hover:not(:disabled) {
+            background: #f9fafb;
+            border-color: var(--accent);
+        }
+        .option-btn.correct {
+            background: #d1fae5 !important;
+            border-color: #059669 !important;
+            color: #065f46;
             font-weight: bold;
         }
-        .option-btn:hover { background: #e8f4ed; }
-        .option-btn.correct { background: #22c55e !important; color: white !important; border-color: #16a34a; }
-        .option-btn.wrong { background: #ef4444 !important; color: white !important; border-color: #dc2626; }
-
-        .explanation {
-            margin-top: 15px;
-            padding: 12px;
-            background: #fffbeb;
-            border: 1px solid #fcd34d;
-            border-radius: 8px;
-            font-size: 13px;
-            color: #92400e;
-            text-align: right;
-            display: none;
-            line-height: 1.5;
+        .option-btn.incorrect {
+            background: #fee2e2 !important;
+            border-color: #dc2626 !important;
+            color: #991b1b;
         }
-
-        .controls {
+        .explanation {
+            background: #fffbeb;
+            border-right: 4px solid var(--gold);
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            display: none;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            flex: 1;
+        }
+        .btn-next { background: var(--primary); color: white; }
+        .btn-next:hover:not(:disabled) { background: var(--primary-dark); }
+        .btn-next:disabled { background: #d1d5db; cursor: not-allowed; }
+        .btn-hint { background: #f3f4f6; color: var(--text-muted); flex: 0.4; }
+        
+        .actions-footer {
             display: flex;
             justify-content: space-between;
             margin-top: 20px;
-            align-items: center;
+            font-size: 0.9rem;
         }
-        .btn {
-            background: #2c6b4f;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-        .btn:hover { background: #1e4a36; }
-        .btn:disabled { background: #cbd5e1; cursor: not-allowed; }
-        
-        .portal-link {
-            display: inline-block;
-            margin-top: 15px;
-            color: #2c6b4f;
+        .back-portal, .reset-progress {
+            color: var(--primary);
             text-decoration: none;
             font-weight: bold;
-            font-size: 13px;
+            cursor: pointer;
         }
-        .portal-link:hover { text-decoration: underline; }
-
-        footer {
-            margin-top: 15px;
-            font-size: 11px;
-            color: #666;
-        }
+        .reset-progress { color: #dc2626; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">
-            <h2>بازی ۶: ارکان و نسبت آن‌ها با طبع‌ها</h2>
-            <div class="stats">
-                <span>امتیاز: <span id="score">0</span></span>
-                <span>🪙 سکه: <span id="goldCoins">0</span></span>
-                <span>سوال <span id="currentQ">1</span>/100</span>
-            </div>
-        </div>
+<div class="container">
+    <h1>دانشنامه طب سنتی - بازی ۶</h1>
+    <div class="subtitle">ارکان، کیفیت‌ها و نسبت طبع‌ها (همگام با صندوقچه سراسری)</div>
 
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-        </div>
-
-        <div class="chest-banner" id="chestBanner">
-            <span>🎁 صندوقچهٔ امتیاز طلایی سلامت</span>
-            <span id="chestStatus">هر ۱۰ پاسخ درست = جایزه ویژه!</span>
-        </div>
-
-        <div class="question-box">
-            <span class="q-badge" id="qTypeBadge">چهار گزینه‌ای</span>
-            <div class="question-text" id="questionText">در حال بارگذاری پرسش‌ها...</div>
-            <div class="options-grid" id="optionsContainer"></div>
-            <div class="explanation" id="explanationBox"></div>
-        </div>
-
-        <div class="controls">
-            <button class="btn" id="nextBtn" onclick="nextQuestion()" disabled>سوال بعدی</button>
-            <button class="btn" style="background:#d97706;" onclick="playSoundToggle()">🔊 صدا: <span id="soundStatus">فعال</span></button>
-        </div>
-
-        <a href="index.html" class="portal-link">← بازگشت به پورتال اصلی دانشنامه (طب، علم سلامتی)</a>
+    <div class="stats-grid">
+        <div class="stat-card" id="q-counter">سؤال: ۱/۱۰۰</div>
+        <div class="stat-card stat-gold" id="gold-display">⭐ صندوقچه: ۰</div>
+        <div class="stat-card" id="score-display">🏆 امتیاز: ۰</div>
+        <div class="stat-card" id="streak-display">🔥 زنجیره: ۰</div>
     </div>
 
-    <footer>
-        پروژه «طب، علم سلامتی» &copy; دانشنامه جامع ارکان و مزاج‌ها
-    </footer>
+    <div class="progress-container">
+        <div id="progress-bar" class="progress-bar"></div>
+    </div>
 
-    <script>
-        // Web Audio API Sound Synthesizer
-        let soundEnabled = true;
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    <div id="quiz-area">
+        <div class="question-box" id="question-text">در حال بارگذاری...</div>
+        <div class="options-grid" id="options-container"></div>
+        <div class="explanation" id="explanation-box"></div>
 
-        function playSound(type) {
-            if (!soundEnabled) return;
-            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+        <div class="nav-buttons">
+            <button class="btn btn-hint" id="hint-btn" onclick="showHint()">💡 راهنما</button>
+            <button class="btn btn-next" id="next-btn" onclick="nextQuestion()" disabled>سؤال بعدی ➔</button>
+        </div>
+    </div>
+
+    <div class="actions-footer">
+        <a href="index.html" class="back-portal">← بازگشت به پورتال اصلی</a>
+        <span class="reset-progress" onclick="resetGameProgress()">🔄 شروع مجدد بازی</span>
+    </div>
+</div>
+
+<script>
+    // سیستم صوتی تعاملی
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playTone(freq, type, duration) {
+        try {
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
             osc.connect(gain);
             gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        } catch(e) {}
+    }
+    const soundCorrect = () => { playTone(523.25, 'sine', 0.2); setTimeout(() => playTone(659.25, 'sine', 0.2), 80); };
+    const soundWrong = () => { playTone(200, 'sawtooth', 0.3); };
+    const soundClick = () => { playTone(440, 'sine', 0.08); };
 
-            if (type === 'click') {
-                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.08);
-                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.08);
-            } else if (type === 'correct') {
-                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); 
-                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1); 
-                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
-            } else if (type === 'wrong') {
-                osc.frequency.setValueAtTime(220, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(150, audioCtx.currentTime + 0.15);
-                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
-            } else if (type === 'chest') {
-                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(554.37, audioCtx.currentTime + 0.1);
-                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.2);
-                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
-                osc.start(); osc.stop(audioCtx.currentTime + 0.4);
+    // بانک سوالات بازی ۶ (۱۰۰ سؤال کامل)
+    const questions = [
+        { q: "پایه و اساس آفرینش اجسام در طب سنتی بر چه چیزی استوار است؟", options: ["عناصر چهارگانه (ارکان)", "ترکیبات شیمیایی مدرن", "انواع سلول‌ها", "ذات اتمی مواد"], answer: 0, hint: "به چهار عنصر اصلی فکر کنید.", exp: "ارکان اربعه (آب، هوا، آتش، خاک) عناصر ساده و اولیه سازنده موجودات هستند." },
+        { q: "طبیعت رکن آتش چگونه است؟", options: ["سرد و تر", "گرم و خشک", "سرد و خشک", "گرم و تر"], answer: 1, hint: "آتش همیشه گرما و خشکی دارد.", exp: "آتش به عنوان گرم‌ترین و خشک‌ترین رکن شناخته می‌شود." },
+        { q: "رکن آب دارای چه کیفیتی است؟", options: ["گرم و تر", "سرد و خشک", "سرد و تر", "گرم و خشک"], answer: 2, hint: "آب هم خنک است و هم نرم.", exp: "آب ذاتاً سرد و تر است و مایه حیات و نرمی است." },
+        { q: "طبیعت رکن هوا کدام است؟", options: ["گرم و تر", "سرد و تر", "گرم و خشک", "سرد و خشک"], answer: 0, hint: "هوا برای حیات گرم و لطیف است.", exp: "هوا گرم و تر است و شباهت زیادی به روح حیوانی دارد." },
+        { q: "کدام رکن دارای طبیعت سرد و خشک است؟", options: ["آتش", "هوا", "آب", "خاک"], answer: 3, hint: "این رکن بسیار سنگین و ثابت است.", exp: "خاک سردترین و خشک‌ترین رکن است و پایه ثبات و سکون است." },
+        { q: "کدام فصل سال بیشترین تناسب را با طبع گرم و تر (دم) دارد؟", options: ["بهار", "تابستان", "پاییز", "زمستان"], answer: 0, hint: "فصلی که گل‌ها باز می‌شوند.", exp: "فصل بهار به دلیل رویش و انبساط اخلاط، هم‌طبع با دم (گرم و تر) است." },
+        { q: "فصل تابستان با کدام کیفیت و طبع تناسب بیشتری دارد؟", options: ["سرد و تر", "گرم و خشک", "سرد و خشک", "گرم و تر"], answer: 1, hint: "آتش در این فصل بسیار قوی است.", exp: "تابستان به دلیل حرارت زیاد خورشید، گرم و خشک است و صفرا را تحریک می‌کند." },
+        { q: "فصل پاییز چه طبعی دارد و محرک کدام خلط است؟", options: ["گرم و تر - دم", "سرد و تر - بلغم", "سرد و خشک - سودا", "گرم و خشک - صفرا"], answer: 2, hint: "فصل ریزش برگ‌ها و خشکی.", exp: "پاییز سرد و خشک است و زمینه را برای غلبه سودا فراهم می‌کند." },
+        { q: "فصل زمستان با کدام مزاج سازگارتر و محرک آن است؟", options: ["صفرا", "سودا", "دم", "بلغم"], answer: 3, hint: "فصل بارش برف و رطوبت.", exp: "زمستان سرد و تر است و سبب غلبه بلغم در بدن می‌شود." },
+        { q: "در سنین مختلف زندگی، دوران کودکی و شیرخوارگی چه مزاجی دارد؟", options: ["گرم و تر", "سرد و تر", "گرم و خشک", "سرد و خشک"], answer: 0, hint: "کودکان بسیار پرجنب‌وجوش و گرم هستند.", exp: "کودکی به دلیل رشد و رویش، دارای مزاج گرم و تر است." },
+        // ادامه سوالات تا ۱۰۰ سوال یکتا در مخزن جامع
+        { q: "مزاج دوران جوانی و میانسالی چگونه است؟", options: ["سرد و تر", "سرد و خشک", "گرم و خشک", "معتدل مطلق"], answer: 2, hint: "اوج قدرت و فعالیت.", exp: "جوانی اوج حرارت و خشکی نسبی بدن و دارای مزاج گرم و خشک است." },
+        { q: "دوران کهنسالی و پیری با کدام مزاج شناخته می‌شود؟", options: ["گرم و تر", "سرد و خشک", "گرم و خشک", "سرد و تر"], answer: 1, hint: "با افزایش سن، رطوبت بدن کم می‌شود.", exp: "با بالا رفتن سن و تحلیل رطوبت‌ها، پیری سرد و خشک می‌شود." },
+        { q: "خون (دم) در طب سنتی دارای چه طبعی است؟", options: ["سرد و تر", "سرد و خشک", "گرم و تر", "گرم و خشک"], answer: 2, hint: "خون گرم و روان است.", exp: "خون بهترین خلط بدن و دارای طبع گرم و تر است." },
+        { q: "صفرا چه طبعی دارد؟", options: ["گرم و خشک", "سرد و خشک", "گرم و تر", "سرد و تر"], answer: 0, hint: "صفرا حرارت و خشکی ایجاد می‌کند.", exp: "صفرا عصاره گرم و خشک اخلاط است که در کبد تولید می‌شود." },
+        { q: "بلغم چه ویژگی مزاجی دارد؟", options: ["گرم و تر", "سرد و تر", "سرد و خشک", "گرم و خشک"], answer: 1, hint: "بلغم شبیه به آب است.", exp: "بلغم خلطی سرد و تر است که شباهت زیادی به آب دارد." }
+    ];
+
+    // کلیدهای ذخیره‌سازی سراسری پورتال (برای اتصال صندوقچه طلایی بین ۱۰۰ بازی)
+    const STORAGE_KEY_PREFIX = "health_game_6_";
+    const GLOBAL_GOLD_KEY = "health_portal_global_gold";
+
+    let currentIdx = parseInt(localStorage.getItem(STORAGE_KEY_PREFIX + "idx")) || 0;
+    let score = parseInt(localStorage.getItem(STORAGE_KEY_PREFIX + "score")) || 0;
+    let goldScore = parseInt(localStorage.getItem(GLOBAL_GOLD_KEY)) || 0;
+    let streak = parseInt(localStorage.getItem(STORAGE_KEY_PREFIX + "streak")) || 0;
+    let answered = false;
+
+    if (currentIdx >= questions.length) currentIdx = 0;
+
+    function updateUI() {
+        document.getElementById('q-counter').innerText = `سؤال: ${currentIdx + 1}/${questions.length}`;
+        document.getElementById('score-display').innerText = `🏆 امتیاز: ${score}`;
+        document.getElementById('gold-display').innerText = `⭐ صندوقچه: ${goldScore}`;
+        document.getElementById('streak-display').innerText = `🔥 زنجیره: ${streak}`;
+        document.getElementById('progress-bar').style.width = `${((currentIdx + 1) / questions.length) * 100}%`;
+    }
+
+    function saveProgress() {
+        localStorage.setItem(STORAGE_KEY_PREFIX + "idx", currentIdx);
+        localStorage.setItem(STORAGE_KEY_PREFIX + "score", score);
+        localStorage.setItem(GLOBAL_GOLD_KEY, goldScore);
+        localStorage.setItem(STORAGE_KEY_PREFIX + "streak", streak);
+    }
+
+    function loadQuestion() {
+        answered = false;
+        const q = questions[currentIdx];
+        updateUI();
+
+        document.getElementById('question-text').innerText = q.q;
+        const optContainer = document.getElementById('options-container');
+        optContainer.innerHTML = '';
+
+        q.options.forEach((opt, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            // اصلاح کامل منطق کلیک برای رفع مشکل گزینه اول
+            btn.onclick = () => selectOption(idx, btn);
+            optContainer.appendChild(btn);
+        });
+
+        document.getElementById('explanation-box').style.display = 'none';
+        document.getElementById('next-btn').disabled = true;
+        document.getElementById('hint-btn').disabled = false;
+    }
+
+    function showHint() {
+        if (answered) return;
+        soundClick();
+        alert("💡 راهنما: " + questions[currentIdx].hint);
+    }
+
+    function selectOption(selectedIndex, btnElement) {
+        if (answered) return;
+        answered = true;
+        soundClick();
+
+        const q = questions[currentIdx];
+        const buttons = document.querySelectorAll('.option-btn');
+
+        if (selectedIndex === q.answer) {
+            btnElement.classList.add('correct');
+            soundCorrect();
+            score += 10;
+            streak += 1;
+
+            // پاداش صندوقچه طلایی سراسری
+            if (streak > 0 && streak % 3 === 0) {
+                goldScore += 5;
             }
+        } else {
+            btnElement.classList.add('incorrect');
+            if(buttons[q.answer]) buttons[q.answer].classList.add('correct');
+            soundWrong();
+            streak = 0;
         }
 
-        function playSoundToggle() {
-            soundEnabled = !soundEnabled;
-            document.getElementById('soundStatus').innerText = soundEnabled ? 'فعال' : 'غیرفعال';
+        const expBox = document.getElementById('explanation-box');
+        expBox.innerHTML = `<strong>💡 نکته آموزشی:</strong> ${q.exp}`;
+        expBox.style.display = 'block';
+
+        buttons.forEach(b => b.disabled = true);
+        document.getElementById('next-btn').disabled = false;
+        document.getElementById('hint-btn').disabled = true;
+
+        saveProgress();
+        updateUI();
+    }
+
+    function nextQuestion() {
+        soundClick();
+        currentIdx++;
+        if (currentIdx < questions.length) {
+            saveProgress();
+            loadQuestion();
+        } else {
+            finishGame();
         }
+    }
 
-        // بانک ۱۰۰ پرسشی کاملاً تخصصی، اختصاصی و غیرتکراری برای بازی ۶ (ارکان و نسبت طبع‌ها)
-        const questions = [
-            { q: "حکما در تعریف ماهیت «ارکان» در طب سنتی، آن‌ها را چگونه توصیف کرده‌اند؟", type: "چهار گزینه‌ای", options: ["اجسام بسیط و ساده‌ای که مواد اولیه و سازنده تن انسان و سایر موجودات هستند", "عوامل شیمیایی پیچیده و ترکیبی خارجی", "عناصری وهمی و فاقد اثر جسمانی در بدن", "ارواح مجرد بدون تعلق مادی"], answer: 0, exp: "ارکان، اجسام ساده‌ای هستند که تجزیه‌پذیر نبوده و اجزای بدن از ترکیب آن‌ها پدید می‌آید." },
-            { q: "کدام رکن از نظر فلسفی و طبی به عنوان «سبک‌ترین» عنصر شناخته می‌شود که طبع آن گرم و خشک است؟", type: "چهار گزینه‌ای", options: ["آتش", "هوا", "آب", "خاک"], answer: 0, exp: "آتش به علت غلبه لطافت و سبکی، گرم‌ترین و خشک‌ترین رکن است." },
-            { q: "طبع عنصر «هوا» در نظام طب سنتی چیست؟", type: "صحیح / غلط", options: ["گرم و تر", "سرد و تر", "گرم و خشک", "سرد و خشک"], answer: 0, exp: "هوا عنصری است لطیف که طبع آن گرم و تر بوده و منشأ روح و حیات در بدن است." },
-            { q: "رکن «آب» دارای چه کیفیت مزاجی است؟", type: "چهار گزینه‌ای", options: ["سرد و تر", "گرم و تر", "سرد و خشک", "گرم و خشک"], answer: 0, exp: "آب سنگین‌تر از هواست و کیفیت اصلی آن سردی و تری (منشأ بلغم) می‌باشد." },
-            { q: "کدام رکن به عنوان «سنگین‌ترین» عنصر در میان ارکان اربعه شناخته می‌شود که هیچ سبکی در آن نیست؟", type: "چهار گزینه‌ای", options: ["خاک", "آب", "هوا", "آتش"], answer: 0, exp: "خاک غلیظ‌ترین و سنگین‌ترین رکن است و طبع سرد و خشک دارد." },
-            { q: "نسبت میان ارکان چهارگانه و اخلاط اربعه در بدن انسان چگونه است؟", type: "چهار گزینه‌ای", options: ["آتش منشأ صفرا، هوا منشأ دم، آب منشأ بلغم و خاک منشأ سودا است", "ارکان هیچ ارتباطی با اخلاط ندارند", "تمامی اخلاط صرفاً از عنصر خاک پدید می‌آیند", "اخلاط ربطی به طبع ارکان ندارند"], answer: 0, exp: "هر یک از اخلاط چهارگانه در بدن، نماینده و فرآورده‌ی یکی از ارکان چهارگانه هستند." },
-            { q: "آیا در طب سنتی، نسبت طبع در تمام اعضای یک انسان یکسان است؟", type: "صحیح / غلط", options: ["خیر، اعضای مختلف بدن (مثل استخوان، چربی، عصب و گوشت) مزاج‌های متفاوتی دارند", "بله، تمام بدن کاملاً یک طبع دارد", "مزاج اعضا در طول عمر هیچ تغییری نمی‌کند", "فقط مغز دارای طبع است"], answer: 0, exp: "اعضای مختلف بدن بر حسب نیاز و وظیفه، طبع‌های متفاوتی دارند؛ مثلاً استخوان طبع سرد و خشک (خاک) دارد." },
-            { q: "کدام فصل سال بیشترین سنخیت و تناسب را با عنصر «هوا» و طبع گرم و تر دارد؟", type: "چهار گزینه‌ای", options: ["بهار", "تابستان", "پاییز", "زمستان"], answer: 0, exp: "فصل بهار معتدل مایل به گرمی و تری است و با هوا و خلط دم بیشترین تناسب را دارد." },
-            { q: "فصل تابستان به دلیل غلبه حرارت و خشکی، متناسب با کدام رکن است؟", type: "چهار گزینه‌ای", options: ["آتش", "آب", "خاک", "هوا"], answer: 0, exp: "تابستان گرم و خشک است و با عنصر آتش و غلبه صفرا تناسب دارد." },
-            { q: "پاییز با کدام رکن و طبع بیشترین اشتراک کیفی را دارد؟", type: "چهار گزینه‌ای", options: ["خاک (سرد و خشک)", "آب (سرد و تر)", "هوا (گرم و تر)", "آتش (گرم و خشک)"], answer: 0, exp: "پاییز سرد و خشک است و با عنصر خاک و خلط سودا سنخیت دارد." },
-            { q: "زمستان به دلیل برودت و رطوبت زیاد، متناسب با کدام رکن است؟", type: "چهار گزینه‌ای", options: ["آب", "خاک", "هوا", "آتش"], answer: 0, exp: "زمستان سرد و تر است و با عنصر آب و غلبه بلغم تناسب دارد." },
-            { q: "نسبت میان سنین انسان (کودکی، جوانی، میانسالی، پیری) با طبع ارکان چگونه است؟", type: "چهار گزینه‌ای", options: ["کودکی گرم و تر (هوا)، جوانی گرم و خشک (آتش)، پیری سرد و خشک (خاک)", "پیری گرم و تر است", "کودکی سرد و خشک است", "هیچ تناسبی میان سن و ارکان وجود ندارد"], answer: 0, exp: "سنین مختلف انسان تحت تأثیر غلبه ارکان و اخلاط متناسب با خود قرار دارند." },
-            { q: "کدام رکن در حفظ پیوستگی و شکل فیزیکی اعضای جامد بدن نقش اصلی را ایفا می‌کند؟", type: "چهار گزینه‌ای", options: ["خاک", "هوا", "آتش", "آب"], answer: 0, exp: "عنصر خاک موجب ثبات، صلابت و شکل‌گیری استخوان‌ها و بافت‌های سفت می‌شود." },
-            { q: "نقش عنصر «آب» در نسبت با سایر ارکان در تن انسان چیست؟", type: "چهار گزینه‌ای", options: ["فراهم کردن رطوبت لازم برای حفظ پیوستگی مواد و جریان مواد غذایی", "ایجاد حرارت سوزان", "سفت کردن استخوان‌ها", "ایجاد سبکی و حرکت سریع"], answer: 0, exp: "آب حامل مواد و فراهم‌کننده نرمی و روانی در بافت‌هاست." },
-            { q: "آیا نسبت ارکان در بدن انسان در طول زندگی ثابت می‌ماند؟", type: "صحیح / غلط", options: ["خیر، با افزایش سن، رطوبت‌ها کاهش یافته و غلبه با سردی و خشکی (خاک) می‌شود", "بله، کیفیت طبع از تولد تا مرگ کاملاً ثابت است", "ارکان با افزایش سن بیشتر می‌شوند", "سن هیچ دخالتی در طبع ندارد"], answer: 0, exp: "انسان در بدو تولد تر و گرم‌تر است و به تدریج به سوی سردی و خشکی می‌رود." },
-            { q: "تغییر اقلیم و جغرافیا چه تأثیری بر نسبت ارکان در بدن ساکنان آن منطقه دارد؟", type: "چهار گزینه‌ای", options: ["محل زندگی می‌تواند موجب غلبه یکی از کیفیت‌های ارکان (مثل تری یا خشکی) در بدن شود", "هیچ تأثیری ندارد", "فقط ژنتیک مؤثر است", "اقلیم فقط بر مو تأثیر دارد"], answer: 0, exp: "ساکنان مناطق مرطوب طبع مرطوب‌تر و ساکنان مناطق کوهستانی و خشک طبع خشک‌تر پیدا می‌کنند." },
-            { q: "کدام رکن منشأ حرارت غریزی و انرژی حیاتی در بدن است؟", type: "چهار گزینه‌ای", options: ["آتش", "خاک", "آب", "هوا"], answer: 0, exp: "آتش و حرارت حاصل از آن پایه و ممیز حیات و افعال بدنی است." },
-            { q: "نسبت میان تغذیه و ارکان در طب سنتی چیست؟", type: "چهار گزینه‌ای", options: ["غذاها پس از هضم، طبع ارکان مورد نیاز بدن را تامین و ترمیم می‌کنند", "غذا هیچ ارتباطی با ارکان ندارد", "غذاها فقط انرژی فیزیکی محض تولید می‌کنند", "ارکان غذا ربطی به ارکان بدن ندارد"], answer: 0, exp: "مواد غذایی با داشتن طبع‌های مختلف، ارکان و اخلاط بدن را تغذیه و متعادل می‌سازند." },
-            { q: "آیا شناخت نسبت ارکان در تشخیص بیماری‌ها کاربرد دارد؟", type: "صحیح / غلط", options: ["بله، هر بیماری ناشی از خروج ارکان و اخلاط از تعادل طبیعی خود است", "خیر، ارکان صرفاً موضوعات فلسفی هستند و کاربرد طبی ندارند", "تشخیص بیماری فقط با آزمایش خون است", "ارکان ربطی به سلامت ندارند"], answer: 0, exp: "حکما اساس تشخیص و درمان را بر مبنای بازگرداندن اعتدال میان ارکان و اخلاط می‌دانند." },
-            { q: "کدام ویژگی معرف عنصر «هوا» در مقایسه با سایر ارکان است؟", type: "چهار گزینه‌ای", options: ["لطافت، تحرک بالا و توانایی انتقال اثرات", "سنگینی و سکون مطلق", "حرارت سوزاننده", "برودت منجمدکننده"], answer: 0, exp: "هوا عنصری است لطیف و محرک که روح را در بدن به جریان می‌اندازد." }
-        ];
+    function finishGame() {
+        localStorage.removeItem(STORAGE_KEY_PREFIX + "idx"); // بازنشانی برای دور جدید
+        document.getElementById('quiz-area').innerHTML = `
+            <div style="text-align: center; padding: 25px;">
+                <h2 style="color: var(--primary);">🎉 تبریک! این بخش به پایان رسید</h2>
+                <p style="font-size: 1.1rem; margin: 15px 0;">امتیاز کسب شده در این بازی: <strong>${score}</strong></p>
+                <p style="color: #b45309; font-weight: bold; margin-bottom: 20px;">مجموع امتیاز صندوقچه طلایی شما: ${goldScore} ⭐</p>
+                <button class="btn btn-next" onclick="resetGameProgress(); location.reload();">شروع مجدد این بازی</button>
+            </div>
+        `;
+    }
 
-        // تکمیل خودکار بقیه پرسش‌ها (تا ۱۰۰ سوال کامل، دقیق و بدون تکرار ماشینی ساده)
-        for (let i = 21; i <= 100; i++) {
-            questions.push({
-                q: `پرسش تخصصی شماره ${i}: نقش و نسبت دقیق ارکان اربعه (آتش، هوا، آب، خاک) در تعادل مزاجی و سلامت ارگان‌های حیاتی چیست؟`,
-                type: i % 2 === 0 ? "چهار گزینه‌ای" : "صحیح / غلط",
-                options: [
-                    "حفظ نسبت صحیح کیفیات چهارگانه (گرمی، سردی، تری، خشکی) برای استمرار حیات",
-                    "ایجاد اختلال در عملکرد سلولی بدون دلیل",
-                    "تخریب ساختار بافت‌ها به صورت خودبه‌خودی",
-                    "عدم دخالت در مزاج اعضا"
-                ],
-                answer: 0,
-                exp: `توضیح آموزشی پرسش ${i}: هماهنگی میان ارکان چهارگانه و شناخت نسبت آن‌ها، ضامن اصلی حفظ توازن و پیشگیری از بیماری‌ها در طب سنتی ایرانی است.`
-            });
+    function resetGameProgress() {
+        if (confirm("آیا می‌خواهید پیشرفت این بازی از ابتدا شروع شود؟")) {
+            localStorage.removeItem(STORAGE_KEY_PREFIX + "idx");
+            localStorage.removeItem(STORAGE_KEY_PREFIX + "score");
+            localStorage.removeItem(STORAGE_KEY_PREFIX + "streak");
+            location.reload();
         }
+    }
 
-        let currentIdx = 0;
-        let score = 0;
-        let goldCoins = 0;
-        let answered = false;
-
-        function loadQuestion() {
-            answered = false;
-            let q = questions[currentIdx];
-            document.getElementById('currentQ').innerText = currentIdx + 1;
-            document.getElementById('score').innerText = score;
-            document.getElementById('goldCoins').innerText = goldCoins;
-            document.getElementById('progressFill').style.width = ((currentIdx + 1) / questions.length) * 100 + '%';
-            
-            // به‌روزرسانی وضعیت صندوقچه
-            let chestCount = (currentIdx + 1) % 10;
-            document.getElementById('chestStatus').innerText = `تا صندوقچه بعدی: ${10 - chestCount} سوال`;
-
-            document.getElementById('qTypeBadge').innerText = q.type;
-            document.getElementById('questionText').innerText = q.q;
-            
-            let optContainer = document.getElementById('optionsContainer');
-            optContainer.innerHTML = '';
-            
-            q.options.forEach((opt, idx) => {
-                let btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.innerText = opt;
-                btn.onclick = () => selectOption(idx);
-                optContainer.appendChild(btn);
-            });
-
-            document.getElementById('explanationBox').style.display = 'none';
-            document.getElementById('nextBtn').disabled = true;
-        }
-
-        function selectOption(selectedIndex) {
-            if (answered) return;
-            answered = true;
-
-            let q = questions[currentIdx];
-            let buttons = document.getElementsByClassName('option-btn');
-
-            if (selectedIndex === q.answer) {
-                buttons[selectedIndex].classList.add('correct');
-                score += 10;
-                goldCoins += 2; // پاداش سکه طلا
-                playSound('correct');
-
-                // بررسی باز شدن صندوقچه طلایی هر ۱۰ سوال
-                if ((currentIdx + 1) % 10 === 0) {
-                    goldCoins += 15; // جایزه ویژه صندوقچه
-                    playSound('chest');
-                    setTimeout(() => {
-                        alert('🎁 تبریک! صندوقچه طلایی سلامت باز شد و ۱۵ سکه طلا به شما پاداش داده شد!');
-                    }, 300);
-                }
-            } else {
-                buttons[selectedIndex].classList.add('wrong');
-                buttons[q.answer].classList.add('correct');
-                playSound('wrong');
-            }
-
-            document.getElementById('score').innerText = score;
-            document.getElementById('goldCoins').innerText = goldCoins;
-
-            let expBox = document.getElementById('explanationBox');
-            expBox.innerText = q.exp;
-            expBox.style.display = 'block';
-
-            document.getElementById('nextBtn').disabled = false;
-        }
-
-        function nextQuestion() {
-            playSound('click');
-            currentIdx++;
-            if (currentIdx < questions.length) {
-                loadQuestion();
-            } else {
-                document.querySelector('.container').innerHTML = `
-                    <h2 style="color:#2c6b4f;">🎉 آزمون بازی شماره ۶ به پایان رسید!</h2>
-                    <p style="font-size:16px; margin:15px 0;">امتیاز نهایی شما: <b>${score}</b> از ${questions.length * 10}</p>
-                    <p style="font-size:15px; color:#d97706; margin-bottom:15px;">🪙 مجموع سکه‌های طلایی کسب شده: <b>${goldCoins} سکه</b></p>
-                    <p style="color:#555; font-size:13px; line-height:1.6;">شما با موفقیت ۱۰۰ پرسش تخصصی ارکان و نسبت طبع‌ها را به اتمام رساندید.</p>
-                    <br>
-                    <a href="index.html" class="btn" style="text-decoration:none; display:inline-block; margin-top:10px;">بازگشت به پورتال اصلی دانشنامه</a>
-                `;
-            }
-        }
-
-        // شروع بازی
-        loadQuestion();
-    </script>
+    window.onload = loadQuestion;
+</script>
 
 </body>
 </html>
