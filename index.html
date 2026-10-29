@@ -3,183 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دانشنامه جامع طب، علم سلامتی (۱۰۰ بازی تخصصی)</title>
+    <title>پورتال جامع دانشنامه طب، علم سلامتی</title>
     <style>
         :root {
-            --primary: #27ae60;
-            --primary-dark: #219653;
-            --bg-color: #f4f9f4;
+            --primary-color: #1b4d3e;
+            --secondary-color: #c5a059;
+            --bg-color: #f7f9f6;
             --card-bg: #ffffff;
-            --text-color: #2c3e50;
+            --text-color: #333333;
+            --shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
         body {
-            font-family: Tahoma, Arial, sans-serif;
+            font-family: Tahoma, Arial, sans-serif, Vazirmatn;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 15px;
-            text-align: center;
+            padding: 0;
+            line-height: 1.6;
         }
         header {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            background: linear-gradient(135deg, var(--primary-color), #2d6a4f);
             color: white;
-            padding: 25px 15px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
         }
-        h1 { margin: 0; font-size: 22px; }
-        p.subtitle { margin: 8px 0 0 0; font-size: 13px; opacity: 0.95; }
-        
-        .search-box {
-            margin-bottom: 20px;
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2rem;
+            color: #fff;
         }
-        .search-box input {
-            width: 100%;
-            max-width: 450px;
-            padding: 12px 15px;
-            font-size: 14px;
-            border: 2px solid #bdc3c7;
+        header p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #d8f3dc;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .top-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .btn-action {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
             border-radius: 8px;
-            outline: none;
-            transition: border-color 0.3s;
-            box-sizing: border-box;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .search-box input:focus {
-            border-color: var(--primary);
+        .btn-action:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
-
-        .grid {
+        .section-title {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 12px;
-            max-width: 1100px;
-            margin: 0 auto;
-            padding-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
         }
         .game-card {
-            background-color: var(--card-bg);
-            border: 1px solid #e0e0e0;
-            border-right: 5px solid var(--primary);
-            padding: 15px;
-            border-radius: 8px;
-            text-decoration: none;
-            color: var(--text-color);
-            text-align: right;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+            border-right: 5px solid var(--primary-color);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
         .game-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-            border-color: var(--primary);
+            transform: translateY(-5px);
         }
-        .game-title {
+        .game-card h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+        }
+        .game-card p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+        }
+        .btn-play {
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
             font-weight: bold;
-            font-size: 14px;
-            color: #2c3e50;
-            margin-bottom: 5px;
+            transition: background 0.2s;
         }
-        .game-desc {
-            font-size: 12px;
-            color: #7f8c8d;
+        .btn-play:hover {
+            background-color: #2d6a4f;
         }
         footer {
-            margin-top: 20px;
-            font-size: 12px;
-            color: #7f8c8d;
+            text-align: center;
+            padding: 2rem;
+            color: #777;
+            font-size: 0.9rem;
             border-top: 1px solid #ddd;
-            padding-top: 15px;
+            margin-top: 3rem;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        .modal-content h3 { color: var(--primary-color); margin-top: 0; }
+        .modal-content textarea, .modal-content input {
+            width: 100%; padding: 0.75rem; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box;
+        }
+        .modal-close {
+            background: #ccc; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; margin-top: 10px; font-weight: bold;
+        }
+        .modal-submit {
+            background: var(--primary-color); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: bold;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>پورتال جامع طب، علم سلامتی</h1>
-        <p class="subtitle">دایرةالمعارف تخصصی ۱۰۰ بازی استاندارد و جامع طب سنتی ایرانی اسلامی</p>
+        <h1>طب، علم سلامتی</h1>
+        <p>دانشنامه جامع و بازی‌های آموزشی طب سنتی و اسلامی</p>
     </header>
 
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="جستجو در نام بازی‌ها یا شماره آن‌ها (مثلا: بازی ۱ یا game1)..." onkeyup="searchGames()">
+    <div class="container">
+        <!-- دکمه‌های ویژه بالایی -->
+        <div class="top-actions">
+            <button class="btn-action" onclick="openModal('chestModal')">💰 صندوقچه امتیازات طلایی</button>
+            <button class="btn-action" onclick="openModal('contactModal')">💬 ارتباط و نظردهی</button>
+        </div>
+
+        <div class="section-title">فهرست بازی‌های آموزشی (مرحله اول)</div>
+
+        <div class="games-grid">
+            <!-- بازی اول -->
+            <div class="game-card">
+                <div>
+                    <h3>بازی ۱: ارکان اربعه</h3>
+                    <p>آشنایی جامع با عناصر چهارگانه (آب، هوا، آتش، خاک) و ویژگی‌های طبعی آن‌ها در ۱۰۰ سوال.</p>
+                </div>
+                <a href="Game_001_Arkan_Arba_Standalone.html" class="btn-play">ورود به بازی</a>
+            </div>
+
+            <!-- بازی دوم -->
+            <div class="game-card">
+                <div>
+                    <h3>بازی ۲: سته ضروریه</h3>
+                    <p>بررسی اصول شش‌گانه حفظ الصحه و سبک زندگی سالم در ۱۰۰ سوال تخصصی.</p>
+                </div>
+                <a href="Game_002_Sitteh_Zaroorieh_Standalone.html" class="btn-play">ورود به بازی</a>
+            </div>
+
+            <!-- بازی سوم -->
+            <div class="game-card">
+                <div>
+                    <h3>بازی ۳: امزاج چهارگانه</h3>
+                    <p>شناخت دقیق امزاج (دموی، بلغمی، صفراوی و سوداوی) و آزمون‌های تشخیص طبع.</p>
+                </div>
+                <a href="Game_003_Temperament_Quiz.html" class="btn-play">ورود به بازی</a>
+            </div>
+
+            <!-- بازی چهارم -->
+            <div class="game-card">
+                <div>
+                    <h3>بازی ۴: اخلاط چهارگانه</h3>
+                    <p>بررسی تولید، تغییرات و نقش اخلاط در بدن انسان و تعادل سلامتی.</p>
+                </div>
+                <a href="Game_005_Humors_And_Temperaments_100Q.html" class="btn-play">ورود به بازی</a>
+            </div>
+        </div>
     </div>
 
-    <div class="grid" id="gamesGrid">
-        <!-- بازی‌ها از ۱ تا ۱۰۰ با نام‌گذاری استاندارد مخزن -->
-        <a href="game1.html" class="game-card" data-title="بازی ۱ game1 ارکان اربعه">
-            <div class="game-title">بازی ۱: شناخت ارکان اربعه (۱۰۰ پرسشی)</div>
-            <div class="game-desc">آتش، هوا، آب و خاک در طب سنتی</div>
-        </a>
-        <a href="game2.html" class="game-card" data-title="بازی ۲ game2 سته ضروریه حفظ الصحه">
-            <div class="game-title">بازی ۲: سته ضروریه و اصول حفظ الصحه</div>
-            <div class="game-desc">اصول شش‌گانه تندرستی و سبک زندگی</div>
-        </a>
-        <a href="game3.html" class="game-card" data-title="بازی ۳ game3 مزاج شناسی">
-            <div class="game-title">بازی ۳: مزاج‌شناسی و امزاج چهارگانه</div>
-            <div class="game-desc">شناخت طبیعت‌های گرم، سرد، تر و خشک</div>
-        </a>
-        <a href="game4.html" class="game-card" data-title="بازی ۴ game4 اخلاط اربعه">
-            <div class="game-title">بازی ۴: اخلاط اربعه</div>
-            <div class="game-desc">شناخت دم، بلغم، صفرا و سودا</div>
-        </a>
-        <a href="game5.html" class="game-card" data-title="بازی ۵ game5">
-            <div class="game-title">بازی ۵: مبانی تخصصی اخلاط و امزاج</div>
-            <div class="game-desc">ارزیابی تخصصی تعادل اخلاط</div>
-        </a>
-        <a href="game6.html" class="game-card" data-title="بازی ۶ game6 نبض">
-            <div class="game-title">بازی ۶: مبانی نبض و علائم حیاتی</div>
-            <div class="game-desc">شناخت انواع نبض در طب سنتی</div>
-        </a>
-        <a href="game7.html" class="game-card" data-title="بازی ۷ game7">
-            <div class="game-title">بازی ۷: اعضای رئیسه و غیررئیسه</div>
-            <div class="game-desc">قلب، مغز، کبد و ارکان بدن</div>
-        </a>
-        <a href="game8.html" class="game-card" data-title="بازی ۸ game8">
-            <div class="game-title">بازی ۸: ارواح و قوای بدنی</div>
-            <div class="game-desc">قوای طبیعی، نفسانی و حیوانی</div>
-        </a>
-        <a href="game9.html" class="game-card" data-title="بازی ۹ game9">
-            <div class="game-title">بازی ۹: اسباب و علائم سلامتی و بیماری</div>
-            <div class="game-desc">شناخت وضعیت‌های بحرانی و بحران</div>
-        </a>
-        <a href="game10.html" class="game-card" data-title="بازی ۱۰ game10">
-            <div class="game-title">بازی ۱۰: اصول تغذیه و مفردات پزشکی</div>
-            <div class="game-desc">خواص اغذیه و ادویه مفرد</div>
-        </a>
-        <!-- الگو برای بازی‌های ۱۱ تا ۱۰۰ -->
-        <script>
-            // تولید خودکار کارت‌ها برای بازی‌های ۱۱ تا ۱۰۰ جهت حفظ یکپارچگی کامل پورتال
-            const grid = document.getElementById('gamesGrid');
-            for (let i = 11; i <= 100; i++) {
-                grid.innerHTML += `
-                    <a href="game${i}.html" class="game-card" data-title="بازی ${i} game${i}">
-                        <div class="game-title">بازی ${i}: آزمون جامع تخصصی طب سنتی (${i})</div>
-                        <div class="game-desc">مجموعه سوالات تخصصی دایرةالمعارف سلامتی</div>
-                    </a>
-                `;
-            }
-        </script>
+    <!-- Modal صندوقچه امتیازات -->
+    <div id="chestModal" class="modal">
+        <div class="modal-content">
+            <h3>💰 صندوقچه امتیازات طلایی</h3>
+            <p>مجموع سکه‌ها و امتیازات کسب‌شده شما در تمامی بازی‌های دانشنامه:</p>
+            <h2 id="totalCoins" style="color: var(--secondary-color);">۰ سکه</h2>
+            <p style="font-size: 0.9rem; color: #666;">با بازی کردن و پاسخ صحیح به سوالات، امتیازات صندوقچه خود را افزایش دهید.</p>
+            <button class="modal-close" onclick="closeModal('chestModal')">بستن</button>
+        </div>
+    </div>
+
+    <!-- Modal ارتباط و نظردهی -->
+    <div id="contactModal" class="modal">
+        <div class="modal-content">
+            <h3>💬 ارتباط و نظردهی</h3>
+            <p>نظرات، پیشنهادات یا گزارش‌های خود را برای بهبود دانشنامه ارسال کنید:</p>
+            <input type="text" id="userName" placeholder="نام شما...">
+            <textarea id="userMsg" rows="4" placeholder="متن نظر یا پیشنهاد..."></textarea>
+            <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                <button class="modal-close" onclick="closeModal('contactModal')">انصراف</button>
+                <button class="modal-submit" onclick="submitFeedback()">ارسال پیام</button>
+            </div>
+        </div>
     </div>
 
     <footer>
-        مجموعه آموزشی طب، علم سلامتی &copy; ۱۴۰۵ - فعال‌سازی دانشنامه جامع
+        <p>پروژه جامع «طب، علم سلامتی» &copy; ۱۴۰۵ - تمامی حقوق محفوظ است.</p>
     </footer>
 
     <script>
-        function searchGames() {
-            let input = document.getElementById('searchInput').value.toLowerCase();
-            let cards = document.getElementsByClassName('game-card');
-            
-            for (let i = 0; i < cards.length; i++) {
-                let title = cards[i].getAttribute('data-title').toLowerCase();
-                if (title.includes(input)) {
-                    cards[i].style.display = "flex";
-                } else {
-                    cards[i].style.display = "none";
-                }
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+            if(modalId === 'chestModal') {
+                // بارگذاری سکه‌ها از localStorage (در صورت ذخیره توسط بازی‌ها)
+                let coins = localStorage.getItem('total_health_coins') || 0;
+                document.getElementById('totalCoins').innerText = coins + ' سکه';
+            }
+        }
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        function submitFeedback() {
+            let name = document.getElementById('userName').value;
+            let msg = document.getElementById('userMsg').value;
+            if(name && msg) {
+                alert('از نظر ارزشمند شما سپاسگزاریم! پیام شما با موفقیت ثبت شد.');
+                closeModal('contactModal');
+                document.getElementById('userName').value = '';
+                document.getElementById('userMsg').value = '';
+            } else {
+                alert('لطفاً نام و متن پیام را وارد فرمایید.');
+            }
+        }
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
             }
         }
     </script>
