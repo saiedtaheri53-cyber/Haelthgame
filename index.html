@@ -160,9 +160,11 @@
             padding: 2rem;
             border-radius: 12px;
             width: 90%;
-            max-width: 450px;
+            max-width: 500px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
             text-align: center;
+            max-height: 80vh;
+            overflow-y: auto;
         }
         .modal-content h3 { color: var(--primary-color); margin-top: 0; }
         .modal-content textarea, .modal-content input {
@@ -173,6 +175,9 @@
         }
         .modal-submit {
             background: var(--primary-color); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: bold;
+        }
+        .feedback-item {
+            background: #f9f9f9; border: 1px solid #eee; padding: 10px; margin: 8px 0; border-radius: 6px; text-align: right; font-size: 0.9rem;
         }
     </style>
 </head>
@@ -195,7 +200,7 @@
             <input type="text" id="searchInput" placeholder="جستجو در میان بازی‌ها و موضوعات درگاه..." onkeyup="searchGames()">
         </div>
 
-        <div class="section-title">فهرست بازی‌های آموزشی دانشنامه</div>
+        <div class="section-title">فهرست بازی‌های آموزشی دانشنامه (به ترتیب استاندارد)</div>
 
         <div class="games-grid" id="gamesGrid">
             <!-- بازی اول -->
@@ -204,7 +209,7 @@
                     <h3>بازی ۱: ارکان اربعه</h3>
                     <p>آشنایی جامع با عناصر چهارگانه (آب، هوا، آتش، خاک) و ویژگی‌های طبعی آن‌ها در ۱۰۰ سوال.</p>
                 </div>
-                <a href="Game_001_Arkan_Arba_Standalone.html" class="btn-play">ورود به بازی</a>
+                <a href="game1.html" class="btn-play">ورود به بازی</a>
             </div>
 
             <!-- بازی دوم -->
@@ -213,7 +218,7 @@
                     <h3>بازی ۲: سته ضروریه</h3>
                     <p>بررسی اصول شش‌گانه حفظ الصحه و سبک زندگی سالم در ۱۰۰ سوال تخصصی.</p>
                 </div>
-                <a href="Game_002_Sitteh_Zaroorieh_Standalone.html" class="btn-play">ورود به بازی</a>
+                <a href="game2.html" class="btn-play">ورود به بازی</a>
             </div>
 
             <!-- بازی سوم -->
@@ -222,7 +227,7 @@
                     <h3>بازی ۳: امزاج چهارگانه</h3>
                     <p>شناخت دقیق امزاج (دموی، بلغمی، صفراوی و سوداوی) و آزمون‌های تشخیص طبع.</p>
                 </div>
-                <a href="Game_003_Temperament_Quiz.html" class="btn-play">ورود به بازی</a>
+                <a href="game3.html" class="btn-play">ورود به بازی</a>
             </div>
 
             <!-- بازی چهارم -->
@@ -231,7 +236,7 @@
                     <h3>بازی ۴: اخلاط چهارگانه</h3>
                     <p>بررسی تولید، تغییرات و نقش اخلاط در بدن انسان و تعادل سلامتی.</p>
                 </div>
-                <a href="Game_005_Humors_And_Temperaments_100Q.html" class="btn-play">ورود به بازی</a>
+                <a href="game4.html" class="btn-play">ورود به بازی</a>
             </div>
         </div>
     </div>
@@ -253,11 +258,19 @@
             <h3>💬 ارتباط و نظردهی</h3>
             <p>نظرات، پیشنهادات یا گزارش‌های خود را برای بهبود دانشنامه ارسال کنید:</p>
             <input type="text" id="userName" placeholder="نام شما...">
-            <textarea id="userMsg" rows="4" placeholder="متن نظر یا پیشنهاد..."></textarea>
-            <div style="display: flex; justify-content: space-between; margin-top: 10px;">
-                <button class="modal-close" onclick="closeModal('contactModal')">انصراف</button>
+            <textarea id="userMsg" rows="3" placeholder="متن نظر یا پیشنهاد..."></textarea>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
                 <button class="modal-submit" onclick="submitFeedback()">ارسال و ذخیره</button>
+                <button class="btn-action" style="font-size: 0.9rem; padding: 0.6rem 1rem;" onclick="showFeedbacks()">مشاهده نظرات ثبت‌شده</button>
             </div>
+            
+            <!-- بخش نمایش نظرات ذخیره شده شما -->
+            <div id="feedbackListContainer" style="margin-top: 15px; display: none;">
+                <h4 style="color: var(--primary-color); border-bottom: 1px solid #ddd; padding-bottom: 5px;">نظرات دریافتی شما:</h4>
+                <div id="feedbacksList" style="max-height: 150px; overflow-y: auto;"></div>
+            </div>
+
+            <button class="modal-close" onclick="closeModal('contactModal')" style="margin-top: 15px;">بستن</button>
         </div>
     </div>
 
@@ -275,23 +288,37 @@
         }
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
+            document.getElementById('feedbackListContainer').style.display = 'none';
         }
         function submitFeedback() {
             let name = document.getElementById('userName').value.trim();
             let msg = document.getElementById('userMsg').value.trim();
             if(name && msg) {
-                // ذخیره نظر در حافظه مرورگر (LocalStorage) جهت نگهداری امن
                 let feedbacks = JSON.parse(localStorage.getItem('health_feedbacks') || '[]');
                 feedbacks.push({ name: name, message: msg, date: new Date().toLocaleDateString('fa-IR') });
                 localStorage.setItem('health_feedbacks', JSON.stringify(feedbacks));
 
-                alert('از نظر ارزشمند شما سپاسگزاریم! پیام شما با موفقیت در حافظه درگاه ثبت شد.');
-                closeModal('contactModal');
+                alert('نظر شما با موفقیت در حافظه درگاه ثبت شد و از طریق دکمه «مشاهده نظرات» قابل دسترسی است.');
                 document.getElementById('userName').value = '';
                 document.getElementById('userMsg').value = '';
             } else {
                 alert('لطفاً نام و متن پیام را وارد فرمایید.');
             }
+        }
+        function showFeedbacks() {
+            let container = document.getElementById('feedbackListContainer');
+            let listDiv = document.getElementById('feedbacksList');
+            let feedbacks = JSON.parse(localStorage.getItem('health_feedbacks') || '[]');
+            
+            if(feedbacks.length === 0) {
+                listDiv.innerHTML = '<p style="color: #777; font-size: 0.9rem;">هنوز نظری ثبت نشده است.</p>';
+            } else {
+                listDiv.innerHTML = '';
+                feedbacks.forEach((item, index) => {
+                    listDiv.innerHTML += `<div class="feedback-item"><strong>${index+1}. ${item.name}</strong> (${item.date}):<br>${item.message}</div>`;
+                });
+            }
+            container.style.display = 'block';
         }
         function searchGames() {
             let input = document.getElementById('searchInput').value.toLowerCase();
@@ -309,6 +336,7 @@
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {
                 event.target.style.display = 'none';
+                document.getElementById('feedbackListContainer').style.display = 'none';
             }
         }
     </script>
