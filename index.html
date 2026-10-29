@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پورتال جامع دانشنامه طب، علم سلامتی</title>
+    <title>درگاه جامع طب، علم سلامتی - فعال‌سازی دانشنامه جامع</title>
     <style>
         :root {
             --primary-color: #1b4d3e;
@@ -68,6 +68,25 @@
         .btn-action:hover {
             opacity: 0.9;
             transform: translateY(-2px);
+        }
+        /* کادر جستجو */
+        .search-box {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .search-box input {
+            width: 100%;
+            max-width: 500px;
+            padding: 0.85rem 1.2rem;
+            font-size: 1rem;
+            border: 2px solid var(--primary-color);
+            border-radius: 50px;
+            outline: none;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        .search-box input:focus {
+            border-color: var(--secondary-color);
         }
         .section-title {
             font-size: 1.4rem;
@@ -161,7 +180,7 @@
 
     <header>
         <h1>طب، علم سلامتی</h1>
-        <p>دانشنامه جامع و بازی‌های آموزشی طب سنتی و اسلامی</p>
+        <p>فعال‌سازی دانشنامه جامع و بازی‌های آموزشی طب سنتی و اسلامی</p>
     </header>
 
     <div class="container">
@@ -171,11 +190,16 @@
             <button class="btn-action" onclick="openModal('contactModal')">💬 ارتباط و نظردهی</button>
         </div>
 
-        <div class="section-title">فهرست بازی‌های آموزشی (مرحله اول)</div>
+        <!-- کادر جستجوی پیشرفته -->
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="جستجو در میان بازی‌ها و موضوعات درگاه..." onkeyup="searchGames()">
+        </div>
 
-        <div class="games-grid">
+        <div class="section-title">فهرست بازی‌های آموزشی دانشنامه</div>
+
+        <div class="games-grid" id="gamesGrid">
             <!-- بازی اول -->
-            <div class="game-card">
+            <div class="game-card" data-title="ارکان اربعه عناصر چهارگانه آب هوا آتش خاک">
                 <div>
                     <h3>بازی ۱: ارکان اربعه</h3>
                     <p>آشنایی جامع با عناصر چهارگانه (آب، هوا، آتش، خاک) و ویژگی‌های طبعی آن‌ها در ۱۰۰ سوال.</p>
@@ -184,7 +208,7 @@
             </div>
 
             <!-- بازی دوم -->
-            <div class="game-card">
+            <div class="game-card" data-title="سته ضروریه حفظ الصحه سبک زندگی سالم">
                 <div>
                     <h3>بازی ۲: سته ضروریه</h3>
                     <p>بررسی اصول شش‌گانه حفظ الصحه و سبک زندگی سالم در ۱۰۰ سوال تخصصی.</p>
@@ -193,7 +217,7 @@
             </div>
 
             <!-- بازی سوم -->
-            <div class="game-card">
+            <div class="game-card" data-title="امزاج چهارگانه دموی بلغمی صفراوی سوداوی طبع">
                 <div>
                     <h3>بازی ۳: امزاج چهارگانه</h3>
                     <p>شناخت دقیق امزاج (دموی، بلغمی، صفراوی و سوداوی) و آزمون‌های تشخیص طبع.</p>
@@ -202,7 +226,7 @@
             </div>
 
             <!-- بازی چهارم -->
-            <div class="game-card">
+            <div class="game-card" data-title="اخلاط چهارگانه تولید تغییرات سلامتی بدن">
                 <div>
                     <h3>بازی ۴: اخلاط چهارگانه</h3>
                     <p>بررسی تولید، تغییرات و نقش اخلاط در بدن انسان و تعادل سلامتی.</p>
@@ -232,20 +256,19 @@
             <textarea id="userMsg" rows="4" placeholder="متن نظر یا پیشنهاد..."></textarea>
             <div style="display: flex; justify-content: space-between; margin-top: 10px;">
                 <button class="modal-close" onclick="closeModal('contactModal')">انصراف</button>
-                <button class="modal-submit" onclick="submitFeedback()">ارسال پیام</button>
+                <button class="modal-submit" onclick="submitFeedback()">ارسال و ذخیره</button>
             </div>
         </div>
     </div>
 
     <footer>
-        <p>پروژه جامع «طب، علم سلامتی» &copy; ۱۴۰۵ - تمامی حقوق محفوظ است.</p>
+        <p>درگاه جامع «طب، علم سلامتی» &copy; ۱۴۰۵ - تمامی حقوق محفوظ است.</p>
     </footer>
 
     <script>
         function openModal(modalId) {
             document.getElementById(modalId).style.display = 'flex';
             if(modalId === 'chestModal') {
-                // بارگذاری سکه‌ها از localStorage (در صورت ذخیره توسط بازی‌ها)
                 let coins = localStorage.getItem('total_health_coins') || 0;
                 document.getElementById('totalCoins').innerText = coins + ' سکه';
             }
@@ -254,15 +277,33 @@
             document.getElementById(modalId).style.display = 'none';
         }
         function submitFeedback() {
-            let name = document.getElementById('userName').value;
-            let msg = document.getElementById('userMsg').value;
+            let name = document.getElementById('userName').value.trim();
+            let msg = document.getElementById('userMsg').value.trim();
             if(name && msg) {
-                alert('از نظر ارزشمند شما سپاسگزاریم! پیام شما با موفقیت ثبت شد.');
+                // ذخیره نظر در حافظه مرورگر (LocalStorage) جهت نگهداری امن
+                let feedbacks = JSON.parse(localStorage.getItem('health_feedbacks') || '[]');
+                feedbacks.push({ name: name, message: msg, date: new Date().toLocaleDateString('fa-IR') });
+                localStorage.setItem('health_feedbacks', JSON.stringify(feedbacks));
+
+                alert('از نظر ارزشمند شما سپاسگزاریم! پیام شما با موفقیت در حافظه درگاه ثبت شد.');
                 closeModal('contactModal');
                 document.getElementById('userName').value = '';
                 document.getElementById('userMsg').value = '';
             } else {
                 alert('لطفاً نام و متن پیام را وارد فرمایید.');
+            }
+        }
+        function searchGames() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let cards = document.getElementsByClassName('game-card');
+            for (let i = 0; i < cards.length; i++) {
+                let title = cards[i].getAttribute('data-title').toLowerCase();
+                let text = cards[i].innerText.toLowerCase();
+                if (title.includes(input) || text.includes(input)) {
+                    cards[i].style.display = "flex";
+                } else {
+                    cards[i].style.display = "none";
+                }
             }
         }
         window.onclick = function(event) {
