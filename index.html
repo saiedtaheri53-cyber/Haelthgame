@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>طب، علم سلامتی - پورتال جامع بازی‌ها (۱ تا ۱۰۰)</title>
+    <title>طب، علم سلامتی - فعال‌سازی دانشنامه جامع</title>
     <style>
         :root {
             --primary: #2e7d32;
             --primary-light: #4caf50;
+            --accent: #ff9800;
             --bg-color: #f4f6f5;
             --card-bg: #ffffff;
             --text-color: #333333;
@@ -28,7 +29,7 @@
         }
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: white;
             padding: 30px;
@@ -43,6 +44,18 @@
             margin: 0;
             font-size: 16px;
             opacity: 0.9;
+        }
+        /* صندوقچه امتیازات کل پروژه */
+        .global-treasury {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            padding: 8px 20px;
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 15px;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
         }
         .search-box {
             margin: 20px 0;
@@ -64,7 +77,7 @@
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 15px;
         }
         .card {
@@ -75,6 +88,9 @@
             text-align: center;
             transition: transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         .card:hover {
             transform: translateY(-3px);
@@ -82,9 +98,15 @@
             border-color: var(--primary-light);
         }
         .card h3 {
-            margin: 0 0 10px 0;
-            font-size: 18px;
+            margin: 0 0 8px 0;
+            font-size: 16px;
             color: var(--primary);
+        }
+        .card p.game-title {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            color: #555;
+            min-height: 40px;
         }
         .card a {
             display: inline-block;
@@ -99,6 +121,26 @@
         .card a:hover {
             background-color: var(--primary-light);
         }
+        /* دکمه ارتباط و نظردهی شناور */
+        .feedback-float {
+            position: fixed;
+            bottom: 25px;
+            left: 25px;
+            background-color: var(--accent);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            z-index: 1000;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+        .feedback-float:hover {
+            background-color: #f57c00;
+            transform: scale(1.05);
+        }
         footer {
             text-align: center;
             margin-top: 40px;
@@ -112,15 +154,18 @@
     <div class="container">
         <header>
             <h1>طب، علم سلامتی</h1>
-            <p class="subtitle">دانشنامه جامع بازی‌های آموزشی (بازی ۱ تا ۱۰۰)</p>
+            <p class="subtitle">فعال‌سازی دانشنامه جامع بازی‌های آموزشی (۱ تا ۱۰۰)</p>
+            <div class="global-treasury" id="globalTreasury">
+                💰 صندوقچه کل امتیازات پروژه: <span id="totalCoinsSpan">0</span> سکه
+            </div>
         </header>
 
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="جستجوی شماره بازی (مثلا: game1 یا 25)..." onkeyup="filterGames()">
+            <input type="text" id="searchInput" placeholder="جستجوی نام یا شماره بازی (مثلا: ارکان، مزاج، game1)..." onkeyup="filterGames()">
         </div>
 
         <div class="grid" id="gamesGrid">
-            <!-- بازی‌ها به‌صورت پویا توسط جاوااسکریپت تولید می‌شوند -->
+            <!-- بازی‌ها به‌صورت پویا تولید می‌شوند -->
         </div>
 
         <footer>
@@ -128,33 +173,65 @@
         </footer>
     </div>
 
+    <!-- دکمه شناور ارتباط و نظردهی -->
+    <a href="mailto:support@healthgame.ir" class="feedback-float" title="ارسال نظرات و پیشنهادات">💬 ارتباط و نظردهی</a>
+
     <script>
+        // نام‌گذاری‌های تخصصی برای بازی‌ها
+        const gameTitles = {
+            1: "ارکان اربعه (عناصر چهارگانه)",
+            2: "سته ضروریه (اصول شش‌گانه حفظ سلامتی)",
+            3: "مزاج‌شناسی کاربردی و شناخت طبایع",
+            4: "اخلاط اربعه (دم، بلغم، صفرا، سودا)",
+            5: "امزاج و طبایع انسانی تخصصی",
+            6: "خودمراقبتی و اصول تغذیه سالم"
+        };
+
         const grid = document.getElementById('gamesGrid');
         const totalGames = 100;
 
-        // تولید خودکار کارت‌ها برای ۱۰۰ بازی
+        // محاسبه و نمایش صندوقچه کل امتیازات ذخیره شده در localStorage
+        function updateGlobalTreasury() {
+            let totalCoins = 0;
+            for (let i = 1; i <= totalGames; i++) {
+                const savedCoins = localStorage.getItem(`game_${i}_coins`);
+                if (savedCoins) {
+                    totalCoins += parseInt(savedCoins, 10);
+                }
+            }
+            document.getElementById('totalCoinsSpan').innerText = totalCoins;
+        }
+
+        // تولید کارت‌ها
         for (let i = 1; i <= totalGames; i++) {
             const card = document.createElement('div');
             card.className = 'card';
-            card.setAttribute('data-name', `game${i} بازی ${i}`);
+            
+            const specificTitle = gameTitles[i] || `دانشنامه تخصصی طب سنتی و سلامت - بخش ${i}`;
+            card.setAttribute('data-search', `game${i} بازی ${i} ${i} ${specificTitle}`.toLowerCase());
             
             card.innerHTML = `
-                <h3>بازی شماره ${i}</h3>
+                <div>
+                    <h3>بازی شماره ${i}</h3>
+                    <p class="game-title">${specificTitle}</p>
+                </div>
                 <a href="game${i}.html">ورود به بازی</a>
             `;
             grid.appendChild(card);
         }
 
-        // تابع جستجوی هوشمند
+        updateGlobalTreasury();
+
+        // تابع جستجوی دقیق و اصلاح‌شده
         function filterGames() {
-            const input = document.getElementById('searchInput').value.toLowerCase();
+            const input = document.getElementById('searchInput').value.trim().toLowerCase();
             const cards = grid.getElementsByClassName('card');
 
             for (let i = 0; i < cards.length; i++) {
                 const card = cards[i];
-                const name = card.getAttribute('data-name').toLowerCase();
-                if (name.includes(input) || input === '') {
-                    card.style.display = "";
+                const searchText = card.getAttribute('data-search');
+                if (searchText.includes(input) || input === '') {
+                    card.style.display = "flex";
                 } else {
                     card.style.display = "none";
                 }
