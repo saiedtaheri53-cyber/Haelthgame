@@ -3,263 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی شماره ۱: ارکان اربعه - طب، علم سلامتی</title>
+    <title>بازی ارکان اربعه - طب، علم سلامتی</title>
     <style>
-        :root {
-            --primary: #2e7d32;
-            --primary-light: #4caf50;
-            --accent: #ff9800;
-            --bg-color: #f4f6f5;
-            --card-bg: #ffffff;
-            --text-color: #333333;
-            --border-color: #d0d7de;
-        }
-        body {
-            font-family: Tahoma, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            direction: rtl;
-            text-align: right;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            padding: 25px;
-            border: 1px solid var(--border-color);
-        }
-        header {
-            text-align: center;
-            border-bottom: 2px solid var(--bg-color);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-        }
-        h1 {
-            color: var(--primary);
-            margin: 0 0 8px 0;
-            font-size: 22px;
-        }
-        .stats-bar {
-            display: flex;
-            justify-content: space-between;
-            background: #e8f5e9;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-weight: bold;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-        .question-box {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-        .option-btn {
-            background-color: #ffffff;
-            border: 2px solid var(--border-color);
-            padding: 12px 18px;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            text-align: right;
-            transition: all 0.2s ease;
-        }
-        .option-btn:hover {
-            border-color: var(--primary-light);
-            background-color: #f1f8e9;
-        }
-        .option-btn.correct {
-            background-color: #c8e6c9 !important;
-            border-color: var(--primary) !important;
-            color: #1b5e20;
-        }
-        .option-btn.wrong {
-            background-color: #ffcdd2 !important;
-            border-color: #c62828 !important;
-            color: #b71c1c;
-        }
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid var(--border-color);
-            padding-top: 15px;
-        }
-        .btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-size: 15px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-        .btn:hover {
-            background-color: var(--primary-light);
-        }
-        .btn-secondary {
-            background-color: #78909c;
-        }
-        .btn-secondary:hover {
-            background-color: #607d8b;
-        }
-        .popup {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-        .popup h2 {
-            color: var(--primary);
-        }
+        body { font-family: Tahoma, sans-serif; background: #e8f5e9; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .header-bar { width: 100%; max-width: 500px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: #c8e6c9; padding: 10px 15px; border-radius: 10px; box-sizing: border-box; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 500px; box-sizing: border-box; }
+        button { display: block; width: 100%; padding: 15px; margin: 10px 0; border: none; border-radius: 8px; background: #2e7d32; color: white; font-size: 16px; cursor: pointer; }
+        button:hover { background: #1b5e20; }
+        .back-portal { background: #388e3c; text-decoration: none; text-align: center; display: block; padding: 10px; border-radius: 8px; color: white; margin-top: 15px; }
+        #question { font-size: 1.2em; font-weight: bold; margin-bottom: 20px; }
+        #feedback { margin-top: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>بازی شماره ۱: ارکان اربعه (عناصر چهارگانه)</h1>
-            <p>دانشنامه جامع طب، علم سلامتی</p>
-        </header>
+    <div class="header-bar">
+        <span>📦 صندوقچه سکه: <strong id="coin-count">0</strong></span>
+        <span>«طب، علم سلامتی»</span>
+    </div>
 
-        <div id="gameArea">
-            <div class="stats-bar">
-                <span id="questionCounter">سوال ۱ از ۱۰۰</span>
-                <span id="scoreTracker">💰 سکه این بازی: ۰</span>
-            </div>
+    <div class="card">
+        <div id="counter"></div>
+        <div id="question"></div>
+        <div id="options"></div>
+        <div id="feedback"></div>
+        <button id="next-btn" style="display:none;" onclick="nextQuestion()">سوال بعدی</button>
+    </div>
 
-            <div class="question-box" id="questionText">
-                در حال بارگذاری سوالات ارکان اربعه...
-            </div>
-
-            <div class="options-container" id="optionsContainer">
-                <!-- گزینه‌ها اینجا قرار می‌گیرند -->
-            </div>
-
-            <div class="nav-buttons">
-                <a href="index.html" class="btn btn-secondary">← بازگشت به درگاه پورتال</a>
-                <button class="btn" id="nextBtn" style="display:none;" onclick="nextQuestion()">سوال بعدی →</button>
-            </div>
-        </div>
-
-        <div id="resultArea" class="popup">
-            <h2>پایان بازی شماره ۱ 🎉</h2>
-            <p id="finalScoreText" style="font-size: 18px; margin: 15px 0;"></p>
-            <p style="color: #666;">امتیاز شما در صندوقچه کل پروژه ذخیره شد.</p>
-            <div style="margin-top: 20px; display: flex; justify-content: center; gap: 15px;">
-                <a href="index.html" class="btn">بازگشت به پورتال اصلی</a>
-                <button class="btn btn-secondary" onclick="restartGame()">تلاش مجدد</button>
-            </div>
-        </div>
+    <div style="width: 100%; max-width: 500px;">
+        <a href="index.html" class="back-portal">بازگشت به درگاه مرکزی (فعال‌سازی دانش‌نامه جامع)</a>
     </div>
 
     <script>
-        const questions = [
-            {
-                q: "کدام عنصر از ارکان اربعه دارای طبع گرم و خشک است؟",
-                options: ["آتش", "آباد", "آب", "خاک"],
-                answer: 0
-            },
-            {
-                q: "طبع عنصر آب چیست؟",
-                options: ["گرم و تر", "سرد و تر", "سرد و خشک", "گرم و خشک"],
-                answer: 1
-            },
-            {
-                q: "عنصر خاک دارای چه طبعی است؟",
-                options: ["گرم و خشک", "سرد و تر", "سرد و خشک", "گرم و تر"],
-                answer: 2
-            },
-            {
-                q: "طبع عنصر هوا (باد) چیست؟",
-                options: ["سرد و تر", "سرد و خشک", "گرم و خشک", "گرم و تر"],
-                answer: 3
-            },
-            ...Array.from({length: 96}, (_, index) => ({
-                q: `سوال شماره ${index + 5}: از مباحث تخصصی ارکان اربعه و تاثیرات آن بر امزاج انسانی، کدام گزینه صحیح است؟`,
-                options: ["گزینه الف (صحیح)", "گزینه ب", "گزینه ج", "گزینه د"],
-                answer: 0
-            }))
-        ];
+        let coins = parseInt(localStorage.getItem('game_1_coins')) || 0;
+        document.getElementById('coin-count').innerText = coins;
+
+        function updateCoins(amount) {
+            coins += amount;
+            localStorage.setItem('game_1_coins', coins);
+            document.getElementById('coin-count').innerText = coins;
+        }
+
+        const questions = [{"w": "کدام عنصر از عناصر ارکان اربعه، گرم و خشک است؟", "options": ["آتش", "هوا", "آب", "خاک"], "answer": "آتش", "h": "مزاج آن صفراوی است"}, {"w": "کدام عنصر از عناصر ارکان اربعه، گرم و تر است؟", "options": ["هوا", "آتش", "آب", "خاک"], "answer": "هوا", "h": "خون با آن هم‌خوان است"}, {"w": "کدام عنصر از عناصر ارکان اربعه، سرد و تر است؟", "options": ["آب", "آتش", "هوا", "خاک"], "answer": "آب", "h": "بلغم با آن هم‌خوان است"}, {"w": "کدام عنصر از عناصر ارکان اربعه، سرد و خشک است؟", "options": ["خاک", "آتش", "هوا", "آب"], "answer": "خاک", "h": "سودا با آن هم‌خوان است"}, {"w": "مزاج صفرا با کدام عنصر متناسب است؟", "options": ["آتش", "آب", "خاک", "هوا"], "answer": "آتش", "h": "صفرا گرم و خشک است"}, {"w": "مزاج دموی (خون) با کدام عنصر متناسب است؟", "options": ["هوا", "آتش", "خاک", "آب"], "answer": "هوا", "h": "خون گرم و تر است"}, {"w": "مزاج بلغمی با کدام عنصر متناسب است؟", "options": ["آب", "آتش", "هوا", "خاک"], "answer": "آب", "h": "بلغم سرد و تر است"}, {"w": "مزاج سوداوی با کدام عنصر متناسب است؟", "options": ["خاک", "آب", "آتش", "هوا"], "answer": "خاک", "h": "سودا سرد و خشک است"}, {"w": "عنصر آتش در میان عناصر چه جایگاهی دارد؟", "options": ["بالاترین و لطیف‌ترین جایگاه", "پایین‌ترین جایگاه", "میانه عناصر", "کنار خاک"], "answer": "بالاترین و لطیف‌ترین جایگاه", "h": "سبک‌ترین عنصر است"}, {"w": "عنصر خاک در کدام جایگاه قرار دارد؟", "options": ["پایین‌ترین جایگاه", "بالاترین جایگاه", "بالای آب", "بالای هوا"], "answer": "پایین‌ترین جایگاه", "h": "سنگین‌ترین عنصر است"}, {"w": "کدام عنصر سنگین‌ترین عناصر است؟", "options": ["خاک", "آتش", "آب", "هوا"], "answer": "خاک", "h": "در پایین‌ترین طبقه است"}, {"w": "کدام عنصر سبک‌ترین عناصر است؟", "options": ["آتش", "خاک", "آب", "هوا"], "answer": "آتش", "h": "همیشه به بالا حرکت می‌کند"}, {"w": "حرکت طبیعی آتش و هوا به سمت کدام است؟", "options": ["بالا", "پایین", "چپ", "راست"], "answer": "بالا", "h": "آن‌ها لطیف‌اند"}, {"w": "حرکت طبیعی آب و خاک به سمت کدام است؟", "options": ["پایین", "بالا", "چپ", "راست"], "answer": "پایین", "h": "آن‌ها ثقیل‌اند"}, {"w": "عنصر آب چه کیفیتی غالب دارد؟", "options": ["سردی", "گرمی", "خشکی", "شدت"], "answer": "سردی", "h": "سرد و تر است"}, {"w": "عنصر آتش با کدام مزاج هم‌خوان است؟", "options": ["صفراوی", "بلغمی", "سوداوی", "دموی"], "answer": "صفراوی", "h": "گرم و خشک"}, {"w": "عنصر هوا در بدن بیش از همه با کدام خلط همراه است؟", "options": ["خون (دم)", "بلغم", "سودا", "صفرا"], "answer": "خون (دم)", "h": "مربوط به نفس و تنفس است"}, {"w": "کدام عنصر «جسم لطیف» شناخته می‌شود؟", "options": ["هوا", "خاک", "آب", "آتش"], "answer": "هوا", "h": "با نفس و تنفس مرتبط است"}, {"w": "در طب سنتی، تناسب «چهار مزاج» با «چهار عنصر» چه نامیده می‌شود؟", "options": ["هم‌ارزی عنصر و خلط", "حفظ و ادا", "احتباس و انسداد", "هضم و تهضیح"], "answer": "هم‌ارزی عنصر و خلط", "h": "پیوند چهارگانه"}, {"w": "اگر عنصر آتش در بدن غلبه کند، کدام مزاج تشدید می‌شود؟", "options": ["صفراوی", "بلغمی", "دموی", "سوداوی"], "answer": "صفراوی", "h": "گرم و خشک"}, {"w": "اگر عنصر آب غلبه کند، چه حالتی ایجاد می‌شود؟", "options": ["برودت و رطوبت (بلغمیت)", "حرارت و یبوست", "خشکی پوست", "تشنج"], "answer": "برودت و رطوبت (بلغمیت)", "h": "سرد و تر"}, {"w": "اگر عنصر خاک غلبه کند، کدام مزاج بروز می‌کند؟", "options": ["سوداوی", "بلغمی", "صفراوی", "دموی"], "answer": "سوداوی", "h": "سرد و خشک"}, {"w": "اگر عنصر هوا غلبه کند، کدام مزاج قوی می‌شود؟", "options": ["دموی", "سوداوی", "بلغمی", "صفراوی"], "answer": "دموی", "h": "گرم و تر"}, {"w": "چهار عنصر ارکان اربعه به ترتیب سنتی کدام‌اند؟", "options": ["آتش، هوا، آب، خاک", "خاک، آب، هوا، آتش", "آب، خاک، آتش، هوا", "هوا، آتش، خاک، آب"], "answer": "آتش، هوا، آب، خاک", "h": "از لطیف به کثیف"}, {"w": "کدام عناصر «لطیف» محسوب می‌شوند؟", "options": ["آتش و هوا", "آب و خاک", "خاک و آتش", "آب و آتش"], "answer": "آتش و هوا", "h": "به سمت بالا می‌روند"}, {"w": "کلمه «ارکان» جمع کدام واژه است؟", "options": ["رُکن", "رُحان", "رَکان", "رِکان"], "answer": "رُکن", "h": "به معنای پایه و ستون"}, {"w": "«ارکان اربعه» یعنی چه؟", "options": ["چهار پایه و رکن", "چهار بیماری", "چهار دارو", "چهار فصل"], "answer": "چهار پایه و رکن", "h": "ارکان = پایه‌ها"}, {"w": "در طب سنتی، چهار رکن بنیادین هستی کدام‌اند؟", "options": ["چهار عنصر: آتش، هوا، آب، خاک", "چهار خلط", "چهار فصل", "چهار عضو"], "answer": "چهار عنصر: آتش، هوا، آب، خاک", "h": "عناصر نه خلط"}, {"w": "کیفیت خشکی با کدام عنصر همراه اصلی دارد؟", "options": ["خاک", "آتش", "آب", "هوا"], "answer": "خاک", "h": "سرد و خشک"}, {"w": "کیفیت رطوبت با کدام عنصر همراه اصلی دارد؟", "options": ["آب", "خاک", "آتش", "هوا"], "answer": "آب", "h": "سرد و تر"}, {"w": "کیفیت گرمی با کدام دو عنصر همراه است؟", "options": ["آتش و هوا", "آب و خاک", "خاک و آب", "آب و آتش"], "answer": "آتش و هوا", "h": "هر دو گرم‌اند"}, {"w": "کیفیت سردی با کدام دو عنصر همراه است؟", "options": ["آب و خاک", "آتش و هوا", "آتش و خاک", "هوا و آتش"], "answer": "آب و خاک", "h": "هر دو سردند"}, {"w": "در بدن، کدام عنصر با «حرارت غریزی» مرتبط‌تر است؟", "options": ["آتش", "آب", "خاک", "هوا"], "answer": "آتش", "h": "منبع گرمی بدن"}, {"w": "در بدن، کدام عنصر با «نفس و روح» مرتبط‌تر است؟", "options": ["هوا", "خاک", "آب", "آتش"], "answer": "هوا", "h": "هوای درونی بدن"}, {"w": "در بدن، کدام عنصر با «رطوبت و بلغم» مرتبط‌تر است؟", "options": ["آب", "آتش", "خاک", "هوا"], "answer": "آب", "h": "مایعات بدن"}, {"w": "در بدن، کدام عنصر با «ساخت و استخوان» مرتبط‌تر است؟", "options": ["خاک", "آب", "هوا", "آتش"], "answer": "خاک", "h": "قوام‌بخش بدن"}, {"w": "کدام عنصر با فصل تابستان هم‌خوانی بیشتری دارد؟", "options": ["آتش", "خاک", "آب", "هوا"], "answer": "آتش", "h": "فصل گرم و خشک"}, {"w": "کدام عنصر با فصل بهار هم‌خوانی بیشتری دارد؟", "options": ["هوا", "آتش", "آب", "خاک"], "answer": "هوا", "h": "فصل گرم و تر"}, {"w": "کدام عنصر با فصل زمستان هم‌خوانی بیشتری دارد؟", "options": ["آب", "آتش", "هوا", "خاک"], "answer": "آب", "h": "فصل سرد و تر"}, {"w": "کدام عنصر با فصل پاییز هم‌خوانی بیشتری دارد؟", "options": ["خاک", "آب", "آتش", "هوا"], "answer": "خاک", "h": "فصل سرد و خشک"}, {"w": "کدام مزاج با عنصر هوا و فصل بهار متناسب است؟", "options": ["دموی", "سوداوی", "بلغمی", "صفراوی"], "answer": "دموی", "h": "گرم و تر"}, {"w": "کدام مزاج با عنصر آتش و فصل تابستان متناسب است؟", "options": ["صفراوی", "دموی", "بلغمی", "سوداوی"], "answer": "صفراوی", "h": "گرم و خشک"}, {"w": "کدام مزاج با عنصر خاک و فصل پاییز متناسب است؟", "options": ["سوداوی", "دموی", "صفراوی", "بلغمی"], "answer": "سوداوی", "h": "سرد و خشک"}, {"w": "کدام مزاج با عنصر آب و فصل زمستان متناسب است؟", "options": ["بلغمی", "دموی", "صفراوی", "سوداوی"], "answer": "بلغمی", "h": "سرد و تر"}, {"w": "در ترکیب بدن انسان، کدام عنصر کم‌ترین سهم را دارد؟", "options": ["آتش", "آب", "خاک", "هوا"], "answer": "آتش", "h": "نادر و لطیف است"}, {"w": "در ترکیب بدن انسان، کدام دو عنصر سهم بیشتری دارند؟", "options": ["آب و خاک", "آتش و هوا", "آتش و خاک", "هوا و آب"], "answer": "آب و خاک", "h": "بدن بیشتر مایع و ساختار است"}, {"w": "«اعتدال مزاجی» به چه معناست؟", "options": ["تعادل میان کیفیات چهار عنصر", "غلبه یک عنصر", "حذف یک عنصر", "افزایش همه عناصر"], "answer": "تعادل میان کیفیات چهار عنصر", "h": "نه گرم، نه سرد، نه خشک، نه تر"}, {"w": "سوءمزاج ناشی از غلبه آتش چه نشانه‌ای دارد؟", "options": ["گرمی و خشکی بدن", "سردی و رطوبت", "سردی و خشکی", "گرمی و رطوبت"], "answer": "گرمی و خشکی بدن", "h": "صفراوی می‌شود"}, {"w": "سوءمزاج ناشی از غلبه آب چه نشانه‌ای دارد؟", "options": ["سردی و رطوبت بدن", "گرمی و خشکی", "خشکی پوست", "تشنج و لرز"], "answer": "سردی و رطوبت بدن", "h": "بلغمی می‌شود"}, {"w": "سوءمزاج ناشی از غلبه خاک چه نشانه‌ای دارد؟", "options": ["سردی و خشکی بدن", "گرمی و رطوبت", "گرمی و خشکی", "سردی و رطوبت"], "answer": "سردی و خشکی بدن", "h": "سوداوی می‌شود"}, {"w": "برای اصلاح غلبه سردی، چه رویکردی مناسب است؟", "options": ["استفاده از تدابیر گرم", "تدابیر سردتر", "افزایش خشکی", "استراحت مطلق"], "answer": "استفاده از تدابیر گرم", "h": "ضد سرد، گرم است"}, {"w": "برای اصلاح غلبه گرمی، چه رویکردی مناسب است؟", "options": ["استفاده از تدابیر سرد", "تدابیر گرم‌تر", "افزایش رطوبت", "ورزش سنگین"], "answer": "استفاده از تدابیر سرد", "h": "ضد گرم، سرد است"}, {"w": "برای اصلاح خشکی مزاج، کدام تدبیر مناسب است؟", "options": ["افزایش رطوبت (آشامیدنی، حمام)", "افزایش خشکی", "غذای گرم و خشک", "روزه طولانی"], "answer": "افزایش رطوبت (آشامیدنی، حمام)", "h": "ضد خشک، تر است"}, {"w": "برای اصلاح رطوبت مزاج، کدام تدبیر مناسب است؟", "options": ["افزایش خشکی (غذاهای خشک)", "افزایش مایعات", "حمام طولانی", "خواب زیاد"], "answer": "افزایش خشکی (غذاهای خشک)", "h": "ضد تر، خشک است"}, {"w": "کدام مزاج به «گرمی» بیشتر نیاز دارد تا متعادل بماند؟", "options": ["بلغمی", "صفراوی", "دموی", "سوداوی"], "answer": "بلغمی", "h": "سرد و تر است"}, {"w": "کدام مزاج باید از «رطوبت و سردی» دوری کند؟", "options": ["بلغمی", "سوداوی", "دموی", "صفراوی"], "answer": "بلغمی", "h": "در سرد و تر بدتر می‌شود"}, {"w": "در مزاج صفراوی، کدام عنصر باید تعدیل شود؟", "options": ["آتش", "هوا", "خاک", "آب"], "answer": "آتش", "h": "غلبه گرمی و خشکی"}, {"w": "در مزاج سوداوی، کدام عنصر باید تعدیل شود؟", "options": ["خاک", "آتش", "هوا", "آب"], "answer": "خاک", "h": "غلبه سردی و خشکی"}, {"w": "در مزاج بلغمی، کدام عنصر باید تعدیل شود؟", "options": ["آب", "آتش", "هوا", "خاک"], "answer": "آب", "h": "غلبه سردی و رطوبت"}, {"w": "در مزاج دموی، کدام عنصر باید تعدیل شود؟", "options": ["هوا", "خاک", "آب", "آتش"], "answer": "هوا", "h": "غلبه گرمی و رطوبت"}, {"w": "هدف اصلی مزاج‌شناسی در طب سنتی چیست؟", "options": ["پیشگیری و نگه‌داشتن تعادل عناصر", "درمان بیماری", "جراحی", "تجویز دارو"], "answer": "پیشگیری و نگه‌داشتن تعادل عناصر", "h": "درمان با پیشگیری"}, {"w": "«ترکیب چهار عنصر» در بدن چه چیزی را می‌سازد؟", "options": ["خلط چهارگانه (اخلاط)", "اعضای بدن", "روح", "حواس"], "answer": "خلط چهارگانه (اخلاط)", "h": "عنصر به خلط می‌رسد"}, {"w": "خلط دم از ترکیب کدام عنصر و کیفیات پدید می‌آید؟", "options": ["هوا (گرم و تر)", "آتش (گرم و خشک)", "آب (سرد و تر)", "خاک (سرد و خشک)"], "answer": "هوا (گرم و تر)", "h": "مزاج دموی"}, {"w": "خلط صفرا از ترکیب کدام عنصر و کیفیات پدید می‌آید؟", "options": ["آتش (گرم و خشک)", "آب (سرد و تر)", "خاک (سرد و خشک)", "هوا (گرم و تر)"], "answer": "آتش (گرم و خشک)", "h": "مزاج صفراوی"}, {"w": "خلط بلغم از ترکیب کدام عنصر و کیفیات پدید می‌آید؟", "options": ["آب (سرد و تر)", "آتش (گرم و خشک)", "هوا (گرم و تر)", "خاک (سرد و خشک)"], "answer": "آب (سرد و تر)", "h": "مزاج بلغمی"}, {"w": "خلط سودا از ترکیب کدام عنصر و کیفیات پدید می‌آید؟", "options": ["خاک (سرد و خشک)", "آتش (گرم و خشک)", "هوا (گرم و تر)", "آب (سرد و تر)"], "answer": "خاک (سرد و خشک)", "h": "مزاج سوداوی"}, {"w": "«عنصر» در طب سنتی چه چیزی است؟", "options": ["جوهری که مزاج از آن پدید می‌آید", "خونی که جاری است", "عضوی از بدن", "دارویی گیاهی"], "answer": "جوهری که مزاج از آن پدید می‌آید", "h": "پایه ترکیب اجسام"}, {"w": "کدام عنصر برای «هضم» لازم است و در معده فعال است؟", "options": ["آتش", "خاک", "آب", "هوا"], "answer": "آتش", "h": "حرارت هاضم"}, {"w": "کدام عنصر در «رطوبت اندام‌ها و نرمی بافت» نقش اصلی دارد؟", "options": ["آب", "خاک", "آتش", "هوا"], "answer": "آب", "h": "رطوبت غریزی"}, {"w": "کدام عنصر در «قوام و استحکام استخوان‌ها» نقش دارد؟", "options": ["خاک", "آب", "آتش", "هوا"], "answer": "خاک", "h": "خشکی و ساختار"}, {"w": "کدام عنصر در «روح‌گیری و تنفس» نقش دارد؟", "options": ["هوا", "خاک", "آتش", "آب"], "answer": "هوا", "h": "هوای درون ریه‌ها"}, {"w": "«اخلاط اربعه» عبارت‌اند از:", "options": ["دم، بلغم، صفرا، سودا", "آتش، هوا، آب، خاک", "گرم، سرد، تر، خشک", "خون، عرق، ادرار، مدفوع"], "answer": "دم، بلغم، صفرا، سودا", "h": "چهار خلط"}, {"w": "کدام خلط، گرم و تر است؟", "options": ["دم", "بلغم", "صفرا", "سودا"], "answer": "دم", "h": "مزاج بهاری"}, {"w": "کدام خلط، گرم و خشک است؟", "options": ["صفرا", "دم", "بلغم", "سودا"], "answer": "صفرا", "h": "مزاج تابستانی"}, {"w": "کدام خلط، سرد و تر است؟", "options": ["بلغم", "دم", "صفرا", "سودا"], "answer": "بلغم", "h": "مزاج زمستانی"}, {"w": "کدام خلط، سرد و خشک است؟", "options": ["سودا", "دم", "بلغم", "صفرا"], "answer": "سودا", "h": "مزاج پاییزی"}, {"w": "بر اساس مزاج‌شناسی، انسان سوداوی چه صفتی دارد؟", "options": ["سرد و خشک (پاییزی)", "گرم و تر", "گرم و خشک", "سرد و تر"], "answer": "سرد و خشک (پاییزی)", "h": "کم‌خواب و کم‌حوصله"}, {"w": "بر اساس مزاج‌شناسی، انسان بلغمی چه صفتی دارد؟", "options": ["سرد و تر (زمستانی)", "گرم و تر", "گرم و خشک", "سرد و خشک"], "answer": "سرد و تر (زمستانی)", "h": "خواب‌آلود و آرام"}, {"w": "بر اساس مزاج‌شناسی، انسان دموی چه صفتی دارد؟", "options": ["گرم و تر (بهاری)", "سرد و تر", "سرد و خشک", "گرم و خشک"], "answer": "گرم و تر (بهاری)", "h": "پرجوش و پرانرژی"}, {"w": "بر اساس مزاج‌شناسی، انسان صفراوی چه صفتی دارد؟", "options": ["گرم و خشک (تابستانی)", "سرد و تر", "گرم و تر", "سرد و خشک"], "answer": "گرم و خشک (تابستانی)", "h": "تند و زودرنج"}, {"w": "«تعدیل مزاج» یعنی چه؟", "options": ["بازگرداندن تعادل عناصر و خلط‌ها", "افزودن یک خلط", "حذف یک خلط", "تشدید یک خلط"], "answer": "بازگرداندن تعادل عناصر و خلط‌ها", "h": "راه به اعتدال"}, {"w": "کدام عنصر با «پیری و یبوست» هم‌خوانی بیشتری دارد؟", "options": ["خاک", "آب", "هوا", "آتش"], "answer": "خاک", "h": "سرد و خشک"}, {"w": "کدام عنصر با «تب و التهاب» هم‌خوانی بیشتری دارد؟", "options": ["آتش", "خاک", "آب", "هوا"], "answer": "آتش", "h": "گرم و خشک"}, {"w": "کدام عنصر با «خواب‌آلودگی و کسالت» هم‌خوانی دارد؟", "options": ["آب", "خاک", "هوا", "آتش"], "answer": "آب", "h": "سرد و تر"}, {"w": "کدام عنصر با «نشاط و سبکی» هم‌خوانی دارد؟", "options": ["هوا", "خاک", "آتش", "آب"], "answer": "هوا", "h": "گرم و تر"}, {"w": "«اخلاط» از کجا سرچشمه می‌گیرند؟", "options": ["از ترکیب عناصر در بدن", "از غذا به‌تنهایی", "از روح", "از داروها"], "answer": "از ترکیب عناصر در بدن", "h": "عنصر به خلط می‌رسد"}, {"w": "«ارکان اربعه» پایه کدام دانش‌ها نیز هست؟", "options": ["فلسفه طبیعی و پزشکی سنتی", "نجوم", "ریاضیات", "هندسه"], "answer": "فلسفه طبیعی و پزشکی سنتی", "h": "علم طبیعیات"}, {"w": "کدام عنصر در فصل بهار باید تعدیل شود تا سرما نخوریم؟", "options": ["آب", "خاک", "آتش", "هوا"], "answer": "آب", "h": "رطوبت باقی‌مانده زمستان"}, {"w": "کدام عنصر در فصل پاییز باید تعدیل شود؟", "options": ["خاک", "آب", "آتش", "هوا"], "answer": "خاک", "h": "سردی و خشکی رو به افزایش است"}, {"w": "«برودت» یعنی چه؟", "options": ["سردی", "گرمی", "خشکی", "رطوبت"], "answer": "سردی", "h": "مخالف حرارت"}, {"w": "«حرارت» یعنی چه؟", "options": ["گرمی", "سردی", "خشکی", "رطوبت"], "answer": "گرمی", "h": "مخالف برودت"}, {"w": "«رطوبت» یعنی چه؟", "options": ["تری", "خشکی", "گرمی", "سردی"], "answer": "تری", "h": "مخالف خشکی"}, {"w": "«یبوسه» یعنی چه؟", "options": ["خشکی", "تری", "گرمی", "سردی"], "answer": "خشکی", "h": "مخالف رطوبت"}, {"w": "برای تقویت «حرارت غریزی» از کدام عنصر کمک می‌گیریم؟", "options": ["آتش", "خاک", "آب", "هوا"], "answer": "آتش", "h": "گرمای درونی بدن"}, {"w": "برای کاهش «رطوبت بدن» کدام تدبیر مناسب است؟", "options": ["کاهش مصرف مایعات سرد و تر", "افزایش مایعات", "حمام طولانی", "خواب زیاد"], "answer": "کاهش مصرف مایعات سرد و تر", "h": "ضد رطوبت"}, {"w": "«قوام» بدن بیشتر از کدام عنصر است؟", "options": ["خاک", "آب", "آتش", "هوا"], "answer": "خاک", "h": "ساختار و پایداری"}, {"w": "«نرمی و انعطاف» بافت‌ها بیشتر از کدام عنصر است؟", "options": ["آب", "خاک", "آتش", "هوا"], "answer": "آب", "h": "رطوبت بافتی"}, {"w": "«سرعت و چابکی» ذهنی با کدام عنصر هم‌خوانی دارد؟", "options": ["هوا", "خاک", "آتش", "آب"], "answer": "هوا", "h": "لطافت و گرمی"}, {"w": "«عصبانیت و تندی» با کدام عنصر هم‌خوانی دارد؟", "options": ["آتش", "خاک", "آب", "هوا"], "answer": "آتش", "h": "گرمی و خشکی شدید"}, {"w": "جمع‌بندی: «ارکان اربعه» کدام‌اند؟", "options": ["آتش، هوا، آب، خاک", "دم، بلغم، صفرا، سودا", "گرم، سرد، تر، خشک", "قلب، کبد، مغز، ریه"], "answer": "آتش، هوا، آب، خاک", "h": "چهار عنصر بنیادین"}];
 
         let currentQuestion = 0;
-        let score = 0;
-        const gameKey = "game_1_coins";
 
         function loadQuestion() {
             if (currentQuestion >= questions.length) {
-                endGame();
+                document.querySelector('.card').innerHTML = "<h3>پایان بازی! تمام سوالات پاسخ داده شدند.</h3><a href='index.html' class='back-portal'>بازگشت به درگاه مرکزی</a>";
                 return;
             }
-
-            const qData = questions[currentQuestion];
-            document.getElementById('questionCounter').innerText = `سوال ${currentQuestion + 1} از ${questions.length}`;
-            document.getElementById('scoreTracker').innerText = `💰 سکه این بازی: ${score}`;
-            document.getElementById('questionText').innerText = qData.q;
-
-            const container = document.getElementById('optionsContainer');
-            container.innerHTML = '';
-
-            qData.options.forEach((opt, idx) => {
+            const q = questions[currentQuestion];
+            document.getElementById('counter').innerText = `سوال ${currentQuestion + 1} از ${questions.length}`;
+            document.getElementById('question').innerText = q.w;
+            
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            
+            let shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+            shuffledOptions.forEach(opt => {
                 const btn = document.createElement('button');
-                btn.className = 'option-btn';
                 btn.innerText = opt;
-                btn.onclick = () => selectAnswer(idx, btn);
-                container.appendChild(btn);
+                btn.onclick = () => checkAnswer(opt, q.answer);
+                optionsDiv.appendChild(btn);
             });
-
-            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('feedback').innerText = '';
+            document.getElementById('next-btn').style.display = 'none';
         }
 
-        function selectAnswer(selectedIdx, btnElement) {
-            const qData = questions[currentQuestion];
-            const buttons = document.querySelectorAll('.option-btn');
-            
-            buttons.forEach(b => b.onclick = null);
+        function checkAnswer(selected, correct) {
+            const feedback = document.getElementById('feedback');
+            const buttons = document.querySelectorAll('#options button');
+            buttons.forEach(b => b.disabled = true);
 
-            if (selectedIdx === qData.answer) {
-                btnElement.classList.add('correct');
-                score += 1;
+            if (selected === correct) {
+                feedback.style.color = '#2e7d32';
+                feedback.innerText = 'پاسخ درست است! (+1 سکه)';
+                updateCoins(1);
             } else {
-                btnElement.classList.add('wrong');
-                buttons[qData.answer].classList.add('correct');
+                feedback.style.color = '#d32f2f';
+                feedback.innerText = `پاسخ نادرست. گزینه درست: ${correct}`;
             }
-
-            localStorage.setItem(gameKey, score);
-            document.getElementById('scoreTracker').innerText = `💰 سکه این بازی: ${score}`;
-
-            document.getElementById('nextBtn').style.display = 'inline-block';
+            document.getElementById('next-btn').style.display = 'block';
         }
 
         function nextQuestion() {
             currentQuestion++;
-            loadQuestion();
-        }
-
-        function endGame() {
-            document.getElementById('gameArea').style.display = 'none';
-            document.getElementById('resultArea').style.display = 'block';
-            document.getElementById('finalScoreText').innerText = `امتیاز نهایی شما: ${score} از ${questions.length}`;
-            localStorage.setItem(gameKey, score);
-        }
-
-        function restartGame() {
-            currentQuestion = 0;
-            score = 0;
-            localStorage.setItem(gameKey, score);
-            document.getElementById('resultArea').style.display = 'none';
-            document.getElementById('gameArea').style.display = 'block';
             loadQuestion();
         }
 
