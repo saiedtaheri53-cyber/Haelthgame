@@ -3,255 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بازی ۱: ارکان اربعه</title>
+    <title>طب و علم سلامتی - بازی شماره ۱</title>
     <style>
         :root {
             --primary-color: #2c3e50;
-            --accent-color: #d4af37; /* Gold Color */
-            --bg-color: #f4f7f6;
-            --text-color: #333;
-            --correct-color: #27ae60;
-            --wrong-color: #c0392b;
+            --secondary-color: #27ae60;
+            --accent-color: #f1c40f; /* رنگ طلایی برای امتیاز */
+            --error-color: #e74c3c;
+            --bg-color: #ecf0f1;
+            --text-color: #2c3e50;
         }
 
         body {
-            font-family: 'Tahoma', sans-serif;
+            font-family: 'Tahoma', 'Arial', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            margin: 0;
         }
 
-        #game-container {
-            background: white;
-            width: 90%;
-            max-width: 600px;
-            padding: 30px;
+        .quiz-container {
+            background-color: white;
+            padding: 2rem;
             border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 600px;
             text-align: center;
         }
 
         .header {
-            border-bottom: 2px solid var(--accent-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
+            border-bottom: 2px solid var(--bg-color);
             padding-bottom: 10px;
         }
 
-        #question-number {
-            font-size: 0.9em;
-            color: #7f8c8d;
+        .score-container {
+            font-weight: bold;
+            color: var(--accent-color);
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
         }
 
-        #question-text {
-            font-size: 1.3em;
-            margin: 20px 0;
-            font-weight: bold;
+        .question-text {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
         }
 
         .options-container {
             display: grid;
-            gap: 12px;
+            gap: 10px;
         }
 
         .option-btn {
-            background: #fff;
-            border: 2px solid #ecf0f1;
             padding: 15px;
-            border-radius: 8px;
+            font-size: 1.1rem;
+            border: 2px solid var(--bg-color);
+            border-radius: 10px;
+            background: white;
             cursor: pointer;
-            transition: all 0.2s;
-            font-size: 1em;
+            transition: all 0.3s ease;
         }
 
         .option-btn:hover {
-            background: #f8f9fa;
-            border-color: var(--accent-color);
+            background-color: var(--bg-color);
         }
 
         .correct {
-            background-color: var(--correct-color) !important;
-            color: white;
-            border-color: var(--correct-color) !important;
+            background-color: var(--secondary-color) !important;
+            color: white !important;
+            border-color: var(--secondary-color) !important;
         }
 
         .wrong {
-            background-color: var(--wrong-color) !important;
+            background-color: var(--error-color) !important;
+            color: white !important;
+            border-color: var(--error-color) !important;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            padding: 10px 30px;
+            background-color: var(--primary-color);
             color: white;
-            border-color: var(--wrong-color) !important;
-        }
-
-        #feedback {
-            margin-top: 20px;
-            font-weight: bold;
-            min-height: 24px;
-        }
-
-        #next-btn, #home-btn {
-            margin-top: 20px;
-            padding: 12px 30px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 1em;
             display: none;
         }
 
-        #next-btn {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        #home-btn {
-            background-color: var(--accent-color);
-            color: white;
-        }
-
-        #result-screen {
+        .result-screen {
             display: none;
         }
 
-        .gold-score {
-            font-size: 2em;
-            color: var(--accent-color);
-            margin: 20px 0;
+        .golden-score-display {
+            font-size: 1.2rem;
+            color: #d4af37; /* Gold color */
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
-<div id="game-container">
-    <!-- Quiz Interface -->
-    <div id="quiz-interface">
-        <div class="header">
-            <div id="question-number">پرسش ۱ از ۱۰۰</div>
-        </div>
-        <div id="question-text">در حال بارگذاری...</div>
-        <div class="options-container" id="options">
-            <!-- Options injected by JS -->
-        </div>
-        <div id="feedback"></div>
-        <button id="next-btn" onclick="nextQuestion()">سوال بعدی</button>
+<div class="quiz-container" id="quiz-box">
+    <div class="header">
+        <div id="progress">سوال: 1 / 100</div>
+        <div class="score-container" id="golden-score-display">امتیاز طلایی: 0</div>
     </div>
 
-    <!-- Result Interface -->
-    <div id="result-screen">
+    <div id="game-content">
+        <div class="question-text" id="question">در حال بارگذاری...</div>
+        <div class="options-container" id="options"></div>
+        <button class="next-btn" id="next-btn" onclick="nextQuestion()">سوال بعدی</button>
+    </div>
+
+    <div class="result-screen" id="result-screen">
         <h2>پایان بازی!</h2>
-        <p>امتیاز شما:</p>
-        <div id="score-display" class="gold-score">۰ / ۱۰۰</div>
-        <p id="gold-message"></p>
-        <button id="home-btn" style="display: inline-block;" onclick="goToHome()">بازگشت به پورتال</button>
+        <p id="final-score"></p>
+        <p class="golden-score-display" id="final-golden-score"></p>
+        <button class="option-btn" onclick="location.reload()">شروع مجدد</button>
     </div>
 </div>
 
 <script>
-    // ۱۰۰ پرسش استخراج شده از فایل مرجع
-    const questions = [
-        // اینجا تمام ۱۰۰ پرسش از فایل Game_001_Arkan_Arba_Standalone.html قرار می‌گیرد
-        // برای خلاصه بودن این کد، ساختار را با نمونه‌های شما پر کرده‌ام
-        { q: "ارکان اربعه کدام‌اند؟", a: ["آب، خاک، باد، آتش", "آب، خاک، هوا، معدن", "خاک، سنگ، آهن، مس", "آب، باد، آتش، نور"], correct: 0 },
-        // ... [سایر ۹۹ پرسش در فایل نهایی قرار دارد]
+    // داده‌های بازی (به عنوان نمونه برای تست)
+    const quizData = [
+        {
+            question: "کدام عنصر در طب سنتی با حرارت زیاد شناخته می‌شود؟",
+            options: ["آب", "آتش", "خاک", "باد"],
+            correct: 1
+        },
+        {
+            question: "مفهوم 'خلفت‌الله' در چه زمینه‌ای کاربرد دارد؟",
+            options: ["فیزیک", "الهیات", "نجوم", "ریاضیات"],
+            correct: 1
+        }
+        // سوالات ۱ تا ۱۰۰ در اینجا قرار خواهند گرفت
     ];
 
-    // اضافه کردن خودکار پرسش‌های باقی‌مانده از فایل مرجع (در نسخه تولید شده کامل است)
-    // [در اینجا من فرض می‌کنم آرایه بالا شامل هر ۱۰۰ سوال است]
+    let current = 0;
+    let goldenScore = 0; // اضافه شدن امتیاز طلایی
 
-    let currentQuestionIndex = 0;
-    let score = 0;
-    let canAnswer = true;
-
-    const questionNumberEl = document.getElementById('question-number');
-    const questionTextEl = document.getElementById('question-text');
-    const optionsContainerEl = document.getElementById('options');
-    const feedbackEl = document.getElementById('feedback');
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.getElementById('options');
+    const progressEl = document.getElementById('progress');
     const nextBtn = document.getElementById('next-btn');
-    const quizInterface = document.getElementById('quiz-interface');
+    const goldenScoreEl = document.getElementById('golden-score-display');
+    const gameContent = document.getElementById('game-content');
     const resultScreen = document.getElementById('result-screen');
-    const scoreDisplayEl = document.getElementById('score-display');
 
-    function initGame() {
-        currentQuestionIndex = 0;
-        score = 0;
-        showQuestion();
-    }
+    function loadQuiz() {
+        resetState();
+        const currentQuiz = quizData[current];
+        
+        questionEl.innerText = currentQuiz.question;
+        progressEl.innerText = `سوال: ${current + 1} / ${quizData.length}`;
 
-    function showQuestion() {
-        canAnswer = true;
-        nextBtn.style.display = 'none';
-        feedbackEl.textContent = '';
-        
-        const currentQ = questions[currentQuestionIndex];
-        questionNumberEl.textContent = `پرسش ${currentQuestionIndex + 1} از ${questions.length}`;
-        questionTextEl.textContent = currentQ.q;
-        
-        optionsContainerEl.innerHTML = '';
-        currentQ.a.forEach((option, index) => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.textContent = option;
-            btn.onclick = () => checkAnswer(index, btn);
-            optionsContainerEl.appendChild(btn);
+        currentQuiz.options.forEach((option, index) => {
+            const button = document.createElement('button');
+            button.innerText = option;
+            button.classList.add('option-btn');
+            button.addEventListener('click', () => selectOption(index, button));
+            optionsEl.appendChild(button);
         });
     }
 
-    function checkAnswer(selectedIndex, selectedBtn) {
-        if (!canAnswer) return;
-        canAnswer = false;
+    function resetState() {
+        nextBtn.style.display = 'none';
+        while (optionsEl.firstChild) {
+            optionsEl.removeChild(optionsEl.firstChild);
+        }
+    }
 
-        const correctIndex = questions[currentQuestionIndex].correct;
-        const allButtons = optionsContainerEl.getElementsByClassName('option-btn');
+    function selectOption(selectedIndex, button) {
+        const correctIndex = quizData[current].correct;
+        const allButtons = optionsEl.querySelectorAll('.option-btn');
 
         if (selectedIndex === correctIndex) {
-            selectedBtn.classList.add('correct');
-            feedbackEl.textContent = 'کاملاً صحیح!';
-            feedbackEl.style.color = 'var(--correct-color)';
-            score++;
+            button.classList.add('correct');
+            goldenScore++; // افزایش امتیاز طلایی در صورت پاسخ صحیح
+            updateGoldenScoreDisplay();
         } else {
-            selectedBtn.classList.add('wrong');
+            button.classList.add('wrong');
             allButtons[correctIndex].classList.add('correct');
-            feedbackEl.textContent = 'پاسخ صحیح را مشاهده کنید.';
-            feedbackEl.style.color = 'var(--wrong-color)';
         }
 
+        // غیرفعال کردن تمام دکمه‌ها بعد از انتخاب
+        allButtons.forEach(btn => btn.disabled = true);
         nextBtn.style.display = 'inline-block';
     }
 
+    function updateGoldenScoreDisplay() {
+        goldenScoreEl.innerText = `امتیاز طلایی: ${goldenScore}`;
+    }
+
     function nextQuestion() {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-            showQuestion();
+        current++;
+        if (current < quizData.length) {
+            loadQuiz();
         } else {
             showResults();
         }
     }
 
     function showResults() {
-        quizInterface.style.display = 'none';
+        gameContent.style.display = 'none';
         resultScreen.style.display = 'block';
-        scoreDisplayEl.textContent = `${score} / ${questions.length}`;
-        
-        // ذخیره امتیاز طلا برای پورتال (Gold Score Logic)
-        localStorage.setItem('game001_gold_score', score);
-        
-        const msgEl = document.getElementById('gold-message');
-        if (score === questions.length) {
-            msgEl.textContent = "عالی بود! یک استاد تمام!";
-        } else if (score > questions.length * 0.7) {
-            msgEl.textContent = "بسیار خوب، دانش شما قابل توجه است.";
-        } else {
-            msgEl.textContent = "تلاش مجدد برای کسب دانش بیشتر.";
-        }
-    }
-
-    function goToHome() {
-        window.location.href = 'index.html';
+        document.getElementById('final-score').innerText = `تعداد پاسخ‌های صحیح: ${goldenScore}`;
+        document.getElementById('final-golden-score').innerText = `امتیاز طلایی نهایی: ${goldenScore}`;
     }
 
     // شروع بازی
-    initGame();
+    loadQuiz();
 </script>
 
 </body>
