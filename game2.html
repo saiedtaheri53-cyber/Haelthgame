@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>بازی سته ضروریه</title>
     <style>
+        /* طراحی کاملاً ریسپانسیو و بهینه برای موبایل */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: Tahoma, sans-serif;
@@ -65,7 +66,7 @@
 <body>
 
 <div class="game-container">
-    <h2>بازی سته ضروریه</h2>
+    <h2 id="game-title">بازی سته ضروریه</h2>
     <div class="score-board">
         <span id="score-display">امتیاز: 0</span>
         <span id="golden-score-display">🌟 امتیاز طلایی: 0</span>
@@ -81,27 +82,45 @@
 </div>
 
 <script>
-    // دیتای سوالات (نمونه - شما باید تمام ۱۰۰ سوال خود را با این فرمت در اینجا قرار دهید)
-    // نکته مهم: مقدار answer باید ایندکس گزینه درست باشد (0 تا 3)
+    // لیست سوالات - حتماً تمام ۱۰۰ سوال خود را با فرمت زیر در اینجا قرار دهید
     const questions = [
         { w: "ستهٔ ضروریه به چند اصل بنیادین اشاره دارد؟", options: ["چهار اصل", "پنج اصل", "شش اصل", "هفت اصل"], answer: 2, h: "«سته» به معنای شش است." },
         { w: "کدام مورد یکی از اصول شش‌گانه سلامت است؟", options: ["هوا", "رنگ چشم", "قد", "گروه خونی"], answer: 0, h: "کیفیت هوای تنفسی از اصول شش‌گانه است." },
-        // ... بقیه ۱۰۰ سوال را اینجا کپی کنید
+        // اضافه کردن بقیه سوالات...
     ];
 
-    let currentQ = parseInt(localStorage.getItem('game2_currentQ')) || 0;
-    let score = parseInt(localStorage.getItem('game2_score')) || 0;
+    let currentQ = 0;
+    let score = 0;
     let goldenScore = parseInt(localStorage.getItem('goldenScore')) || 0;
     let answered = false;
 
+    // تابع شروع مجدد بازی از صفر (رفع مشکل دکمه دوباره بازی کنید)
+    function resetGame() {
+        localStorage.removeItem('game2_currentQ');
+        localStorage.removeItem('game2_score');
+        currentQ = 0;
+        score = 0;
+        initGame();
+    }
+
     function initGame() {
+        // بررسی پیشرفت ذخیره شده
+        if (localStorage.getItem('game2_currentQ') !== null) {
+            currentQ = parseInt(localStorage.getItem('game2_currentQ'));
+            score = parseInt(localStorage.getItem('game2_score')) || 0;
+        } else {
+            currentQ = 0;
+            score = 0;
+        }
+
         document.getElementById('golden-score-display').innerText = `🌟 امتیاز طلایی: ${goldenScore}`;
         document.getElementById('score-display').innerText = `امتیاز: ${score}`;
+
         if (currentQ >= questions.length) {
             showFinalResult();
-            return;
+        } else {
+            loadQuestion();
         }
-        loadQuestion();
     }
 
     function loadQuestion() {
@@ -142,7 +161,7 @@
 
         document.getElementById('score-display').innerText = `امتیاز: ${score}`;
         localStorage.setItem('game2_score', score);
-        localStorage.setItem('game2_currentQ', currentQ); // ذخیره برای بازگشت
+        localStorage.setItem('game2_currentQ', currentQ); 
         document.getElementById('next-btn').style.display = 'block';
     }
 
@@ -167,13 +186,13 @@
     function showFinalResult() {
         const container = document.querySelector('.game-container');
         container.innerHTML = `
-            <h2>پایان بازی!</h2>
-            <div style="text-align:center; font-size:1.2rem; margin:20px 0;">
-                امتیاز نهایی شما: ${score}<br>
-                امتیاز طلایی: ${goldenScore}
+            <h2 style="margin-bottom:30px;">پایان بازی!</h2>
+            <div style="text-align:center; font-size:1.2rem; margin-bottom:30px; line-height:2;">
+                امتیاز نهایی شما: <span style="color:#2ecc71; font-weight:bold;">${score}</span><br>
+                امتیاز طلایی: <span style="color:#f1c40f; font-weight:bold;">${goldenScore}</span>
             </div>
-            <button onclick="location.reload()" class="option-btn" style="text-align:center">دوباره بازی کنید</button>
-            <a href="index.html" class="portal-link">بازگشت به پورتال</a>
+            <button onclick="resetGame()" class="option-btn" style="text-align:center; background:#3498db; color:white; border:none; font-weight:bold;">دوباره بازی کنید</button>
+            <a href="index.html" class="portal-link" style="margin-top:10px;">بازگشت به پورتال</a>
         `;
     }
 
