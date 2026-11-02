@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>بازی سته ضروریه</title>
     <style>
-        /* طراحی کاملاً ریسپانسیو و بهینه برای موبایل */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: Tahoma, sans-serif;
@@ -26,6 +25,10 @@
             max-width: 500px;
             margin-top: 10px;
         }
+        /* برای مدیریت نمایش بخش‌های مختلف */
+        #game-play-section, #game-result-section { width: 100%; }
+        #game-result-section { display: none; text-align: center; }
+
         h2 { color: #2c3e50; text-align: center; font-size: 1.4rem; margin-top: 0; }
         .score-board {
             display: flex;
@@ -61,24 +64,50 @@
         #feedback { margin-top: 15px; padding: 12px; border-radius: 8px; font-size: 14px; display: none; line-height: 1.5; }
         #next-btn { display: none; margin-top: 15px; width: 100%; padding: 14px; background: #3498db; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
         .portal-link { display: block; text-align: center; margin-top: 25px; color: #7f8c8d; text-decoration: none; font-size: 13px; }
+        
+        /* استایل دکمه شروع مجدد در صفحه پایان */
+        .reset-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
 
 <div class="game-container">
-    <h2 id="game-title">بازی سته ضروریه</h2>
-    <div class="score-board">
-        <span id="score-display">امتیاز: 0</span>
-        <span id="golden-score-display">🌟 امتیاز طلایی: 0</span>
+    <!-- بخش اصلی بازی -->
+    <div id="game-play-section">
+        <h2 id="game-title">بازی سته ضروریه</h2>
+        <div class="score-board">
+            <span id="score-display">امتیاز: 0</span>
+            <span id="golden-score-display">🌟 امتیاز طلایی: 0</span>
+        </div>
+        <div id="q-number"></div>
+        <div id="q-text"></div>
+        <div id="options"></div>
+        <div id="feedback"></div>
+        <button id="next-btn" onclick="nextQuestion()">سوال بعد</button>
+        <a href="index.html" class="portal-link">بازگشت به دانشنامه جامع (پورتال)</a>
     </div>
-    
-    <div id="q-number"></div>
-    <div id="q-text"></div>
-    <div id="options"></div>
-    <div id="feedback"></div>
-    <button id="next-btn" onclick="nextQuestion()">سوال بعد</button>
-    
-    <a href="index.html" class="portal-link">بازگشت به دانشنامه جامع (پورتال)</a>
+
+    <!-- بخش نتیجه نهایی -->
+    <div id="game-result-section">
+        <h2>پایان بازی!</h2>
+        <div style="font-size:1.2rem; margin:30px 0; line-height:2;">
+            امتیاز نهایی شما: <span id="final-score" style="color:#2ecc71; font-weight:bold;">0</span><br>
+            امتیاز طلایی: <span id="final-golden-score" style="color:#f1c40f; font-weight:bold;">0</span>
+        </div>
+        <button class="reset-btn" onclick="resetGame()">دوباره بازی کنید</button>
+        <a href="index.html" class="portal-link">بازگشت به پورتال</a>
+    </div>
 </div>
 
 <script>
@@ -86,7 +115,7 @@
     const questions = [
         { w: "ستهٔ ضروریه به چند اصل بنیادین اشاره دارد؟", options: ["چهار اصل", "پنج اصل", "شش اصل", "هفت اصل"], answer: 2, h: "«سته» به معنای شش است." },
         { w: "کدام مورد یکی از اصول شش‌گانه سلامت است؟", options: ["هوا", "رنگ چشم", "قد", "گروه خونی"], answer: 0, h: "کیفیت هوای تنفسی از اصول شش‌گانه است." },
-        // اضافه کردن بقیه سوالات...
+        // ... بقیه ۱۰۰ سوال شما اینجا قرار دارد
     ];
 
     let currentQ = 0;
@@ -94,17 +123,12 @@
     let goldenScore = parseInt(localStorage.getItem('goldenScore')) || 0;
     let answered = false;
 
-    // تابع شروع مجدد بازی از صفر (رفع مشکل دکمه دوباره بازی کنید)
-    function resetGame() {
-        localStorage.removeItem('game2_currentQ');
-        localStorage.removeItem('game2_score');
-        currentQ = 0;
-        score = 0;
-        initGame();
-    }
-
     function initGame() {
-        // بررسی پیشرفت ذخیره شده
+        // بازگرداندن بخش بازی و مخفی کردن نتیجه
+        document.getElementById('game-play-section').style.display = 'block';
+        document.getElementById('game-result-section').style.display = 'none';
+
+        // بررسی پیشرفت ذخیره شده در حافظه
         if (localStorage.getItem('game2_currentQ') !== null) {
             currentQ = parseInt(localStorage.getItem('game2_currentQ'));
             score = parseInt(localStorage.getItem('game2_score')) || 0;
@@ -184,18 +208,22 @@
     }
 
     function showFinalResult() {
-        const container = document.querySelector('.game-container');
-        container.innerHTML = `
-            <h2 style="margin-bottom:30px;">پایان بازی!</h2>
-            <div style="text-align:center; font-size:1.2rem; margin-bottom:30px; line-height:2;">
-                امتیاز نهایی شما: <span style="color:#2ecc71; font-weight:bold;">${score}</span><br>
-                امتیاز طلایی: <span style="color:#f1c40f; font-weight:bold;">${goldenScore}</span>
-            </div>
-            <button onclick="resetGame()" class="option-btn" style="text-align:center; background:#3498db; color:white; border:none; font-weight:bold;">دوباره بازی کنید</button>
-            <a href="index.html" class="portal-link" style="margin-top:10px;">بازگشت به پورتال</a>
-        `;
+        // مخفی کردن بخش بازی و نمایش بخش نتیجه
+        document.getElementById('game-play-section').style.display = 'none';
+        document.getElementById('game-result-section').style.display = 'block';
+
+        document.getElementById('final-score').innerText = score;
+        document.getElementById('final-golden-score').innerText = goldenScore;
     }
 
+    function resetGame() {
+        // پاکسازی حافظه و شروع مجدد
+        localStorage.removeItem('game2_currentQ');
+        localStorage.removeItem('game2_score');
+        initGame();
+    }
+
+    // شروع اولیه
     initGame();
 </script>
 
