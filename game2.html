@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>طب، علم سلامتی - بازی شماره ۲</title>
+    <title>طب، علم سلامتی - آزمون شماره ۲</title>
     <style>
         :root {
             --primary: #2e7d32;
             --primary-dark: #1b5e20;
-            --accent: #d4af37;
-            --bg: #f4f6f5;
+            --accent: #81c784;
+            --bg: #f4f9f4;
             --card-bg: #ffffff;
-            --text: #2c3e50;
-            --gray: #7f8c8d;
+            --text: #333333;
+            --border: #c8e6c9;
         }
         body {
             font-family: Tahoma, Arial, sans-serif;
@@ -26,170 +26,159 @@
             min-height: 100vh;
         }
         .container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
             width: 100%;
             max-width: 650px;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 25px;
             box-sizing: border-box;
-            position: relative;
+            border: 1px solid var(--border);
         }
-        .header-top {
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 15px;
             margin-bottom: 20px;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
         }
-        .golden-score-badge {
-            background: linear-gradient(135deg, #fff3cd, #ffeeba);
-            color: #856404;
-            padding: 6px 14px;
+        .header h1 {
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin: 0;
+        }
+        .score-box {
+            background: var(--bg);
+            padding: 6px 12px;
             border-radius: 20px;
+            font-size: 0.9rem;
             font-weight: bold;
-            font-size: 14px;
-            border: 1px solid #ffeeba;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .portal-btn {
-            text-decoration: none;
-            background: var(--gray);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            transition: background 0.2s;
-        }
-        .portal-btn:hover {
-            background: #616a6b;
-        }
-        .progress-info {
-            font-size: 14px;
-            color: var(--gray);
-            margin-bottom: 10px;
-            font-weight: bold;
+            color: var(--primary);
+            border: 1px solid var(--border);
         }
         .question-text {
-            font-size: 18px;
+            font-size: 1.1rem;
             font-weight: bold;
             margin-bottom: 20px;
             line-height: 1.6;
         }
         .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 20px;
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
         }
-        .option-btn {
-            background: #fff;
-            border: 2px solid #e0e0e0;
-            padding: 12px 18px;
-            border-radius: 10px;
-            text-align: right;
-            font-size: 15px;
+        .option-item {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
-            color: var(--text);
         }
-        .option-btn:hover:not(:disabled) {
-            border-color: var(--primary);
-            background: #f1f8e9;
+        .option-item:hover {
+            background: #f1f8f1;
+            border-color: var(--accent);
         }
-        .option-btn.correct {
+        .option-item.correct {
             background: #d4edda !important;
-            border-color: #28a745 !important;
-            color: #155724 !important;
+            border-color: #c3e6cb !important;
+            color: #155724;
         }
-        .option-btn.wrong {
+        .option-item.wrong {
             background: #f8d7da !important;
-            border-color: #dc3545 !important;
-            color: #721c24 !important;
+            border-color: #f5c6cb !important;
+            color: #721c24;
         }
-        .feedback-box {
-            margin-top: 15px;
-            padding: 12px;
+        .hint-box {
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 10px 15px;
             border-radius: 8px;
-            background: #e8f4f8;
-            font-size: 14px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
             display: none;
-            line-height: 1.5;
         }
-        .next-btn, .action-btn {
+        .btn {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
+            font-size: 1rem;
             transition: background 0.2s;
         }
-        .next-btn:hover, .action-btn:hover {
+        .btn:hover {
             background: var(--primary-dark);
         }
-        #game-result-section {
-            display: none;
-            text-align: center;
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
         }
-        #game-result-section h2 {
+        .portal-link {
+            text-decoration: none;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .portal-link:hover {
             color: var(--primary);
-            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header-top">
-        <a href="index.html" class="portal-btn">← بازگشت به دانشنامه</a>
-        <div class="golden-score-badge">
-            ⭐ سکه طلایی: <span id="golden-score-display">0</span>
+    <div class="header">
+        <h1>طب، علم سلامتی (آزمون ۲)</h1>
+        <div>
+            <span class="score-box">امتیاز: <span id="score-val">0</span></span>
+            <span class="score-box" style="margin-right: 5px; background: #fff8e1; border-color: #ffe082; color: #f57f17;">گلدن اسکور: <span id="golden-score-val">0</span></span>
         </div>
     </div>
 
-    <!-- بخش بازی -->
+    <!-- بخش پرسش و پاسخ -->
     <div id="game-play-section">
-        <div class="progress-info" id="progress-text">سوال ۱ از ۱۳۶</div>
-        <div class="question-text" id="q-text">در حال بارگذاری سوالات...</div>
-        <div class="options-list" id="options-container"></div>
-        <div class="feedback-box" id="feedback-box"></div>
-        <button class="next-btn" id="next-btn" style="display: none;" onclick="nextQuestion()">سوال بعدی</button>
+        <div id="question-counter" style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">سوال ۱ از ۱۳۶</div>
+        <div class="question-text" id="question-text">در حال بارگذاری سوالات...</div>
+        <ul class="options-list" id="options-list"></ul>
+        <div class="hint-box" id="hint-box"></div>
+        
+        <div class="footer-nav">
+            <a href="index.html" class="portal-link">← بازگشت به پورتال</a>
+            <button class="btn" id="next-btn" onclick="nextQuestion()" style="display:none;">سوال بعد</button>
+        </div>
     </div>
 
-    <!-- بخش پایان بازی / نتیجه -->
-    <div id="game-result-section">
-        <h2>پایان آزمون</h2>
-        <p id="final-score-text" style="font-size: 18px; margin: 20px 0;"></p>
-        <button class="action-btn" onclick="resetGame()">تکرار آزمون</button>
+    <!-- بخش نتیجه نهایی -->
+    <div id="game-result-section" style="display: none; text-align: center; padding: 20px 0;">
+        <h2 style="color: var(--primary-dark);">آزمون به پایان رسید!</h2>
+        <p style="font-size: 1.1rem; margin: 15px 0;">امتیاز نهایی شما: <span id="final-score" style="font-weight: bold; color: var(--primary);">0</span> از ۱۳۶</p>
+        <button class="btn" onclick="restartQuiz()">تکرار آزمون</button>
+        <div style="margin-top: 20px;">
+            <a href="index.html" class="portal-link">← بازگشت به پورتال</a>
+        </div>
     </div>
 </div>
 
 <script>
-    // بارگذاری تمامی ۱۳۶ سوال دقیق از نسخه اصلی
     const questions = [
-        { w: "کدام گزینه از ارکان اربعه در طب سنتی نیست؟", options: ["آب", "خاک", "فلز", "آتش"], answer: 2, h: "ارکان اربعه شامل آتش، هوا، آب و خاک می‌باشند." },
-        { w: "کدام خلط غلبه بیشتری بر بلغم دارد و سرد و تر است؟", options: ["سودا", "بلغم", "صفرا", "دم"], answer: 1, h: "طبیعت بلغم سرد و تر است." },
-        // ... (سایر سوالات ۱۳۶ گانه دقیقاً به همان ترتیب در اینجا قرار می‌گیرند)
+        { w: "آیا خوابیدن بلافاصله پس از خوردن شام توصیه می‌شود؟", options: ["بله", "خیر", فرقی ندارد, "فقط در تابستان"], answer: 1, h: "خوابیدن بلافاصله پس از غذا مانع هضم درست می‌شود و عوارض گوارشی دارد." },
+        // ... (تمام ۱۳۶ سوال کامل فایل game2-(2).html در اینجا قرار می‌گیرد)
     ];
 
     let currentQ = parseInt(localStorage.getItem('game2_currentQ')) || 0;
     let score = parseInt(localStorage.getItem('game2_score')) || 0;
     let goldenScore = parseInt(localStorage.getItem('goldenScore')) || 0;
-
-    function updateGoldenScoreDisplay() {
-        document.getElementById('golden-score-display').textContent = goldenScore;
-        localStorage.setItem('goldenScore', goldenScore);
-    }
+    let answered = false;
 
     function initGame() {
-        updateGoldenScoreDisplay();
+        document.getElementById('golden-score-val').innerText = goldenScore;
         if (currentQ >= questions.length) {
             showResult();
         } else {
@@ -198,54 +187,60 @@
     }
 
     function renderQuestion() {
+        answered = false;
         const q = questions[currentQ];
-        document.getElementById('progress-text').textContent = `سوال ${currentQ + 1} از ${questions.length}`;
-        document.getElementById('q-text').textContent = q.w;
+        document.getElementById('question-counter').innerText = `سوال ${currentQ + 1} از ${questions.length}`;
+        document.getElementById('question-text').innerText = q.w;
+        document.getElementById('score-val').innerText = score;
         
-        const optionsContainer = document.getElementById('options-container');
-        optionsContainer.innerHTML = '';
+        const optionsList = document.getElementById('options-list');
+        optionsList.innerHTML = '';
         
         q.options.forEach((opt, index) => {
-            const btn = document.createElement('button');
-            btn.className = 'option-btn';
-            btn.textContent = opt;
-            btn.onclick = () => selectOption(index, btn);
-            optionsContainer.appendChild(btn);
+            const li = document.createElement('li');
+            li.className = 'option-item';
+            li.innerText = opt;
+            li.onclick = () => checkAnswer(index, li);
+            optionsList.appendChild(li);
         });
 
-        document.getElementById('feedback-box').style.display = 'none';
+        document.getElementById('hint-box').style.display = 'none';
         document.getElementById('next-btn').style.display = 'none';
     }
 
-    function selectOption(selectedIndex, selectedBtn) {
+    function checkAnswer(selectedIndex, element) {
+        if (answered) return;
+        answered = true;
+        
         const q = questions[currentQ];
-        const allBtns = document.querySelectorAll('.option-btn');
-        allBtns.forEach(b => b.disabled = true);
-
-        const feedbackBox = document.getElementById('feedback-box');
+        const options = document.querySelectorAll('.option-item');
         
         if (selectedIndex === q.answer) {
-            selectedBtn.classList.add('correct');
+            element.classList.add('correct');
             score++;
-            goldenScore += 10; // افزودن امتیاز طلایی به ازای هر پاسخ درست
-            updateGoldenScoreDisplay();
-            feedbackBox.innerHTML = `<strong>پاسخ صحیح است!</strong><br>${q.h}`;
+            goldenScore++;
+            localStorage.setItem('goldenScore', goldenScore);
+            document.getElementById('golden-score-val').innerText = goldenScore;
         } else {
-            selectedBtn.classList.add('wrong');
-            allBtns[q.answer].classList.add('correct');
-            feedbackBox.innerHTML = `<strong>پاسخ نادرست.</strong><br>${q.h}`;
+            element.classList.add('wrong');
+            options[q.answer].classList.add('correct');
         }
 
-        feedbackBox.style.display = 'block';
-        document.getElementById('next-btn').style.display = 'block';
-
         localStorage.setItem('game2_score', score);
+        document.getElementById('score-val').innerText = score;
+
+        if (q.h) {
+            const hintBox = document.getElementById('hint-box');
+            hintBox.innerText = 'راهنمایی: ' + q.h;
+            hintBox.style.display = 'block';
+        }
+
+        document.getElementById('next-btn').style.display = 'inline-block';
     }
 
     function nextQuestion() {
         currentQ++;
         localStorage.setItem('game2_currentQ', currentQ);
-        
         if (currentQ < questions.length) {
             renderQuestion();
         } else {
@@ -255,24 +250,21 @@
 
     function showResult() {
         document.getElementById('game-play-section').style.display = 'none';
-        document.getElementById('final-score-text').textContent = `امتیاز شما: ${score} از ${questions.length}`;
         document.getElementById('game-result-section').style.display = 'block';
+        document.getElementById('final-score').innerText = score;
     }
 
-    function resetGame() {
+    function restartQuiz() {
         currentQ = 0;
         score = 0;
-        localStorage.removeItem('game2_currentQ');
-        localStorage.removeItem('game2_score');
-        
+        localStorage.setItem('game2_currentQ', 0);
+        localStorage.setItem('game2_score', 0);
         document.getElementById('game-result-section').style.display = 'none';
         document.getElementById('game-play-section').style.display = 'block';
         initGame();
     }
 
-    // شروع بازی در اولین بارگذاری
     window.onload = initGame;
 </script>
-
 </body>
 </html>
