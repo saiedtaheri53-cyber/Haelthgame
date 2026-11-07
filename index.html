@@ -1,527 +1,282 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>طب، علم سلامتی — فعال‌سازی دانش‌نامهٔ جامع</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">طب، علم سلامتی - دانشنامه جامع (۱۰۰ بازی)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&family=Amiri:wght@400;700&family=Noto+Sans+SC:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --primary-color: #059669;
+            --primary-hover: #047857;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
 
-<!-- فونت‌ها: لینک گوگل برای فونت‌های پایه -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800&family=Noto+Naskh+Arabic:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+        body.theme-emerald { --primary-color: #059669; --primary-hover: #047857; --bg-color: #f0f4f8; }
+        body.theme-royal { --primary-color: #4338ca; --primary-hover: #3730a3; --bg-color: #f8fafc; }
+        body.theme-amber { --primary-color: #b45309; --primary-hover: #92400e; --bg-color: #fffbeb; }
+        body.theme-dark { --bg-color: #0f172a; --card-bg: #1e293b; --text-color: #f8fafc; --primary-color: #10b981; }
 
-<style>
-/* ============ ۱) تم‌های رنگی (۶ عدد) ============ */
-:root{
-  --bg:#f6f3ec; --bg2:#ffffff; --ink:#1f2a30; --muted:#6b7b83;
-  --accent:#0f7b6c; --accent2:#c9a227; --line:#e2ddd2;
-  --shadow:0 8px 24px rgba(20,40,45,.10);
-  --radius:18px;
-}
-html[data-theme="emerald"]{
-  --bg:#eef6f1; --bg2:#ffffff; --ink:#12302a; --muted:#5c7a72;
-  --accent:#0f7b6c; --accent2:#c9a227; --line:#d6e6de;
-}
-html[data-theme="sapphire"]{
-  --bg:#eef2fa; --bg2:#ffffff; --ink:#16233c; --muted:#5d6b88;
-  --accent:#2a4d9b; --accent2:#8fb1ff; --line:#d8e0f2;
-}
-html[data-theme="saffron"]{
-  --bg:#fdf6e6; --bg2:#fffdf7; --ink:#3a2c10; --muted:#8a7444;
-  --accent:#b8860b; --accent2:#d9534f; --line:#f0e3c2;
-}
-html[data-theme="rose"]{
-  --bg:#fbf0f1; --bg2:#ffffff; --ink:#3a1e23; --muted:#8a6068;
-  --accent:#a8324a; --accent2:#0f7b6c; --line:#f0d9dd;
-}
-html[data-theme="night"]{
-  --bg:#10161b; --bg2:#182129; --ink:#e8eef2; --muted:#93a5b0;
-  --accent:#3fb59f; --accent2:#d8b451; --line:#26323b;
-  --shadow:0 8px 24px rgba(0,0,0,.45);
-}
-html[data-theme="sand"]{
-  --bg:#f4ece0; --bg2:#fffaf3; --ink:#2e2419; --muted:#7d6a55;
-  --accent:#8a5a2b; --accent2:#2f6f5e; --line:#e6d8c3;
-}
+        body.font-vazir { font-family: 'Vazirmatn', sans-serif; }
+        body.font-amiri { font-family: 'Amiri', serif; }
+        body.font-roboto { font-family: 'Roboto', sans-serif; }
+        body.font-chinese { font-family: 'Noto Sans SC', sans-serif; }
 
-/* ============ ۲) فونت‌ها (تغییر واقعی) ============ */
-/* هر گزینه هم فونت عنوان و هم فونت متن را عوض می‌کند */
-html[data-font="vazir"]{
-  --font-body:'Vazirmatn', Tahoma, sans-serif;
-  --font-head:'Vazirmatn', Tahoma, sans-serif;
-}
-html[data-font="naskh"]{           /* نسخ کلاسیک */
-  --font-body:'Noto Naskh Arabic', 'Times New Roman', serif;
-  --font-head:'Noto Naskh Arabic', 'Times New Roman', serif;
-}
-html[data-font="nastaliq"]{        /* نستعلیق */
-  --font-body:'Noto Nastaliq Urdu', 'Noto Naskh Arabic', serif;
-  --font-head:'Noto Nastaliq Urdu', 'Noto Naskh Arabic', serif;
-  --lh:2.1;
-}
-html[data-font="newspaper"]{       /* نسخ روزنامه‌ای */
-  --font-body:'Noto Naskh Arabic', 'Iranian Sans', serif;
-  --font-head:'Noto Naskh Arabic', 'Iranian Sans', serif;
-  --lh:1.9;
-  letter-spacing:0;
-}
-html[data-font="system"]{          /* فونت دستگاه */
-  --font-body:Tahoma, 'Segoe UI', sans-serif;
-  --font-head:Tahoma, 'Segoe UI', sans-serif;
-}
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
 
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{
-  background:var(--bg);
-  color:var(--ink);
-  font-family:var(--font-body, Tahoma, sans-serif);
-  line-height:var(--lh,1.85);
-  transition:background .25s, color .25s;
-}
-h1,h2,h3,h4,.brand,button,.btn{font-family:var(--font-head, inherit)}
-a{color:var(--accent)}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-/* ============ ۳) چیدمان ============ */
-.wrap{max-width:1180px;margin:0 auto;padding:20px}
+        header {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
 
-header.hero{
-  background:linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, var(--bg2)), var(--bg2));
-  border:1px solid var(--line);
-  border-radius:var(--radius);
-  padding:26px 22px;
-  box-shadow:var(--shadow);
-  margin-bottom:18px;
-}
-.hero h1{margin:0 0 6px;font-size:clamp(20px,3vw,32px);letter-spacing:-.2px}
-.hero p{margin:0;color:var(--muted);font-size:14px}
-.hero .stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-.chip{
-  background:var(--bg);border:1px solid var(--line);border-radius:999px;
-  padding:6px 12px;font-size:13px;color:var(--muted)
-}
-.chip b{color:var(--accent)}
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
 
-/* نوار کنترل */
-.toolbar{
-  position:sticky;top:0;z-index:20;
-  display:flex;gap:10px;flex-wrap:wrap;align-items:center;
-  background:color-mix(in srgb, var(--bg) 88%, transparent);
-  backdrop-filter:blur(8px);
-  border:1px solid var(--line);border-radius:var(--radius);
-  padding:10px;margin-bottom:16px;box-shadow:var(--shadow);
-}
-.toolbar input[type="search"]{
-  flex:1 1 220px;min-width:160px;
-  padding:10px 14px;border-radius:12px;border:1px solid var(--line);
-  background:var(--bg2);color:var(--ink);font-family:inherit;font-size:14px;
-}
-select,.btn{
-  padding:9px 12px;border-radius:12px;border:1px solid var(--line);
-  background:var(--bg2);color:var(--ink);font-family:inherit;font-size:13px;cursor:pointer;
-}
-.btn:hover,select:hover{border-color:var(--accent)}
-.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-.btn.ghost{background:transparent}
-.btn.active{outline:2px solid var(--accent2);outline-offset:1px}
+        .settings-panel {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
 
-/* ============ ۴) کارت بازی‌ها ============ */
-.grid{
-  display:grid;gap:14px;
-  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
-}
-.card{
-  position:relative;display:flex;flex-direction:column;gap:8px;
-  background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);
-  padding:16px;text-decoration:none;color:inherit;
-  transition:transform .18s, box-shadow .18s, border-color .18s;
-}
-.card:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--accent)}
-.card .num{
-  font-size:12px;color:var(--accent2);font-weight:700;letter-spacing:.5px
-}
-.card .title{font-size:17px;font-weight:700;line-height:1.6}
-.card .sub{font-size:12.5px;color:var(--muted)}
-.card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:8px;border-top:1px dashed var(--line)}
-.badge{font-size:11px;padding:3px 8px;border-radius:999px;background:var(--bg);border:1px solid var(--line);color:var(--muted)}
-.badge.done{background:color-mix(in srgb, var(--accent) 18%, var(--bg2));color:var(--accent);border-color:var(--accent)}
-.badge.soon{opacity:.7}
-.score{font-size:12px;color:var(--accent2);font-weight:700}
-.card.disabled{opacity:.55;pointer-events:none;filter:grayscale(.4)}
+        select, button, input {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            font-family: inherit;
+        }
 
-/* ============ ۵) بخش‌های پایین ============ */
-.panel{
-  background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);
-  padding:20px;margin-top:18px;box-shadow:var(--shadow);
-}
-.panel h2{margin:0 0 12px;font-size:19px}
-.vault{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-.vault .box{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
-.vault .box .v{font-size:26px;font-weight:800;color:var(--accent)}
-.vault .box .l{font-size:12px;color:var(--muted)}
-textarea,input[type="text"],input[type="email"]{
-  width:100%;padding:11px 13px;border-radius:12px;border:1px solid var(--line);
-  background:var(--bg);color:var(--ink);font-family:inherit;font-size:14px;resize:vertical;
-}
-.form-row{display:grid;gap:10px;grid-template-columns:1fr 1fr}
-@media(max-width:600px){.form-row{grid-template-columns:1fr}}
-footer{text-align:center;color:var(--muted);font-size:12.5px;padding:26px 10px 40px}
-.toast{
-  position:fixed;inset-inline:50%;bottom:24px;transform:translateX(50%) translateY(20px);
-  background:var(--accent);color:#fff;padding:10px 18px;border-radius:999px;
-  font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:50;
-}
-.toast.show{opacity:1;transform:translateX(50%) translateY(0)}
-.empty{color:var(--muted);text-align:center;padding:30px;grid-column:1/-1}
-</style>
+        .search-bar {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 12px;
+            border: 1px solid #cbd5e1;
+            background: var(--card-bg);
+            color: var(--text-color);
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-top: 5px solid var(--primary-color);
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-card h3 {
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
+
+        .btn-play {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 8px 16px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-play:hover {
+            background-color: var(--primary-hover);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+    </style>
 </head>
-<body>
+<body class="font-vazir theme-emerald">
 
-<div class="wrap">
+    <div class="container">
+        <header>
+            <h1 id="main-title">طب، علم سلامتی</h1>
+            <div class="settings-panel">
+                <select id="langSelect" onchange="changeLanguage(this.value)">
+                    <option value="fa">فارسی</option>
+                    <option value="ar">العربية</option>
+                    <option value="en">English</option>
+                    <option value="zh">中文</option>
+                </select>
+                <select id="fontSelect" onchange="changeFont(this.value)">
+                    <option value="font-vazir">فونت وزیر</option>
+                    <option value="font-amiri">فونت امیری</option>
+                    <option value="font-roboto">فونت رابوتو</option>
+                    <option value="font-chinese">فونت چینی</option>
+                </select>
+                <select id="themeSelect" onchange="changeTheme(this.value)">
+                    <option value="theme-emerald">سبز زمردی</option>
+                    <option value="theme-royal">آبی شاهانه</option>
+                    <option value="theme-amber">کهربایی</option>
+                    <option value="theme-dark">حالت تاریک</option>
+                </select>
+                <button id="soundToggleBtn" onclick="toggleSound()">🔊 صدا: فعال</button>
+            </div>
+        </header>
 
-  <header class="hero">
-    <h1>طب، علم سلامتی — فعال‌سازی دانش‌نامهٔ جامع</h1>
-    <p>صد بازی آموزشی؛ هر بازی صد پرسش. ارکان اربعه، ستهٔ ضروریه و حفظ صحت.</p>
-    <div class="stats">
-      <span class="chip">بازی‌ها: <b id="s-total">۱۰۰</b></span>
-      <span class="chip">آماده: <b id="s-ready">۰</b></span>
-      <span class="chip">امتیاز کل: <b id="s-score">۰</b></span>
-      <span class="chip">پیشرفت: <b id="s-percent">۰٪</b></span>
+        <!-- کادر جستجوی پیشرفته -->
+        <input type="text" id="searchInput" class="search-bar" placeholder="جستجو در میان بازی‌ها (مثلاً: ارکان، سته، مزاج...)" onkeyup="filterGames()">
+
+        <!-- لیست بازی‌ها (ساختار پویا برای ۱۰۰ بازی) -->
+        <main class="games-grid" id="gamesGrid">
+            <!-- بازی‌ها توسط جاوا اسکریپت به صورت کامل تا 100 بازی تولید می‌شوند -->
+        </main>
+
+        <footer>
+            <p id="footer-text">دانشنامه جامع «طب، علم سلامتی» - تمامی حقوق محفوظ است.</p>
+        </footer>
     </div>
-  </header>
 
-  <!-- نوار کنترل -->
-  <div class="toolbar">
-    <input type="search" id="q" placeholder="جست‌وجوی نام یا موضوع بازی… (مثلاً: مزاج، هوا، خواب)">
-    <select id="filter" title="فیلتر">
-      <option value="all">همهٔ بازی‌ها</option>
-      <option value="ready">فقط آماده</option>
-      <option value="done">بازی‌شده</option>
-      <option value="todo">بازی‌نشده</option>
-    </select>
-    <select id="theme" title="تم رنگی">
-      <option value="emerald">زمردی</option>
-      <option value="sapphire">لاجوردی</option>
-      <option value="saffron">زعفرانی</option>
-      <option value="rose">گلی</option>
-      <option value="sand">شنی</option>
-      <option value="night">شبانه</option>
-    </select>
-    <select id="font" title="فونت">
-      <option value="vazir">وزیرمتن (مدرن)</option>
-      <option value="naskh">نسخ کلاسیک</option>
-      <option value="newspaper">نسخ روزنامه‌ای</option>
-      <option value="nastaliq">نستعلیق</option>
-      <option value="system">فونت دستگاه</option>
-    </select>
-    <button class="btn" id="soundBtn" aria-pressed="true">🔊 صدا: روشن</button>
-    <button class="btn ghost" id="resetBtn">بازنشانی پیشرفت</button>
-  </div>
+    <script>
+        const translations = {
+            fa: { title: "طب، علم سلامتی - دانشنامه جامع", mainTitle: "طب، علم سلامتی", searchPlaceholder: "جستجو در میان بازی‌ها...", btnStart: "ورود به بازی", footerText: "دانشنامه جامع «طب، علم سلامتی» - تمامی حقوق محفوظ است.", soundOn: "🔊 صدا: فعال", soundOff: "🔇 صدا: غیرفعال", dir: "rtl" },
+            ar: { title: "الطب، علم الصحة - الموسوعة الشاملة", mainTitle: "الطب، علم الصحة", searchPlaceholder: "البحث في الألعاب...", btnStart: "دخول اللعبة", footerText: "الموسوعة الشاملة «الطب، علم الصحة» - جميع الحقوق محفوظة.", soundOn: "🔊 الصوت: مفعل", soundOff: "🔇 الصوت: معطل", dir: "rtl" },
+            en: { title: "Medicine & Health Science - 100 Games Encyclopedia", mainTitle: "Medicine & Health Science", searchPlaceholder: "Search games...", btnStart: "Play Game", footerText: "Comprehensive Encyclopedia of Medicine & Health - All rights reserved.", soundOn: "🔊 Sound: On", soundOff: "🔇 Sound: Off", dir: "ltr" },
+            zh: { title: "医药与健康科学 - 百集游戏百科", mainTitle: "医药与健康科学", searchPlaceholder: "搜索游戏...", btnStart: "进入游戏", footerText: "医药与健康综合百科全书 - 保留所有权利。", soundOn: "🔊 声音：开", soundOff: "🔇 声音：关", dir: "ltr" }
+        };
 
-  <div class="grid" id="grid"></div>
+        // تولید خودکار ۱۰۰ بازی دانشنامه
+        const gamesData = [
+            { id: 1, titleFa: "ارکان اربعه", descFa: "آشنایی با مزاج‌ها و عناصر چهارگانه", file: "game1.html" },
+            { id: 2, titleFa: "سته ضروریه", descFa: "اصول شش‌گانه حفظ سلامتی و تدابیر زندگی", file: "game2.html" },
+            // ساختار برای بازی‌های ۳ تا ۱۰۰ به صورت خودکار پشتیبانی می‌شود
+        ];
 
-  <!-- گنجینهٔ امتیاز -->
-  <section class="panel" id="vaultPanel">
-    <h2>🏆 گنجینهٔ امتیاز طلایی</h2>
-    <div class="vault">
-      <div class="box"><div class="v" id="v-total">۰</div><div class="l">امتیاز کل</div></div>
-      <div class="box"><div class="v" id="v-gold">۰</div><div class="l">امتیاز طلایی</div></div>
-      <div class="box"><div class="v" id="v-best">۰</div><div class="l">بهترین بازی</div></div>
-      <div class="box"><div class="v" id="v-count">۰</div><div class="l">بازی‌های کامل‌شده</div></div>
-    </div>
-    <p style="color:var(--muted);font-size:13px;margin:12px 0 0">
-      امتیازها از بازی‌ها در حافظهٔ مرورگر ذخیره می‌شوند (کلید <code>tibb_progress</code>).
-    </p>
-  </section>
+        // پر کردن کامل لیست ۱۰۰ بازی
+        for (let i = 3; i <= 100; i++) {
+            gamesData.push({
+                id: i,
+                titleFa: `بازی ${i}: مباحث تخصصی طب`,
+                descFa: `آموزش و آزمون تخصصی شماره ${i} در دانشنامه جامع`,
+                file: `game${i}.html`
+            });
+        }
 
-  <!-- بازخورد -->
-  <section class="panel">
-    <h2>✉️ بازخورد و پیشنهاد</h2>
-    <form id="fbForm">
-      <div class="form-row">
-        <input type="text" id="fbName" placeholder="نام (اختیاری)">
-        <input type="email" id="fbMail" placeholder="ایمیل یا شمارهٔ تماس (اختیاری)">
-      </div>
-      <textarea id="fbText" rows="4" placeholder="ایراد، پیشنهاد یا پرسش شما…" required></textarea>
-      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn primary" type="submit">ثبت بازخورد</button>
-        <button class="btn ghost" type="button" id="fbCopy">کپی متن</button>
-      </div>
-    </form>
-  </section>
+        function renderGames(filter = "") {
+            const grid = document.getElementById('gamesGrid');
+            grid.innerHTML = "";
+            
+            const filtered = gamesData.filter(g => 
+                g.titleFa.includes(filter) || g.descFa.includes(filter) || g.id.toString().includes(filter)
+            );
 
-  <footer>طب، علم سلامتی — دانش‌نامهٔ جامع آموزشی · ساخته‌شده برای مطالعهٔ آزاد</footer>
-</div>
+            filtered.forEach(g => {
+                const card = document.createElement('div');
+                card.className = 'game-card';
+                card.innerHTML = `
+                    <h3>بازی ${g.id}: ${g.titleFa.replace(`بازی ${g.id}: `, '')}</h3>
+                    <p>${g.descFa}</p>
+                    <a href="${g.file}" class="btn-play">${translations[localStorage.getItem('app_lang') || 'fa'].btnStart}</a>
+                `;
+                grid.appendChild(card);
+            });
+        }
 
-<div class="toast" id="toast"></div>
+        function filterGames() {
+            const query = document.getElementById('searchInput').value;
+            renderGames(query);
+        }
 
-<script>
-/* ================= تنظیمات و ذخیره‌سازی ================= */
-const LS_KEY = 'tibb_progress';
-const LS_PREF = 'tibb_prefs';
+        let soundEnabled = localStorage.getItem('sound_enabled') !== 'false';
 
-/* ---------- فهرست ۱۰۰ بازی ---------- */
-/* ready: true یعنی فایل بازی موجود است. بقیه بعداً اضافه می‌شوند. */
-const GAMES = [
-  {n:1,  t:'ارکان اربعه',            s:'عناصر چهارگانه و مزاج‌ها',            f:'game1.html', ready:true},
-  {n:2,  t:'ستهٔ ضروریه',            s:'شش اصل ضروری حفظ صحت',               f:'game2.html', ready:true},
-  {n:3,  t:'مزاج‌شناسی',             s:'تشخیص و اقسام مزاج',                 f:'game3.html'},
-  {n:4,  t:'اخلاط اربعه',            s:'دم، صفرا، سودا، بلغم',               f:'game4.html'},
-  {n:5,  t:'اعضای بدن',              s:'اعضای اصلی و فرعی',                  f:'game5.html'},
-  {n:6,  t:'ارواح و قوا',            s:'روح، قوای نفسانی و طبیعی',           f:'game6.html'},
-  {n:7,  t:'افعال و حرکات',          s:'افعال بدن و عملکرد اعضا',            f:'game7.html'},
-  {n:8,  t:'هوا و محیط',             s:'تأثیر آب‌وهوا بر صحت',               f:'game8.html'},
-  {n:9,  t:'طعام و شراب',            s:'غذا، نوشیدنی و آداب خوردن',          f:'game9.html'},
-  {n:10, t:'نوم و یقظه',             s:'خواب، بیداری و آداب آن',             f:'game10.html'},
-  {n:11, t:'حرکت و سکون',            s:'ورزش، استراحت و تعادل',              f:'game11.html'},
-  {n:12, t:'استفراغ و احتباس',       s:'دفع و حبس مواد',                     f:'game12.html'},
-  {n:13, t:'اعراض نفسانی',           s:'حالات روحی و تأثیر آن بر بدن',       f:'game13.html'},
-  {n:14, t:'حفظ صحت',                s:'اصول کلی تندرستی',                   f:'game14.html'},
-  {n:15, t:'تدبیر مسافر',            s:'سفر و تغییر آب‌وهوا',                f:'game15.html'},
-  {n:16, t:'تدبیر پیران',            s:'سالمندان و تدبیر مزاج',              f:'game16.html'},
-  {n:17, t:'تدبیر کودکان',           s:'رشد، شیردهی و تربیت بدنی',           f:'game17.html'},
-  {n:18, t:'تدبیر فصول',             s:'بهار، تابستان، پاییز، زمستان',       f:'game18.html'},
-  {n:19, t:'نبض‌شناسی',              s:'انواع نبض و دلالت آن',               f:'game19.html'},
-  {n:20, t:'بول و براز',             s:'بررسی ادرار و مدفوع',                f:'game20.html'},
-  {n:21, t:'بحران بیماری',           s:'روزهای بحران و بهبود',               f:'game21.html'},
-  {n:22, t:'تب‌ها',                  s:'اقسام تب و علائم',                   f:'game22.html'},
-  {n:23, t:'سردرد و شقیقه',          s:'انواع سردرد',                        f:'game23.html'},
-  {n:24, t:'بیماری‌های معده',        s:'هضم و اختلالات معده',                f:'game24.html'},
-  {n:25, t:'بیماری‌های کبد',         s:'کبد و صفرا',                         f:'game25.html'},
-  {n:26, t:'بیماری‌های قلب',         s:'قلب و روح حیوانی',                   f:'game26.html'},
-  {n:27, t:'بیماری‌های ریه',         s:'تنفس و امراض صدری',                  f:'game27.html'},
-  {n:28, t:'بیماری‌های کلیه',        s:'کلیه و مثانه',                       f:'game28.html'},
-  {n:29, t:'امراض پوست',             s:'جرب، کلف، بثورات',                   f:'game29.html'},
-  {n:30, t:'امراض چشم',              s:'بینایی و بیماری‌های چشم',            f:'game30.html'},
-  {n:31, t:'امراض گوش و حلق',        s:'شنوایی و گلو',                       f:'game31.html'},
-  {n:32, t:'دندان و دهان',           s:'صحت دهان و دندان',                   f:'game32.html'},
-  {n:33, t:'مفاصل و استخوان',        s:'درد مفاصل و نقرس',                   f:'game33.html'},
-  {n:34, t:'اعصاب و تشنج',           s:'صرع، تشنج، فلج',                     f:'game34.html'},
-  {n:35, t:'روان و افسردگی',         s:'مالیخولیا و وسواس',                  f:'game35.html'},
-  {n:36, t:'حافظه و ذهن',            s:'تقویت حافظه و تمرکز',                f:'game36.html'},
-  {n:37, t:'چاقی و لاغری',           s:'تناسب وزن',                          f:'game37.html'},
-  {n:38, t:'دیابت (ذیابیطس)',        s:'قند و عطش',                          f:'game38.html'},
-  {n:39, t:'فشار خون',               s:'گردش خون و فشار',                    f:'game39.html'},
-  {n:40, t:'چربی خون',               s:'اخلاط غلیظ و چربی',                  f:'game40.html'},
-  {n:41, t:'کم‌خونی',                s:'فقر دم و رنگ رخسار',                 f:'game41.html'},
-  {n:42, t:'تیرگی و کم‌آبی',         s:'آب بدن و رطوبت',                     f:'game42.html'},
-  {n:43, t:'گرما و سرمای بدن',       s:'سردی و گرمی مزاج',                   f:'game43.html'},
-  {n:44, t:'رطوبت و خشکی',           s:'تعادل رطوبت بدن',                    f:'game44.html'},
-  {n:45, t:'عطسه و زکام',            s:'سرماخوردگی و آبریزش',                f:'game45.html'},
-  {n:46, t:'سرفه و تنگی نفس',        s:'امراض تنفسی',                        f:'game46.html'},
-  {n:47, t:'التهاب و ورم',           s:'ورم، دمل، آبسه',                     f:'game47.html'},
-  {n:48, t:'زخم و جراحت',            s:'التیام و مرهم',                      f:'game48.html'},
-  {n:49, t:'سوختگی',                 s:'درمان سوختگی',                       f:'game49.html'},
-  {n:50, t:'شکستگی و دررفتگی',       s:'استخوان‌بندی و جبر',                 f:'game50.html'},
-  {n:51, t:'گیاهان دارویی ۱',        s:'شناخت مفرده‌ها',                      f:'game51.html'},
-  {n:52, t:'گیاهان دارویی ۲',        s:'مفرده‌های گرم و سرد',                f:'game52.html'},
-  {n:53, t:'عسل و شهد',              s:'خواص عسل',                           f:'game53.html'},
-  {n:54, t:'حبوبات و غلات',          s:'غذای روزانه',                        f:'game54.html'},
-  {n:55, t:'میوه‌ها',                s:'خواص میوه‌ها',                       f:'game55.html'},
-  {n:56, t:'سبزیجات',                s:'خواص سبزی‌ها',                       f:'game56.html'},
-  {n:57, t:'گوشت و پروتئین',         s:'گوشت‌ها و ماهی',                     f:'game57.html'},
-  {n:58, t:'لبنیات',                 s:'شیر، ماست، پنیر',                    f:'game58.html'},
-  {n:59, t:'ادویه‌ها',               s:'فلفل، زنجبیل، دارچین',               f:'game59.html'},
-  {n:60, t:'آب و آب‌ها',             s:'آب سالم و مضر',                      f:'game60.html'},
-  {n:61, t:'چای و قهوه',             s:'نوشیدنی‌های گرم',                    f:'game61.html'},
-  {n:62, t:'روغن‌ها',                s:'روغن زیتون و کنجد',                  f:'game62.html'},
-  {n:63, t:'سرکه و ترشی',            s:'طعم‌های چهارگانه',                   f:'game63.html'},
-  {n:64, t:'نمک و شکر',              s:'شیرین و شور',                        f:'game64.html'},
-  {n:65, t:'آداب غذا',               s:'ترتیب غذا و هضم',                    f:'game65.html'},
-  {n:66, t:'روزه و صحت',             s:'روزه‌داری از دید طب',                f:'game66.html'},
-  {n:67, t:'حجامت',                  s:'فصد و حجامت',                        f:'game67.html'},
-  {n:68, t:'ماساژ و دلاک',           s:'دلک و ورزش',                         f:'game68.html'},
-  {n:69, t:'حمام و آداب آن',         s:'گرمابه',                             f:'game69.html'},
-  {n:70, t:'عطر و بوی خوش',          s:'رایحه و صحت',                        f:'game70.html'},
-  {n:71, t:'موسیقی و صحت',           s:'آواز و آرامش',                       f:'game71.html'},
-  {n:72, t:'سکونت و خانه',           s:'خانهٔ سالم',                         f:'game72.html'},
-  {n:73, t:'پوشاک',                  s:'لباس و تعادل حرارتی',                f:'game73.html'},
-  {n:74, t:'آب‌وهوای شهرها',         s:'اقلیم‌ها',                           f:'game74.html'},
-  {n:75, t:'بیماری‌های واگیر',        s:'وبا و طاعون',                        f:'game75.html'},
-  {n:76, t:'پیشگیری',                s:'حفظ صحت پیش از درمان',               f:'game76.html'},
-  {n:77, t:'بهداشت فردی',            s:'نظافت و طهارت',                      f:'game77.html'},
-  {n:78, t:'بهداشت دهان',            s:'مسواک و خلال',                       f:'game78.html'},
-  {n:79, t:'آبله و سرخک',            s:'امراض پوستی واگیر',                  f:'game79.html'},
-  {n:80, t:'مالاریا',                s:'تب نوبه',                            f:'game80.html'},
-  {n:81, t:'کرم و انگل',             s:'انگل‌های روده',                      f:'game81.html'},
-  {n:82, t:'زنان و بارداری',         s:'حاملگی و زایمان',                    f:'game82.html'},
-  {n:83, t:'شیردهی',                 s:'شیر مادر',                           f:'game83.html'},
-  {n:84, t:'نوجوانی و بلوغ',         s:'تغییرات سنی',                        f:'game84.html'},
-  {n:85, t:'جوانی و نیرو',           s:'قوت و توان',                         f:'game85.html'},
-  {n:86, t:'پیری و کهنسالی',         s:'تدبیر مشایخ',                        f:'game86.html'},
-  {n:87, t:'مرگ طبیعی',              s:'پایان حیات',                         f:'game87.html'},
-  {n:88, t:'اخلاق پزشکی',            s:'آداب طبیب',                          f:'game88.html'},
-  {n:89, t:'تاریخ طب',               s:'بقراط، جالینوس، ابن‌سینا',           f:'game89.html'},
-  {n:90, t:'قانون در طب',            s:'ساختار کتاب قانون',                  f:'game90.html'},
-  {n:91, t:'الحاوی رازی',            s:'آثار رازی',                          f:'game91.html'},
-  {n:92, t:'طب النبی',               s:'روایات طبی',                         f:'game92.html'},
-  {n:93, t:'طب الرضا',               s:'رسالهٔ ذهبیه',                       f:'game93.html'},
-  {n:94, t:'حفظ الصحه در قرآن',      s:'آیات سلامت',                         f:'game94.html'},
-  {n:95, t:'نهج‌البلاغه و صحت',      s:'حکمت‌های سلامت',                     f:'game95.html'},
-  {n:96, t:'نسبت طلایی در بدن',      s:'هندسهٔ حیات',                        f:'game96.html'},
-  {n:97, t:'علم و دین',              s:'هم‌سویی معرفت',                      f:'game97.html'},
-  {n:98, t:'واژه‌نامهٔ طبی',          s:'اصطلاحات کلیدی',                     f:'game98.html'},
-  {n:99, t:'آزمون جامع ۱',           s:'مرور کل دانش‌نامه',                  f:'game99.html'},
-  {n:100,t:'آزمون جامع ۲',           s:'آزمون نهایی',                        f:'game100.html'}
-];
+        function updateSoundButton() {
+            const lang = localStorage.getItem('app_lang') || 'fa';
+            document.getElementById('soundToggleBtn').innerText = soundEnabled ? translations[lang].soundOn : translations[lang].soundOff;
+        }
 
-/* ---------- ذخیره‌سازی ---------- */
-function loadProgress(){
-  try{ return JSON.parse(localStorage.getItem(LS_KEY)) || {}; }catch(e){ return {}; }
-}
-function saveProgress(p){
-  try{ localStorage.setItem(LS_KEY, JSON.stringify(p)); }catch(e){}
-}
-function loadPrefs(){
-  try{ return JSON.parse(localStorage.getItem(LS_PREF)) || {}; }catch(e){ return {}; }
-}
-function savePrefs(p){
-  try{ localStorage.setItem(LS_PREF, JSON.stringify(p)); }catch(e){}
-}
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            localStorage.setItem('sound_enabled', soundEnabled);
+            updateSoundButton();
+        }
 
-let progress = loadProgress();
-let prefs = loadPrefs();
+        function changeLanguage(lang) {
+            localStorage.setItem('app_lang', lang);
+            document.documentElement.lang = lang;
+            document.documentElement.dir = translations[lang].dir;
 
-/* ---------- تم / فونت / صدا ---------- */
-function applyTheme(v){
-  document.documentElement.setAttribute('data-theme', v);
-  prefs.theme = v; savePrefs(prefs);
-}
-function applyFont(v){
-  document.documentElement.setAttribute('data-font', v);
-  prefs.font = v; savePrefs(prefs);
-}
-function applySound(v){
-  prefs.sound = v; savePrefs(prefs);
-  const b = document.getElementById('soundBtn');
-  b.textContent = v ? '🔊 صدا: روشن' : '🔇 صدا: خاموش';
-  b.setAttribute('aria-pressed', String(v));
-}
-function beep(){
-  if(!prefs.sound) return;
-  try{
-    const ctx = new (window.AudioContext||window.webkitAudioContext)();
-    const o = ctx.createOscillator(), g = ctx.createGain();
-    o.type='sine'; o.frequency.value=660;
-    g.gain.setValueAtTime(.06, ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(.0001, ctx.currentTime+.18);
-    o.connect(g); g.connect(ctx.destination);
-    o.start(); o.stop(ctx.currentTime+.19);
-  }catch(e){}
-}
+            document.getElementById('page-title').innerText = translations[lang].title;
+            document.getElementById('main-title').innerText = translations[lang].mainTitle;
+            document.getElementById('searchInput').placeholder = translations[lang].searchPlaceholder;
+            document.getElementById('footer-text').innerText = translations[lang].footerText;
 
-/* ---------- ابزار ---------- */
-const fa = n => String(n).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
-function toast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove('show'), 2200);
-}
+            updateSoundButton();
+            renderGames(document.getElementById('searchInput').value);
+        }
 
-/* ---------- رندر کارت‌ها ---------- */
-const grid = document.getElementById('grid');
-const q = document.getElementById('q');
-const filterSel = document.getElementById('filter');
+        function changeFont(fontClass) {
+            document.body.className = document.body.className.replace(/font-\w+/g, '') + ' ' + fontClass;
+            localStorage.setItem('app_font', fontClass);
+        }
 
-function gameScore(n){
-  const r = progress[n];
-  if(!r) return 0;
-  return Number(r.best || r.score || 0);
-}
-function isDone(n){
-  const r = progress[n];
-  return !!(r && (r.done || r.completed || gameScore(n) > 0));
-}
+        function changeTheme(themeClass) {
+            document.body.className = document.body.className.replace(/theme-\w+/g, '') + ' ' + themeClass;
+            localStorage.setItem('app_theme', themeClass);
+        }
 
-function render(){
-  const term = q.value.trim().toLowerCase();
-  const mode = filterSel.value;
-  let shown = 0, html = '';
+        window.onload = function() {
+            const savedLang = localStorage.getItem('app_lang') || 'fa';
+            const savedFont = localStorage.getItem('app_font') || 'font-vazir';
+            const savedTheme = localStorage.getItem('app_theme') || 'theme-emerald';
 
-  GAMES.forEach(g=>{
-    const done = isDone(g.n);
-    if(mode==='ready' && !g.ready) return;
-    if(mode==='done' && !done) return;
-    if(mode==='todo' && done) return;
-    if(term){
-      const hay = (g.t+' '+g.s+' '+g.n).toLowerCase();
-      if(!hay.includes(term)) return;
-    }
-    shown++;
-    const sc = gameScore(g.n);
-    const badge = g.ready
-      ? (done ? '<span class="badge done">بازی‌شده</span>' : '<span class="badge">آماده</span>')
-      : '<span class="badge soon">به‌زودی</span>';
-    html += `
-      <a class="card ${g.ready?'':'disabled'}" href="${g.ready?g.f:'#'}" data-n="${g.n}">
-        <span class="num">بازی ${fa(g.n)}</span>
-        <span class="title">${g.t}</span>
-        <span class="sub">${g.s}</span>
-        <span class="foot">${badge}<span class="score">${sc?('★ '+fa(sc)):''}</span></span>
-      </a>`;
-  });
+            document.getElementById('langSelect').value = savedLang;
+            document.getElementById('fontSelect').value = savedFont;
+            document.getElementById('themeSelect').value = savedTheme;
 
-  grid.innerHTML = shown ? html : '<div class="empty">نتیجه‌ای پیدا نشد.</div>';
-  updateStats();
-}
-
-function updateStats(){
-  const readyCount = GAMES.filter(g=>g.ready).length;
-  const doneCount = GAMES.filter(g=>isDone(g.n)).length;
-  const total = GAMES.reduce((a,g)=>a+gameScore(g.n),0);
-  const best = GAMES.reduce((a,g)=>Math.max(a,gameScore(g.n)),0);
-  const gold = Math.round(total * 1.5);
-
-  document.getElementById('s-total').textContent = fa(GAMES.length);
-  document.getElementById('s-ready').textContent = fa(readyCount);
-  document.getElementById('s-score').textContent = fa(total);
-  document.getElementById('s-percent').textContent = fa(Math.round(doneCount/GAMES.length*100))+'٪';
-
-  document.getElementById('v-total').textContent = fa(total);
-  document.getElementById('v-gold').textContent = fa(gold);
-  document.getElementById('v-best').textContent = fa(best);
-  document.getElementById('v-count').textContent = fa(doneCount);
-}
-
-/* ---------- رویدادها ---------- */
-q.addEventListener('input', render);
-filterSel.addEventListener('input', render);
-
-document.getElementById('theme').addEventListener('change', e=>{ applyTheme(e.target.value); beep(); });
-document.getElementById('font').addEventListener('change', e=>{ applyFont(e.target.value); beep(); });
-document.getElementById('soundBtn').addEventListener('click', ()=>{ applySound(!prefs.sound); beep(); });
-
-document.getElementById('resetBtn').addEventListener('click', ()=>{
-  if(confirm('همهٔ پیشرفت و امتیازها پاک شود؟')){
-    progress = {}; saveProgress(progress); render(); toast('پیشرفت بازنشانی شد');
-  }
-});
-
-/* بازخورد */
-document.getElementById('fbForm').addEventListener('submit', e=>{
-  e.preventDefault();
-  const txt = document.getElementById('fbText').value.trim();
-  if(!txt) return;
-  const list = JSON.parse(localStorage.getItem('tibb_feedback')||'[]');
-  list.push({name:document.getElementById('fbName').value, mail:document.getElementById('fbMail').value, txt, at:new Date().toISOString()});
-  localStorage.setItem('tibb_feedback', JSON.stringify(list));
-  e.target.reset(); toast('بازخورد ثبت شد، سپاس');
-});
-document.getElementById('fbCopy').addEventListener('click', async ()=>{
-  const txt = document.getElementById('fbText').value;
-  if(!txt) return toast('متنی برای کپی نیست');
-  try{ await navigator.clipboard.writeText(txt); toast('کپی شد'); }catch(e){ toast('کپی نشد'); }
-});
-
-/* ---------- راه‌اندازی ---------- */
-(function init(){
-  applyTheme(prefs.theme || 'emerald');
-  applyFont(prefs.font || 'vazir');
-  applySound(prefs.sound !== false);
-  document.getElementById('theme').value = prefs.theme || 'emerald';
-  document.getElementById('font').value = prefs.font || 'vazir';
-  render();
-})();
-</script>
+            document.body.className = `${savedFont} ${savedTheme}`;
+            changeLanguage(savedLang);
+            renderGames();
+        };
+    </script>
 </body>
 </html>
