@@ -1,87 +1,93 @@
-/**
- * progress-core.js
- * مدیریت پیشرفت، امتیازات، تم و زبان برای پروژه طب و علم سلامتی
- * طراحی شده توسط GapGPT (مدیر پروژه)
- */
+/* ==========================================
+   PROGRESS CORE - Portal Engine & Storage
+   ========================================== */
 
-const ProgressManager = {
-    // کلیدهای اصلی در LocalStorage
-    KEYS: {
-        SCORES: 'gap_health_scores',
-        MEDALS: 'gap_health_medals',
-        SETTINGS: 'gap_health_settings',
-        PROGRESS: 'gap_health_progress'
-    },
+const PortalProgress = {
+    STORAGE_KEY: 'tibb_games_progress_v1',
 
-    // ۱. مدیریت تنظیمات (تم، فونت، زبان)
-    saveSettings(settings) {
-        // settings: { theme: 'theme-emerald', font: 'font-vazir', lang: 'fa' }
-        localStorage.setItem(this.KEYS.SETTINGS, JSON.stringify(settings));
-        this.applySettings(settings);
-    },
+    // لیست کامل بازی‌های ثبت‌شده در پورتال
+    games: [
+        { id: 'game1', title: 'ارکان اربعه (طبع‌ها و عناصر)', file: 'game1.html', category: 'tibb', icon: '🌿' },
+        { id: 'game2', title: 'سیت‌های ضروری (ستة ضروریة)', file: 'game2.html', category: 'tibb', icon: '⚖️' },
+        { id: 'game3', title: 'مزاج‌شناسی کاربردی', file: 'game3.html', category: 'tibb', icon: '🔥' },
+        { id: 'game4', title: 'اصول تغذیه سالم در طب سنتی', file: 'game4.html', category: 'tibb', icon: '🍎' }
+    ],
 
-    loadSettings() {
-        const saved = localStorage.getItem(this.KEYS.SETTINGS);
-        return saved ? JSON.parse(saved) : {
-            theme: 'theme-emerald',
-            font: 'font-vazir',
-            lang: 'fa'
-        };
-    },
-
-    applySettings(settings) {
-        document.body.className = `${settings.theme} ${settings.font}`;
-        // در اینجا می‌توان منطق تغییر زبان را هم اضافه کرد
-    },
-
-    // ۲. مدیریت امتیازات و مدال‌ها
-    saveScore(gameId, score) {
-        let scores = this.getAllScores();
-        scores[gameId] = score;
-        localStorage.setItem(this.KEYS.SCORES, JSON.stringify(scores));
-        
-        // چک کردن برای اعطای مدال (مثال ساده)
-        this.checkMedals(gameId, score);
-    },
-
-    getAllScores() {
-        const scores = localStorage.getItem(this.KEYS.SCORES);
-        return scores ? JSON.parse(scores) : {};
-    },
-
-    checkMedals(gameId, score) {
-        // منطق اعطای مدال (مثلاً اگر امتیاز از ۹۰ بیشتر شد)
-        if (score >= 90) {
-            this.addMedal(`Gold - ${gameId}`);
+    // دریافت اطلاعات پیشرفت کل
+    getProgress() {
+        try {
+            const data = localStorage.getItem(this.STORAGE_KEY);
+            return data ? JSON.parse(data) : { totalScore: 0, medals: 0, completedGames: {} };
+        } catch (e) {
+            return { totalScore: 0, medals: 0, completedGames: {} };
         }
     },
 
-    addMedal(medalName) {
-        let medals = this.getAllMedals();
-        if (!medals.includes(medalName)) {
-            medals.push(medalName);
-            localStorage.setItem(this.KEYS.MEDALS, JSON.stringify(medals));
-        }
-    },
-
-    getAllMedals() {
-        const medals = localStorage.getItem(this.KEYS.MEDALS);
-        return medals ? JSON.parse(medals) : [];
-    },
-
-    // ۳. متد کمکی برای نمایش وضعیت در پورتال (Vault)
-    getVaultSummary() {
-        const scores = this.getAllScores();
-        const medals = this.getAllMedals();
-        const totalScore = Object.values(scores).reduce((a, b) => a + b, 0);
+    // ذخیره امتیاز یک بازی خاص
+    saveGameScore(gameId, score, stars) {
+        const progress = this.getProgress();
+        progress.completedGames[gameId] = { score: score, stars: stars, date: new Date().toISOString() };
         
-        return {
-            totalScore: totalScore,
-            medalCount: medals.length,
-            recentMedals: medals.slice(-5) // ۵ مدال آخر
-        };
+        // محاسبه مجموع امتیازات و مدال‌ها
+        let totalScore = 0;
+        let totalStars = 0;
+        for (let key in progress.completedGames) {
+            totalScore += progress.completedGames[key].score || 0;
+            totalStars += progress.completedGames[key].stars || 0;
+        }
+        progress.totalScore = totalScore;
+        progress.medals = totalStars;
+
+        try {
+            localStorage.setItem(this.STORAGE_KEY, JSON.stringify(progress));
+        } catch (e) {
+            console.error('Storage error:', e);
+        }
+        return progress;
+    },
+
+    // رندر کردن لیست بازی‌ها در صفحه اصلی پورتال (index.html)
+    renderGamesGrid(containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const progress = this.getProgress();
+        let html = '';
+
+        this.games.forEach((game, index) => {
+            const isCompleted = progress.completedGames[game.id];
+            const statusClass = isCompleted ? 'completed' : '';
+            const statusText = isCompleted ? '✅ تکمیل شده' : '🔓 آماده شروع';
+            const scoreText = isCompleted ? `امتیاز: ${isCompleted.score}` : 'هنوز بازی نشده';
+
+            html += `
+                <div class="game-card ${statusClass}" style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s;">
+                    <div>
+                        <div style="font-size: 2rem; margin-bottom: 10px;">${game.icon}</div>
+                        <h3 style="font-size: 1.1rem; color: #166534; margin-bottom: 8px;">بازی ${index + 1}: ${game.title}</h3>
+                        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">${statusText} | ${scoreText}</p>
+                    </div>
+                    <a href="${game.file}" style="display: inline-block; background: #16a34a; color: white; text-align: center; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">ورود به بازی</a>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    },
+
+    // به‌روزرسانی صندوقچه طلایی در هدر یا صفحه اصلی
+    updateGoldenVaultUI() {
+        const progress = this.getProgress();
+        const scoreEl = document.getElementById('totalScoreDisplay');
+        const medalsEl = document.getElementById('totalMedalsDisplay');
+
+        if (scoreEl) scoreEl.innerText = progress.totalScore;
+        if (medalsEl) medalsEl.innerText = progress.medals;
     }
 };
 
-// در دسترس قرار دادن برای تمام فایل‌ها
-window.ProgressManager = ProgressManager;
+// اجرای خودکار هنگام لود شدن صفحه
+document.addEventListener('DOMContentLoaded', () => {
+    PortalProgress.updateGoldenVaultUI();
+    PortalProgress.renderGamesGrid('gamesGridContainer');
+});
