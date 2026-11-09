@@ -5,11 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>طب، علم سلامتی - دانشنامه جامع</title>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&family=Amiri:wght@400;700&family=Noto+Sans+SC:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <!-- اضافه کردن فونت Thuluth/Amiri برای بسم الله -->
     <style>
-        /* فونت‌های سفارشی و استایل‌های پایه */
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap');
-
+        /* استایل‌های پایه و تم‌ها */
         :root {
             --bg-color: #f0f4f8;
             --card-bg: #ffffff;
@@ -19,18 +16,15 @@
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        /* تم‌ها */
         body.theme-emerald { --primary-color: #059669; --primary-hover: #047857; --bg-color: #f0f4f8; }
         body.theme-royal { --primary-color: #4338ca; --primary-hover: #3730a3; --bg-color: #f8fafc; }
         body.theme-amber { --primary-color: #b45309; --primary-hover: #92400e; --bg-color: #fffbeb; }
         body.theme-dark { --bg-color: #0f172a; --card-bg: #1e293b; --text-color: #f8fafc; --primary-color: #10b981; }
 
-        /* فونت‌ها */
         body.font-vazir { font-family: 'Vazirmatn', sans-serif; }
         body.font-amiri { font-family: 'Amiri', serif; }
         body.font-roboto { font-family: 'Roboto', sans-serif; }
         body.font-chinese { font-family: 'Noto Sans SC', sans-serif; }
-        .font-nastaliq { font-family: 'Noto Nastaliq Urdu', serif; }
 
         body {
             background-color: var(--bg-color);
@@ -38,10 +32,9 @@
             margin: 0;
             padding: 0;
             transition: all 0.3s ease;
-            overflow-x: hidden;
         }
 
-        /* پرده ورود (Intro Screen) */
+        /* Intro Screen */
         #intro-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -54,110 +47,41 @@
             cursor: pointer;
             transition: opacity 0.8s ease;
         }
+        .basmala { font-size: 3.5rem; color: #1e293b; text-align: center; }
 
-        .basmala {
-            font-size: 3.5rem;
-            color: #1e293b;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        /* کانتینر اصلی */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            display: none; /* در ابتدا مخفی است */
-        }
-
+        /* Layout */
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; display: none; }
         header {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
+            background: var(--card-bg); padding: 20px; border-radius: 16px;
+            box-shadow: var(--shadow); display: flex; flex-wrap: wrap;
+            justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 20px;
         }
-
         h1 { margin: 0; font-size: 1.8rem; color: var(--primary-color); }
 
         .settings-panel { display: flex; gap: 10px; flex-wrap: wrap; }
+        select, input { padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: var(--card-bg); color: var(--text-color); }
 
-        select, button, input {
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            background: var(--card-bg);
-            color: var(--text-color);
-            cursor: pointer;
-        }
+        .search-bar { width: 100%; padding: 12px 20px; font-size: 1rem; border-radius: 12px; border: 1px solid #cbd5e1; margin-bottom: 25px; box-sizing: border-box; }
 
-        .search-bar {
-            width: 100%;
-            padding: 12px 20px;
-            font-size: 1rem;
-            border-radius: 12px;
-            border: 1px solid #cbd5e1;
-            margin-bottom: 25px;
-            box-sizing: border-box;
-        }
-
-        /* شبکه بازی‌ها */
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
-        }
-
-        .game-card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            text-align: center;
-            border-top: 5px solid var(--primary-color);
-            transition: transform 0.2s;
-        }
-        .game-card:hover { transform: translateY(-5px); }
-
-        .btn-play {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 8px 16px;
-            background-color: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-
-        /* صندوقچه طلایی (Vault) */
+        /* Vault Section */
         .vault-section {
             background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-            text-align: center;
-            color: #92400e;
-            box-shadow: var(--shadow);
+            padding: 20px; border-radius: 16px; margin-bottom: 30px;
+            text-align: center; color: #92400e; box-shadow: var(--shadow);
         }
 
-        footer {
-            text-align: center;
-            padding: 40px 0;
-            opacity: 0.7;
-            font-size: 0.9rem;
+        /* Games Grid */
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+        .game-card {
+            background: var(--card-bg); padding: 20px; border-radius: 16px;
+            box-shadow: var(--shadow); text-align: center;
+            border-top: 5px solid var(--primary-color); transition: transform 0.2s;
         }
+        .game-card:hover { transform: translateY(-5px); }
+        .btn-play { display: inline-block; margin-top: 15px; padding: 8px 16px; background-color: var(--primary-color); color: white; text-decoration: none; border-radius: 8px; font-weight: bold; }
 
-        .contact-links a {
-            margin: 0 10px;
-            color: var(--primary-color);
-            text-decoration: none;
-        }
+        footer { text-align: center; padding: 40px 0; opacity: 0.7; font-size: 0.9rem; }
+        .contact-links a { margin: 0 10px; color: var(--primary-color); text-decoration: none; }
     </style>
 </head>
 <body class="font-vazir theme-emerald">
@@ -196,13 +120,13 @@
         <!-- صندوقچه طلایی -->
         <div class="vault-section">
             <h2 id="vault-title">صندوقچه طلایی (امتیازات)</h2>
-            <div id="user-stats">امتیاز: ۰ | مدال‌ها: ۰</div>
+            <div id="user-stats">در حال بارگذاری...</div>
         </div>
 
         <input type="text" class="search-bar" id="gameSearch" placeholder="جستجوی بازی..." onkeyup="filterGames()">
 
         <div class="games-grid" id="gamesGrid">
-            <!-- بازی‌ها توسط JS اینجا ساخته می‌شوند -->
+            <!-- بازی‌ها توسط JS ساخته می‌شوند -->
         </div>
 
         <footer>
@@ -214,14 +138,16 @@
         </footer>
     </div>
 
+    <!-- بارگذاری فایل اصلی مدیریت پیشرفت -->
+    <script src="progress-core.js"></script>
+
     <script>
-        // دیتای بازی‌ها (این لیست می‌تواند بزرگتر شود)
+        // لیست بازی‌ها (می‌توانید این را با لیست ۱۰۰ تایی جایگزین کنید)
         const gamesData = [
             { id: 1, title: "ارکان اربعه", file: "game1.html" },
-            // سایر بازی‌ها اینجا اضافه می‌شوند...
+            { id: 2, title: "سیت‌های ضروری", file: "game2_sitte_zaruriye.html" }
         ];
 
-        // شروع برنامه
         function startApp() {
             const intro = document.getElementById('intro-screen');
             const container = document.getElementById('main-container');
@@ -230,12 +156,31 @@
             setTimeout(() => {
                 intro.style.display = 'none';
                 container.style.display = 'block';
-                loadGames();
-                loadUserSettings();
+                initPortal();
             }, 800);
         }
 
-        // بارگذاری بازی‌ها در گرید
+        function initPortal() {
+            // ۱. بارگذاری تنظیمات از فایل JS
+            const settings = ProgressManager.loadSettings();
+            document.body.className = `${settings.theme} ${settings.font}`;
+            document.getElementById('themeSelect').value = settings.theme;
+            document.getElementById('fontSelect').value = settings.font;
+            document.getElementById('langSelect').value = settings.lang;
+
+            // ۲. بارگذاری اطلاعات Vault
+            updateVaultDisplay();
+
+            // ۳. بارگذاری بازی‌ها
+            loadGames();
+        }
+
+        function updateVaultDisplay() {
+            const stats = ProgressManager.getVaultSummary();
+            document.getElementById('user-stats').innerText = 
+                `امتیاز کل: ${stats.totalScore} | مدال‌ها: ${stats.medalCount}`;
+        }
+
         function loadGames() {
             const grid = document.getElementById('gamesGrid');
             grid.innerHTML = '';
@@ -250,53 +195,34 @@
             });
         }
 
-        // جستجو
         function filterGames() {
             const input = document.getElementById('gameSearch').value.toLowerCase();
             const cards = document.getElementsByClassName('game-card');
-            
             for (let card of cards) {
                 const title = card.getElementsByTagName('h3')[0].innerText.toLowerCase();
                 card.style.display = title.includes(input) ? "" : "none";
             }
         }
 
-        // مدیریت تنظیمات (تم، فونت، زبان)
+        // توابع مدیریت تغییرات (ارتباط با ProgressManager)
         function handleThemeChange(theme) {
-            document.body.className = document.body.className.replace(/theme-\w+/g, '');
-            document.body.classList.add(theme);
-            localStorage.setItem('gap_theme', theme);
+            ProgressManager.saveSettings({
+                theme: theme,
+                font: document.getElementById('fontSelect').value,
+                lang: document.getElementById('langSelect').value
+            });
         }
 
         function handleFontChange(font) {
-            document.body.className = document.body.className.replace(/font-\w+/g, '');
-            document.body.classList.add(font);
-            localStorage.setItem('gap_font', font);
+            const theme = document.getElementById('themeSelect').value;
+            const lang = document.getElementById('langSelect').value;
+            ProgressManager.saveSettings({ theme: theme, font: font, lang: lang });
         }
 
         function handleLanguageChange(lang) {
-            localStorage.setItem('gap_lang', lang);
-            // در مرحله بعد، ترجمه‌ها را اینجا اعمال می‌کنیم
-            alert("زبان تغییر کرد (در نسخه بعدی کامل می‌شود)");
-        }
-
-        // بارگذاری تنظیمات ذخیره شده
-        function loadUserSettings() {
-            const savedTheme = localStorage.getItem('gap_theme');
-            const savedFont = localStorage.getItem('gap_font');
-            const savedLang = localStorage.getItem('gap_lang');
-
-            if (savedTheme) {
-                document.body.classList.add(savedTheme);
-                document.getElementById('themeSelect').value = savedTheme;
-            }
-            if (savedFont) {
-                document.body.classList.add(savedFont);
-                document.getElementById('fontSelect').value = savedFont;
-            }
-            if (savedLang) {
-                document.getElementById('langSelect').value = savedLang;
-            }
+            const theme = document.getElementById('themeSelect').value;
+            const font = document.getElementById('fontSelect').value;
+            ProgressManager.saveSettings({ theme: theme, font: font, lang: lang });
         }
     </script>
 </body>
