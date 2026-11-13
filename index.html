@@ -7,45 +7,81 @@
   <link rel="manifest" href="manifest.json">
   <link rel="preload" as="image" href="door-bg.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <title>طب، علم سلامتی | دروازه</title>
+  <title id="pageTitle">طب، علم سلامتی | دروازه</title>
   <style>
-    :root{color-scheme:dark;--gold:#e6c56e;--gold2:#9e7023}
+    :root{color-scheme:dark;--gold:#e6c56e;--gold2:#9e7023;--dark-bg:#1a130f}
     *{box-sizing:border-box}
-    html,body{margin:0;min-height:100%;font-family:Tahoma,sans-serif;background:#1a130f;color:#f4e8d1}
-    .portal{display:flex;justify-content:center;align-items:center;min-height:100vh;position:relative;overflow:hidden}
-    .doors{position:absolute;inset:0;background:url('door-bg.webp') center/cover no-repeat}
+    html,body{margin:0;min-height:100%;font-family:Tahoma,sans-serif;background:var(--dark-bg);color:#f4e8d1}
+    .portal{display:flex;flex-direction:column;justify-content:center;align-items:center;min-height:100vh;position:relative;overflow:hidden;padding:20px}
+    .basmala{font-size:1.4rem;color:var(--gold);margin-bottom:15px;font-weight:bold;text-shadow:0 2px 4px rgba(0,0,0,0.8);z-index:10;letter-spacing:1px}
+    .lang-selector{position:absolute;top:20px;left:20px;z-index:20;background:rgba(26,19,15,0.85);border:1px solid var(--gold2);color:var(--gold);padding:6px 12px;border-radius:6px;font-size:0.95rem;cursor:pointer}
+    .doors{position:absolute;inset:0;background:url('door-bg.webp') center/cover no-repeat;z-index:1}
+    .knocker-wrap{position:absolute;z-index:5}
+    .hint{position:absolute;bottom:30px;z-index:10;background:rgba(0,0,0,0.7);padding:10px 20px;border-radius:8px;border:1px solid var(--gold2)}
+    .hint a{color:var(--gold);text-decoration:none;font-weight:bold}
+    .hint a:hover{text-decoration:underline}
   </style>
 </head>
 <body>
-  <div class="portal" id="portal" aria-label="دروازه دانشنامه">
-    <div class="doors" aria-hidden="true">
-      <section class="leaf right"></section>
-    </div>
+  <div class="portal" id="portal">
+    <!-- انتخاب زبان روی در -->
+    <select id="doorLang" class="lang-selector" aria-label="انتخاب زبان / Select Language">
+      <option value="fa">فارسی</option>
+      <option value="ar">العربية</option>
+      <option value="en">English</option>
+      <option value="hi">हिन्दी</option>
+      <option value="zh">中文</option>
+    </select>
+
+    <!-- بسم الله الرحمن الرحیم واضح و پررنگ -->
+    <div class="basmala" id="basmalaText">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+
+    <div class="doors" aria-hidden="true"></div>
+
     <div class="knocker-wrap r">
-      <div class="strike">
-        <button class="knocker male" type="button" aria-label="بازی و تمرین">ارتباط</button>
-      </div>
+      <button class="knocker male" type="button" id="rightBtn" style="background:var(--gold);color:#000;padding:10px 20px;border-radius:8px;border:none;font-weight:bold;cursor:pointer;">بازی و تمرین</button>
     </div>
     <div class="knocker-wrap l">
-      <div class="strike">
-        <button class="knocker ring" type="button" aria-label="آموزش و خواندن">آموزش</button>
-      </div>
+      <button class="knocker ring" type="button" id="leftBtn" style="background:var(--gold2);color:#fff;padding:10px 20px;border-radius:8px;border:none;font-weight:bold;cursor:pointer;">آموزش و خواندن</button>
     </div>
-    <div class="medallion">
-      <svg class="emblem" viewBox="0 0 48 48" aria-hidden="true">
-        <path d="M24 39C8 29 12 16 21 17c4 0 3 4 3 4s-1-4 3-4c9-1 13 12-3 22z" fill="var(--gold)"></path>
-      </svg>
-    </div>
-    <div class="hint" id="hint" aria-live="polite">
-      <a href="dashboard.html">ورود مستقیم به دانشنامه</a>
+
+    <div class="hint" id="hint">
+      <a href="dashboard.html" id="directLink">ورود مستقیم به دانشنامه (۶ مورد اصلی)</a>
     </div>
   </div>
+
   <script>
     (function(){
       'use strict';
       const translations = {
-        fa: { hint: 'هر دو کوبه به یک دانشنامه می‌رسند', right: 'بازی و تمرین', left: 'آموزش و خواندن' }
+        fa: { title: 'طب، علم سلامتی | دروازه', basmala: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', right: 'بازی و تمرین', left: 'آموزش و خواندن', direct: 'ورود مستقیم به دانشنامه' },
+        ar: { title: 'الطب، علم الصحة | البوابة', basmala: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', right: 'لعبة وتدريب', left: 'تعلم وقراءة', direct: 'الدخول المباشر إلى الموسوعة' },
+        en: { title: 'Tibb, Science of Health | Portal', basmala: 'In the name of God, the Compassionate, the Merciful', right: 'Play & Practice', left: 'Learn & Read', direct: 'Direct entry to encyclopedia' },
+        hi: { title: 'तिब्ब, स्वास्थ्य का विज्ञान | पोर्टल', basmala: 'अल्लाह के नाम पर जो अत्यंत कृपालु और दयालु है', right: 'खेलें और अभ्यास करें', left: 'सीखें और पढ़ें', direct: 'विश्वकोश में सीधा प्रवेश' },
+        zh: { title: '医un，健康科学 | 入口', basmala: '奉至仁至慈的真主之名', right: '游戏与练习', left: '学习与阅读', direct: '直接进入百科全书' }
       };
+
+      const langSelect = document.getElementById('doorLang');
+      const savedLang = localStorage.getItem('tibbLang') || 'fa';
+      langSelect.value = savedLang;
+      updateTexts(savedLang);
+
+      langSelect.addEventListener('change', function(e){
+        const l = e.target.value;
+        localStorage.setItem('tibbLang', l);
+        updateTexts(l);
+      });
+
+      function updateTexts(lang) {
+        const t = translations[lang] || translations.fa;
+        document.getElementById('pageTitle').innerText = t.title;
+        document.getElementById('basmalaText').innerText = t.basmala;
+        document.getElementById('rightBtn').innerText = t.right;
+        document.getElementById('leftBtn').innerText = t.left;
+        document.getElementById('directLink').innerText = t.direct;
+        document.documentElement.setAttribute('lang', lang);
+        document.documentElement.setAttribute('dir', (lang === 'ar' || lang === 'fa') ? 'rtl' : 'ltr');
+      }
     })();
   </script>
 </body>
