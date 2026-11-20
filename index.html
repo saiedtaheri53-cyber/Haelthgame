@@ -1,215 +1,130 @@
-https://fonts.goo<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>طب پلی | طب، علم سلامتی</title>
-    <meta name="description" content="طب، علم سلامتی؛ فعال‌سازی دانشنامه جامع طب">
+    <title>طب پلی | طب، علم سلامتی - فعال‌سازی دانشنامه جامع</title>
+    <meta name="description" content="طب، علم سلامتی؛ فعال‌سازی دانشنامه جامع طب سنتی و مدرن">
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&family=Noto+Sans+Devanagari&family=Noto+Sans+SC&display=swap" rel="stylesheet">
+    <!-- Font & Styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css"> <!-- اگر فایل استایل دارید -->
     
     <style>
         :root {
-            --primary-color: #2c5e1a;
-            --accent-color: #d4af37;
-            --bg-color: #f4f1ea;
-            --text-color: #333;
+            --primary-color: #2c5e1a; /* سبز طب سنتی */
+            --gold-color: #d4af37;
         }
-
         body {
-            font-family: 'Noto Sans Arabic', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            font-family: 'Tahoma', sans-serif; /* در گام بعد با فونت‌های انتخابی جایگزین می‌شود */
+            background-color: #f4f1ea;
+            transition: all 0.3s ease;
+        }
+        .header-section {
             text-align: center;
-        }
-
-        header {
-            width: 100%;
-            padding: 20px 0;
-            background: var(--primary-color);
-            color: white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        .bismillah {
-            font-size: 1.8rem;
-            margin-bottom: 10px;
-            color: var(--accent-color);
-            font-weight: bold;
-        }
-
-        .branding {
-            font-size: 1.2rem;
-            letter-spacing: 1px;
-        }
-
-        .language-selector {
-            margin: 20px 0;
-        }
-
-        .lang-btn {
-            background: white;
-            border: 1px solid var(--primary-color);
-            padding: 5px 15px;
-            margin: 0 5px;
-            cursor: pointer;
-            border-radius: 20px;
-            transition: 0.3s;
-        }
-
-        .lang-btn:hover {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .menu-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 20px;
-            width: 90%;
-            max-width: 800px;
-            padding: 30px 0;
-        }
-
-        .game-card {
-            background: white;
-            border: 2px solid var(--accent-color);
-            border-radius: 15px;
-            padding: 25px 15px;
-            text-decoration: none;
-            color: var(--primary-color);
-            font-weight: bold;
-            font-size: 1.2rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-            background-color: #fffdf5;
-        }
-
-        .game-card i {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        footer {
-            margin-top: auto;
             padding: 20px;
+            background: var(--primary-color);
+            color: white;
+            border-bottom: 5px solid var(--gold-color);
+        }
+        .game-card {
+            border: 2px solid var(--primary-color);
+            border-radius: 15px;
+            margin: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.2s;
+            background: white;
+            text-decoration: none;
+            color: #333;
+            display: block;
+        }
+        .game-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .gold-box {
+            background: var(--gold-color);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .settings-bar {
+            display: flex;
+            justify-content: space-around;
+            background: #e9e4d4;
+            padding: 10px;
             font-size: 0.9rem;
-            color: #777;
         }
-
-        /* Responsive for RTL/LTR */
-        [dir="ltr"] .language-selector { direction: ltr; }
-        [dir="ltr"] .lang-btn { margin: 0 5px; }
-
-        /* Animation */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .footer-links {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
         }
-        .menu-container { animation: fadeIn 1s ease-in; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="bismillah">بسم الله الرحمن الرحیم</div>
-        <div class="branding">طب پلی | TibbPlay</div>
-    </header>
-
-    <div class="language-selector">
-        <button class="lang-btn" onclick="setLanguage('fa')">فارسی</button>
-        <button class="lang-btn" onclick="setLanguage('ar')">العربية</button>
-        <button class="lang-btn" onclick="setLanguage('en')">English</button>
-        <button class="lang-btn" onclick="setLanguage('hi')">हिन्दी</button>
-        <button class="lang-btn" onclick="setLanguage('zh')">中文</button>
+    <!-- بخش تنظیمات سریع (رنگ، صدا، فونت) -->
+    <div class="settings-bar">
+        <div id="setting-color">🎨 رنگ: <span id="current-theme">پیش‌فرض</span></div>
+        <div id="setting-sound">🔊 صدا: <span id="sound-status">روشن</span></div>
+        <div id="setting-font">🔡 فونت: <span id="current-font">استاندارد</span></div>
     </div>
 
-    <h2 id="welcome-text">انتخاب بازی</h2>
+    <header class="header-section">
+        <h1 id="bismillah">بسم الله الرحمن الرحیم</h1>
+        <h2>طب پلی (TibbPlay)</h2>
+        <p>طب، علم سلامتی؛ فعال‌سازی دانشنامه جامع</p>
+    </header>
 
-    <nav class="menu-container">
-        <a href="game1.html" class="game-card" id="g1">بازی ۱</a>
-        <a href="game2.html" class="game-card" id="g2">بازی ۲</a>
-        <a href="game3.html" class="game-card" id="g3">بازی ۳</a>
-        <a href="game4.html" class="game-card" id="g4">بازی ۴</a>
-        <a href="game5.html" class="game-card" id="g5">بازی ۵</a>
-        <a href="game6.html" class="game-card" id="g6">بازی ۶</a>
-    </nav>
+    <main class="container mt-4">
+        <!-- صندوقچه امتیازات طلایی -->
+        <div class="gold-box">
+            🏆 صندوقچه امتیازات طلایی: <span id="total-gold-score">0</span>
+        </div>
 
-    <footer>
-        <p id="footer-text">طب، علم سلامتی؛ فعال‌سازی دانشنامه جامع</p>
+        <!-- منوی بازی‌ها -->
+        <div class="row" id="game-menu">
+            <!-- بازی‌های اصلی (Fixes) -->
+            <a href="game1.html" class="col-6 col-md-4 game-card">🎮 بازی ۱</a>
+            <a href="game2.html" class="col-6 col-md-4 game-card">🎮 بازی ۲</a>
+            <a href="game3.html" class="col-6 col-md-4 game-card">🎮 بازی ۳</a>
+            <a href="game4.html" class="col-6 col-md-4 game-card">🎮 بازی ۴</a>
+            <a href="game5.html" class="col-6 col-md-4 game-card">🎮 بازی ۵</a>
+            <a href="game6.html" class="col-6 col-md-4 game-card">🎮 بازی ۶</a>
+
+            <!-- بخش بازی‌های در حال ساخت -->
+            <div class="col-12 text-center my-4">
+                <hr>
+                <p class="text-muted">در حال آماده‌سازی بازی‌های ۷ تا ۹۹...</p>
+            </div>
+
+            <!-- بازی آخر -->
+            <a href="game100.html" class="col-12 game-card" style="border-color: var(--gold-color);">🌟 بازی ۱۰۰ (پایان دانشنامه)</a>
+        </div>
+    </main>
+
+    <footer class="footer-links">
+        <div class="mb-3">
+            <a href="door.html" class="btn btn-outline-dark btn-sm">🚪 ورود از درب</a>
+            <a href="https://eitaa.com/your_channel" class="btn btn-outline-primary btn-sm">📱 ایتا</a>
+            <a href="mailto:your-email@example.com" class="btn btn-outline-secondary btn-sm">📧 ایمیل</a>
+        </div>
+        <p>© تمامی حقوق برای طب پلی محفوظ است.</p>
     </footer>
 
+    <!-- اسکریپت هسته برای مدیریت امتیازات و تنظیمات -->
+    <script src="progress-core.js"></script>
     <script>
-        const translations = {
-            fa: {
-                welcome: "انتخاب بازی",
-                footer: "طب، علم سلامتی؛ فعال‌سازی دانشنامه جامع",
-                games: ["بازی ۱", "بازی ۲", "بازی ۳", "بازی ۴", "بازی ۵", "بازی ۶"],
-                dir: "rtl"
-            },
-            ar: {
-                welcome: "اختر اللعبة",
-                footer: "الطب، علم الصحة؛ تفعيل الموسوعة الشاملة",
-                games: ["اللعبة ١", "اللعبة ٢", "اللعبة ٣", "اللعبة ٤", "اللعبة ٥", "اللعبة ٦"],
-                dir: "rtl"
-            },
-            en: {
-                welcome: "Select a Game",
-                footer: "Tibb, the science of health; activating the comprehensive encyclopedia",
-                games: ["Game 1", "Game 2", "Game 3", "Game 4", "Game 5", "Game 6"],
-                dir: "ltr"
-            },
-            hi: {
-                welcome: "खेल चुनें",
-                footer: "तिब्ब, स्वास्थ्य का विज्ञान; व्यापक विश्वकोश को सक्रिय करना",
-                games: ["खेल १", "खेल २", "खेल ३", "खेल ४", "खेल ५", "खेल ६"],
-                dir: "ltr"
-            },
-            zh: {
-                welcome: "选择游戏",
-                footer: "提比，健康科学；激活综合百科全书",
-                games: ["游戏 1", "游戏 2", "游戏 3", "游戏 4", "游戏 5", "游戏 6"],
-                dir: "ltr"
-            }
-        };
-
-        function setLanguage(lang) {
-            const data = translations[lang];
-            document.documentElement.lang = lang;
-            document.documentElement.dir = data.dir;
-            document.getElementById('welcome-text').innerText = data.welcome;
-            document.getElementById('footer-text').innerText = data.footer;
-            
-            const gameLinks = document.querySelectorAll('.game-card');
-            gameLinks.forEach((link, index) => {
-                link.innerText = data.games[index];
-            });
-
-            // Save preference
-            localStorage.setItem('preferredLang', lang);
-        }
-
-        // Load saved language
-        window.onload = () => {
-            const savedLang = localStorage.getItem('preferredLang') || 'fa';
-            setLanguage(savedLang);
-        };
+        // کدهای اولیه برای تست درگاه
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log("TibbPlay Portal Ready");
+            // اینجا بعداً کدهای مربوط به بارگذاری زبان‌ها را اضافه می‌کنیم
+        });
     </script>
 </body>
 </html>
-gleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&family=Noto+Sans+Devanagari&family=Noto+Sans+SC&display=swap
