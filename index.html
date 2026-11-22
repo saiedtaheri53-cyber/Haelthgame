@@ -18,25 +18,10 @@
         }
 
         body { font-family: var(--font-family); background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; transition: all 0.3s ease; }
-        header { background-color: var(--primary-color); color: var(--secondary-color); text-align: center; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .bismillah { font-size: 1.4rem; display: block; margin-bottom: 8px; }
-        .branding { font-size: 1.2rem; font-weight: bold; }
-
-        /* Door Button */
-        .door-section { text-align: center; padding: 25px; background: #e8e3d5; border-bottom: 2px dashed var(--secondary-color); }
-        .door-btn {
-            display: inline-block;
-            padding: 15px 45px;
-            background: linear-gradient(145deg, #d4af37, #b8860b);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1.2rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: transform 0.3s;
-        }
-        .door-btn:hover { transform: scale(1.05); }
+        header { background-color: var(--primary-color); color: var(--secondary-color); text-align: center; padding: 25px 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .bismillah { font-size: 1.5rem; display: block; margin-bottom: 10px; font-weight: bold; }
+        .branding { font-size: 1.3rem; font-weight: bold; }
+        .sub-branding { font-size: 0.95rem; margin-top: 5px; opacity: 0.9; color: #e2d2a2; }
 
         /* Controls Bar (Language, Theme, Font, Sound) */
         .controls-bar {
@@ -71,7 +56,6 @@
         /* Dark Mode */
         body.dark-mode { --bg-color: #181818; --text-color: #f1f1f1; --card-bg: #262626; }
         body.dark-mode .controls-bar { background: #222; }
-        body.dark-mode .door-section { background: #222; border-color: #444; }
         body.dark-mode select, body.dark-mode button { background: #333; color: #fff; border-color: #555; }
     </style>
 </head>
@@ -79,13 +63,9 @@
 
 <header>
     <span class="bismillah">بسم الله الرحمن الرحیم</span>
-    <div class="branding">طب پلی | طب، علم سلامتی - فعال‌سازی دانشنامه جامع</div>
+    <div class="branding">طب پلی</div>
+    <div class="sub-branding">طب، علم سلامتی — فعال‌سازی دانشنامه جامع</div>
 </header>
-
-<!-- Door Entry Section -->
-<div class="door-section">
-    <a href="door.html" class="door-btn">🚪 ورود از درب اصلی</a>
-</div>
 
 <!-- Settings & Multi-language Bar -->
 <div class="controls-bar">
@@ -138,7 +118,7 @@
         { id: 4, title: "عناصر چهارگانه", icon: "🌍", link: "game4.html" },
         { id: 5, title: "تعادل بدن", icon: "☯️", link: "game5.html" },
         { id: 6, title: "فیزیولوژی پایه", icon: "🧬", link: "game6.html" },
-        // Games 7 to 99 (Construct-based)
+        // Games 7 to 99
         ...Array.from({ length: 93 }, (_, i) => ({
             id: i + 7,
             title: `بازی تخصصی شماره ${i + 7}`,
@@ -186,7 +166,7 @@
             document.body.classList.remove('dark-mode');
         }
 
-        // Save preferences and broadcast language to games
+        // Save preferences and broadcast language to games via localStorage
         localStorage.setItem('userLang', lang);
         localStorage.setItem('userFont', font);
         localStorage.setItem('userTheme', theme);
