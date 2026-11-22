@@ -1,7 +1,12 @@
-// بررسی اینکه آیا کاربر از طریق صفحه درب آمده است یا خیر
-if (localStorage.getItem('tibb_entered_through_door') !== 'true') {
-    window.location.href = 'door.html';
-}
+<script>
+    // ۱. کد حفاظتی - باید اولین عملیات باشد
+    if (localStorage.getItem('tibb_entered_through_door') !== 'true') {
+        window.location.replace('door.html'); // استفاده از replace باعث می‌شود کاربر نتواند با دکمه Back دوباره به این صفحه برگردد
+    }
+</script>
+
+<!-- بقیه کدهای HTML و Scriptهای قبلی شما اینجا قرار می‌گیرند -->
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
