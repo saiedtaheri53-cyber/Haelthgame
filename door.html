@@ -1,1 +1,44 @@
-
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ورود به طب پلی | طب، علم سلامتی</title>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        body, html { height: 100%; margin: 0; font-family: 'Vazirmatn', sans-serif; overflow: hidden; }
+        .bg-image {
+            background-image: url('door-bg.webp');
+            height: 100%; background-position: center; background-repeat: no-repeat; background-size: cover;
+            display: flex; align-items: center; justify-content: center; position: relative;
+        }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); }
+        .content { position: relative; text-align: center; color: white; z-index: 10; padding: 20px; }
+        .bismillah { font-size: 2.2rem; margin-bottom: 15px; display: block; color: #d4af37; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .branding { font-size: 1.5rem; margin-bottom: 30px; color: #f4f1ea; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .enter-btn {
+            display: inline-block;
+            padding: 15px 50px; font-size: 1.3rem; background: linear-gradient(145deg, #d4af37, #b8860b); color: #fff;
+            text-decoration: none; border-radius: 50px; font-weight: bold;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4); transition: 0.3s;
+            border: 2px solid #fff; cursor: pointer;
+        }
+        .enter-btn:hover { transform: scale(1.08); background: #d4af37; }
+    </style>
+</head>
+<body>
+    <div class="bg-image">
+        <div class="overlay"></div>
+        <div class="content">
+            <span class="bismillah">بسم الله الرحمن الرحیم</span>
+            <div class="branding">طب پلی — طب، علم سلامتی</div>
+            <a href="index.html" class="enter-btn" onclick="grantAccess()">🚪 ورود به درگاه</a>
+        </div>
+    </div>
+    <script>
+        function grantAccess() {
+            localStorage.setItem('tibb_entered_through_door', 'true');
+        }
+    </script>
+</body>
+</html>
