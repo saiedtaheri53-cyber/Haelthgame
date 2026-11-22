@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>طب پلی | طب، علم سلامتی - فعال‌سازی دانشنامه جامع</title>
-    <meta name="description" content="طب پلی: دانشنامه جامع طب سنتی و علم سلامتی">
+    <title>طب پلی | طب، علم سلامتی</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-    
     <style>
         :root {
             --primary-color: #2c5e1a;
@@ -23,37 +21,20 @@
         .branding { font-size: 1.3rem; font-weight: bold; }
         .sub-branding { font-size: 0.95rem; margin-top: 5px; opacity: 0.9; color: #e2d2a2; }
 
-        /* Controls Bar (Language, Theme, Font, Sound) */
-        .controls-bar {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            padding: 12px;
-            background: #d8d0be;
-            flex-wrap: wrap;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
+        .controls-bar { display: flex; justify-content: center; gap: 12px; padding: 12px; background: #d8d0be; flex-wrap: wrap; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         select, button { padding: 8px 14px; border-radius: 8px; border: 1px solid #aaa; font-family: inherit; cursor: pointer; background: white; font-weight: bold; }
 
-        /* Search */
         .search-container { padding: 20px; max-width: 600px; margin: 0 auto; text-align: center; }
         #gameSearch { width: 100%; padding: 12px 20px; border-radius: 25px; border: 2px solid var(--primary-color); outline: none; text-align: center; font-size: 1rem; }
 
-        /* Games Grid */
         .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 18px; padding: 20px; max-width: 1200px; margin: 0 auto; }
         .game-card { background: var(--card-bg); border-radius: 15px; padding: 20px 10px; text-align: center; text-decoration: none; color: inherit; border: 1px solid #ddd; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .game-card:hover { transform: translateY(-5px); border-color: var(--secondary-color); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
         .game-card .icon { font-size: 2.2rem; margin-bottom: 10px; }
         .game-card .title { font-size: 0.9rem; font-weight: bold; }
 
-        /* Footer */
         footer { text-align: center; padding: 25px; background: var(--primary-color); color: white; margin-top: 40px; }
         .footer-links a { color: var(--secondary-color); text-decoration: none; margin: 0 10px; font-weight: bold; }
-
-        /* Dark Mode */
         body.dark-mode { --bg-color: #181818; --text-color: #f1f1f1; --card-bg: #262626; }
         body.dark-mode .controls-bar { background: #222; }
         body.dark-mode select, body.dark-mode button { background: #333; color: #fff; border-color: #555; }
@@ -63,11 +44,10 @@
 
 <header>
     <span class="bismillah">بسم الله الرحمن الرحیم</span>
-    <div class="branding">طب پلی</div>
-    <div class="sub-branding">طب، علم سلامتی — فعال‌سازی دانشنامه جامع</div>
+    <div class="branding" id="headerTitle">طب پلی</div>
+    <div class="sub-branding" id="subTitle">طب، علم سلامتی — فعال‌سازی دانشنامه جامع</div>
 </header>
 
-<!-- Settings & Multi-language Bar -->
 <div class="controls-bar">
     <select id="langSelect" onchange="updateSettings()">
         <option value="fa">🇮🇷 فارسی</option>
@@ -91,88 +71,154 @@
     <button id="soundBtn" onclick="toggleSound()">🔊 صدا: روشن</button>
 </div>
 
-<!-- Search Bar -->
 <div class="search-container">
-    <input type="text" id="gameSearch" placeholder="جستجوی بازی یا موضوع در دانشنامه..." onkeyup="filterGames()">
+    <input type="text" id="gameSearch" placeholder="جستجوی بازی..." onkeyup="filterGames()">
 </div>
 
-<!-- Games Grid (1 to 100) -->
-<main class="games-grid" id="gamesGrid">
-    <!-- Dynamic Injection -->
-</main>
+<main class="games-grid" id="gamesGrid"></main>
 
 <footer>
     <div class="footer-links">
         <a href="https://eitaa.com/pazashke" target="_blank">ارتباط با ما (ایتا)</a> | 
         <a href="mailto:saiedtaheri53@gmail.com">ایمیل پشتیبانی</a>
     </div>
-    <p style="font-size: 0.85rem; margin-top: 15px; opacity: 0.8;">© تمامی حقوق برای طب پلی (طب، علم سلامتی) محفوظ است.</p>
+    <p style="font-size: 0.85rem; margin-top: 15px; opacity: 0.8;" id="footerText">© تمامی حقوق برای طب پلی محفوظ است.</p>
 </footer>
 
 <script>
-    // --- 100 Games Setup ---
-    const games = [
-        { id: 1, title: "ارکان اربعه", icon: "⚖️", link: "game1.html" },
-        { id: 2, title: "ستّه ضروریه", icon: "🌡️", link: "game2.html" },
-        { id: 3, title: "مزاج‌شناسی پایه", icon: "🔥", link: "game3.html" },
-        { id: 4, title: "عناصر چهارگانه", icon: "🌍", link: "game4.html" },
-        { id: 5, title: "تعادل بدن", icon: "☯️", link: "game5.html" },
-        { id: 6, title: "فیزیولوژی پایه", icon: "🧬", link: "game6.html" },
-        // Games 7 to 99
-        ...Array.from({ length: 93 }, (_, i) => ({
-            id: i + 7,
-            title: `بازی تخصصی شماره ${i + 7}`,
-            icon: "🌿",
-            link: `game${i + 7}.html`
-        })),
-        { id: 100, title: "دانشنامه جامع", icon: "📚", link: "game100.html" }
-    ];
+    // ترجمه‌های جامع برای رابط کاربری و بازی‌ها
+    const i18n = {
+        fa: {
+            title: "طب پلی",
+            sub: "طب، علم سلامتی — فعال‌سازی دانشنامه جامع",
+            searchPlaceholder: "جستجوی بازی یا موضوع در دانشنامه...",
+            soundOn: "🔊 صدا: روشن",
+            soundOff: "🔇 صدا: خاموش",
+            footer: "© تمامی حقوق برای طب پلی محفوظ است.",
+            games: {
+                1: "ارکان اربعه", 2: "ستّه ضروریه", 3: "مزاج‌شناسی پایه", 
+                4: "عناصر چهارگانه", 5: "تعادل بدن", 6: "فیزیولوژی پایه", 100: "دانشنامه جامع"
+            }
+        },
+        ar: {
+            title: "طب پلی",
+            sub: "الطب، علم الصحة — تفعيل الموسوعة الشاملة",
+            searchPlaceholder: "البحث عن لعبة أو موضوع...",
+            soundOn: "🔊 الصوت: مفعل",
+            soundOff: "🔇 الصوت: معطل",
+            footer: "© جميع الحقوق محفوظة لطب پلی.",
+            games: {
+                1: "الأركان الأربعة", 2: "الستة الضرورية", 3: "علم المزاج الأساسي", 
+                4: "العناصر الأربعة", 5: "توازن الجسم", 6: "فزيولوجيا أساسية", 100: "الموسوعة الشاملة"
+            }
+        },
+        en: {
+            title: "TibbPlay",
+            sub: "Medicine, Health Science — Encyclopedia Activation",
+            searchPlaceholder: "Search game or topic...",
+            soundOn: "🔊 Sound: ON",
+            soundOff: "🔇 Sound: OFF",
+            footer: "© All rights reserved for TibbPlay.",
+            games: {
+                1: "Four Pillars", 2: "Six Essentials", 3: "Basic Temperament", 
+                4: "Four Elements", 5: "Body Balance", 6: "Basic Physiology", 100: "Comprehensive Encyclopedia"
+            }
+        },
+        hi: {
+            title: "तिब्बप्ले",
+            sub: "चिकित्सा, स्वास्थ्य विज्ञान",
+            searchPlaceholder: "खेल या विषय खोजें...",
+            soundOn: "🔊 ध्वनि: चालू",
+            soundOff: "🔇 ध्वनि: बंद",
+            footer: "© सर्वाधिकार सुरक्षित।",
+            games: {
+                1: "चार स्तंभ", 2: "छह आवश्यक बातें", 3: "मूल स्वभाव", 
+                4: "चार तत्व", 5: "शरीर संतुलन", 6: "मूल शरीर विज्ञान", 100: "व्यापक विश्वकोश"
+            }
+        },
+        zh: {
+            title: "TibbPlay",
+            sub: "医学，健康科学 — 综合百科全书激活",
+            searchPlaceholder: "搜索游戏或主题...",
+            soundOn: "🔊 声音: 开启",
+            soundOff: "🔇 声音: 关闭",
+            footer: "© TibbPlay 版权所有。",
+            games: {
+                1: "四大支柱", 2: "六大要素", 3: "基础体质", 
+                4: "四大元素", 5: "身体平衡", 6: "基础生理学", 100: "综合百科全书"
+            }
+        }
+    };
+
+    // لیست بازی‌ها
+    const games = Array.from({ length: 100 }, (_, i) => {
+        const id = i + 1;
+        let icon = "🌿";
+        if (id === 1) icon = "⚖️";
+        else if (id === 2) icon = "🌡️";
+        else if (id === 3) icon = "🔥";
+        else if (id === 4) icon = "🌍";
+        else if (id === 5) icon = "☯️";
+        else if (id === 6) icon = "🧬";
+        else if (id === 100) icon = "📚";
+
+        return { id, icon, link: `game${id}.html` };
+    });
 
     const gamesGrid = document.getElementById('gamesGrid');
     const searchInput = document.getElementById('gameSearch');
 
-    function renderGames(gameList) {
+    function renderGames(filterQuery = "") {
+        const lang = localStorage.getItem('userLang') || 'fa';
+        const dict = i18n[lang].games;
+        
         gamesGrid.innerHTML = '';
-        gameList.forEach(game => {
+        
+        games.forEach(game => {
+            // نام بازی از دیکشنری زبان یا پیش‌فرض
+            let gameTitle = dict[game.id] || (lang === 'fa' ? `بازی تخصصی شماره ${game.id}` : `Specialized Game ${game.id}`);
+            
+            if (filterQuery && !gameTitle.toLowerCase().includes(filterQuery.toLowerCase())) {
+                return; // فیلتر جستجو
+            }
+
             const card = document.createElement('a');
             card.className = 'game-card';
             card.href = game.link;
             card.innerHTML = `
                 <div class="icon">${game.icon}</div>
-                <div class="title">${game.title}</div>
+                <div class="title">${gameTitle}</div>
             `;
             gamesGrid.appendChild(card);
         });
     }
 
     function filterGames() {
-        const query = searchInput.value.toLowerCase();
-        const filtered = games.filter(g => g.title.toLowerCase().includes(query));
-        renderGames(filtered);
+        const query = searchInput.value;
+        renderGames(query);
     }
 
-    // --- Settings & Multi-Language Synchronization ---
     function updateSettings() {
         const lang = document.getElementById('langSelect').value;
         const font = document.getElementById('fontSelect').value;
         const theme = document.getElementById('themeSelect').value;
         const sound = localStorage.getItem('sound') !== 'false';
 
+        // اعمال فونت و تم
         document.body.style.setProperty('--font-family', font);
-        
         if (theme === 'dark') {
             document.body.classList.add('dark-mode');
         } else {
             document.body.classList.remove('dark-mode');
         }
 
-        // Save preferences and broadcast language to games via localStorage
+        // ذخیره در localStorage برای دسترسی بازی‌ها
         localStorage.setItem('userLang', lang);
         localStorage.setItem('userFont', font);
         localStorage.setItem('userTheme', theme);
         localStorage.setItem('sound', sound);
 
-        // Direction adjustment based on language
+        // جهت صفحه بر اساس زبان
         if (lang === 'ar' || lang === 'fa') {
             document.documentElement.setAttribute('dir', 'rtl');
             document.documentElement.setAttribute('lang', lang);
@@ -180,13 +226,26 @@
             document.documentElement.setAttribute('dir', 'ltr');
             document.documentElement.setAttribute('lang', lang);
         }
+
+        // تغییر متن‌های هدر و فوتر به صورت زنده
+        const t = i18n[lang];
+        document.getElementById('headerTitle').innerText = t.title;
+        document.getElementById('subTitle').innerText = t.sub;
+        searchInput.placeholder = t.searchPlaceholder;
+        document.getElementById('footerText').innerText = t.footer;
+
+        // رندر مجدد بازی‌ها با زبان جدید
+        renderGames(searchInput.value);
     }
 
     function toggleSound() {
         let sound = localStorage.getItem('sound') !== 'false';
         sound = !sound;
         localStorage.setItem('sound', sound);
-        document.getElementById('soundBtn').innerText = sound ? "🔊 صدا: روشن" : "🔇 صدا: خاموش";
+        
+        const lang = localStorage.getItem('userLang') || 'fa';
+        const t = i18n[lang];
+        document.getElementById('soundBtn').innerText = sound ? t.soundOn : t.soundOff;
         updateSettings();
     }
 
@@ -199,14 +258,15 @@
         document.getElementById('langSelect').value = savedLang;
         document.getElementById('fontSelect').value = savedFont;
         document.getElementById('themeSelect').value = savedTheme;
-        document.getElementById('soundBtn').innerText = savedSound ? "🔊 صدا: روشن" : "🔇 صدا: خاموش";
+        
+        const t = i18n[savedLang];
+        document.getElementById('soundBtn').innerText = savedSound ? t.soundOn : t.soundOff;
 
         updateSettings();
     }
 
     window.onload = () => {
         loadSettings();
-        renderGames(games);
     };
 </script>
 </body>
