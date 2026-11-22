@@ -6,73 +6,60 @@
     <title>ورود به طب پلی | طب، علم سلامتی</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
-        :root { --gold: #d4af37; --dark-wood: #3e2723; }
+        :root { --gold: #d4af37; --dark-wood: #2c1810; }
         body, html { height: 100%; margin: 0; font-family: 'Vazirmatn', sans-serif; overflow: hidden; }
         
-        /* پس‌زمینه در چوبی */
+        /* پس‌زمینه دقیقاً همان تصویر درگاه چوبی */
         .door-container {
             background-image: url('door-bg.webp');
             height: 100vh; background-size: cover; background-position: center;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            position: relative;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            position: relative; padding: 20px 0; box-sizing: border-box;
         }
-        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); }
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.35); z-index: 1; }
 
-        /* بسم الله */
+        .content-wrapper {
+            position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%; justify-content: space-between;
+        }
+
+        /* هدر / عنوان بالای صفحه */
+        .header-section { text-align: center; margin-top: 10px; }
         .bismillah {
-            position: relative; z-index: 10; font-size: 2.2rem; color: var(--gold);
-            text-shadow: 0 2px 10px rgba(0,0,0,0.9); margin-bottom: 15px; font-weight: bold;
+            font-size: 1.8rem; color: #f4d06f;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.9); font-weight: bold; margin-bottom: 5px;
         }
 
-        /* پلاک درب */
-        .door-plate {
-            position: relative; z-index: 10; background: linear-gradient(145deg, #d4af37, #8a6d3b);
-            padding: 12px 35px; border-radius: 8px; border: 3px solid #5d4037;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.6), inset 2px 2px 5px rgba(255,255,255,0.4);
-            text-align: center; color: #2e1a05; margin-bottom: 25px;
-        }
-        .door-plate h1 { margin: 0; font-size: 1.6rem; letter-spacing: 2px; }
-        .door-plate p { margin: 3px 0 0 0; font-size: 0.85rem; font-weight: bold; }
-
-        /* بکوب‌ها */
-        .knocker {
-            position: absolute; z-index: 10; font-size: 2.8rem; cursor: pointer;
-            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.7)); transition: 0.1s; user-select: none;
-        }
-        .knocker-left { left: 8%; top: 45%; }
-        .knocker-right { right: 8%; top: 45%; }
-        .knocker:active { transform: scale(0.9) rotate(10deg); }
-
-        /* پنل تنظیمات اولیه روی در */
+        /* پنل تنظیمات حرفه‌ای روی در */
         .settings-panel {
-            position: relative; z-index: 10; background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(8px); padding: 15px 20px; border-radius: 15px;
-            display: flex; gap: 12px; align-items: center; justify-content: center;
-            border: 1px solid rgba(212, 175, 55, 0.3); margin-bottom: 20px; flex-wrap: wrap;
+            background: rgba(44, 24, 16, 0.75);
+            backdrop-filter: blur(10px); padding: 10px 20px; border-radius: 12px;
+            display: flex; gap: 15px; align-items: center; justify-content: center;
+            border: 1px solid rgba(212, 175, 55, 0.4); box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
-        .setting-item { display: flex; flex-direction: column; gap: 3px; }
-        .setting-item label { color: #f4f1ea; font-size: 0.75rem; text-align: center; }
+        .setting-item { display: flex; flex-direction: column; gap: 2px; }
+        .setting-item label { color: #d4af37; font-size: 0.7rem; text-align: center; font-weight: bold; }
         .settings-panel select {
-            padding: 6px 10px; border-radius: 6px; border: 1px solid var(--gold);
-            background: #2e1a05; color: #fff; font-family: inherit; font-size: 0.85rem; cursor: pointer;
+            padding: 5px 10px; border-radius: 6px; border: 1px solid var(--gold);
+            background: #1a0f0a; color: #fff; font-family: inherit; font-size: 0.8rem; cursor: pointer;
         }
 
-        /* دکمه ورود اصلی */
+        /* بخش پایین (دکمه ورود و فوتر) */
+        .bottom-section { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-bottom: 10px; }
+
+        /* دکمه ورود اصلی با استایل درخشان */
         .enter-main-btn {
-            position: relative; z-index: 10;
-            padding: 12px 45px; font-size: 1.3rem; background: linear-gradient(145deg, #d4af37, #b8860b);
-            color: #fff; border: 2px solid #fff; border-radius: 50px;
-            cursor: pointer; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+            padding: 12px 50px; font-size: 1.2rem; background: linear-gradient(145deg, #d4af37, #997a25);
+            color: #1a0f0a; border: 2px solid #fff; border-radius: 50px;
+            cursor: pointer; font-weight: bold; box-shadow: 0 8px 25px rgba(0,0,0,0.7);
             transition: 0.3s; text-decoration: none; display: inline-block;
+            text-shadow: 0 1px 1px rgba(255,255,255,0.4);
         }
-        .enter-main-btn:hover { transform: scale(1.08); background: #d4af37; }
+        .enter-main-btn:hover { transform: scale(1.06); background: #f3cf55; }
 
         /* فوتر ارتباطات */
-        .contact-footer {
-            position: absolute; bottom: 15px; z-index: 10; display: flex; gap: 20px;
-        }
-        .contact-footer a { color: #d4af37; text-decoration: none; font-size: 0.8rem; font-weight: bold; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-        .contact-footer a:hover { text-decoration: underline; }
+        .contact-footer { display: flex; gap: 25px; }
+        .contact-footer a { color: #f4d06f; text-decoration: none; font-size: 0.85rem; font-weight: bold; text-shadow: 0 1px 4px rgba(0,0,0,0.9); }
+        .contact-footer a:hover { text-decoration: underline; color: #fff; }
     </style>
 </head>
 <body>
@@ -80,53 +67,49 @@
 <div class="door-container">
     <div class="overlay"></div>
 
-    <span class="bismillah">بسم الله الرحمن الرحیم</span>
-
-    <!-- بکوب‌ها -->
-    <div class="knocker knocker-left" title="کوبش زنانه">🚪</div>
-    <div class="knocker knocker-right" title="کوبش مردانه">🚪</div>
-
-    <!-- پلاک درب -->
-    <div class="door-plate">
-        <h1>طِب پُلی</h1>
-        <p>طب، علم سلامتی — فعال‌سازی دانشنامه جامع</p>
-    </div>
-
-    <!-- پنل تنظیمات سریع اولیه -->
-    <div class="settings-panel">
-        <div class="setting-item">
-            <label>زبان / Language</label>
-            <select id="doorLang" onchange="saveDoorSettings()">
-                <option value="fa">فارسی</option>
-                <option value="ar">العربية</option>
-                <option value="en">English</option>
-                <option value="hi">हिन्दी</option>
-                <option value="zh">中文</option>
-            </select>
+    <div class="content-wrapper">
+        <!-- بالای صفحه: بسم الله و تنظیمات -->
+        <div class="header-section">
+            <div class="bismillah">بسم الله الرحمن الرحیم</div>
+            <div class="settings-panel">
+                <div class="setting-item">
+                    <label>زبان / Language</label>
+                    <select id="doorLang" onchange="saveDoorSettings()">
+                        <option value="fa">فارسی</option>
+                        <option value="ar">العربية</option>
+                        <option value="en">English</option>
+                        <option value="hi">हिन्दी</option>
+                        <option value="zh">中文</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>صدا / Sound</label>
+                    <select id="doorSound" onchange="saveDoorSettings()">
+                        <option value="true">روشن (🔊)</option>
+                        <option value="false">خاموش (🔇)</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>تم / Theme</label>
+                    <select id="doorTheme" onchange="saveDoorSettings()">
+                        <option value="light">روشن</option>
+                        <option value="dark">تاریک</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <div class="setting-item">
-            <label>صدا / Sound</label>
-            <select id="doorSound" onchange="saveDoorSettings()">
-                <option value="true">روشن (🔊)</option>
-                <option value="false">خاموش (🔇)</option>
-            </select>
-        </div>
-        <div class="setting-item">
-            <label>تم / Theme</label>
-            <select id="doorTheme" onchange="saveDoorSettings()">
-                <option value="light">روشن</option>
-                <option value="dark">تاریک</option>
-            </select>
-        </div>
-    </div>
 
-    <!-- دکمه ورود -->
-    <a href="index.html" class="enter-main-btn" onclick="grantAccess()">ورود به درگاه</a>
+        <!-- فضای خالی میانی برای دیده شدن طرح درب چوبی و نور وسط آن -->
+        <div></div>
 
-    <!-- فوتر ارتباطات -->
-    <div class="contact-footer">
-        <a href="https://eitaa.com/pazashke" target="_blank">ارتباط در ایتا</a>
-        <a href="mailto:saiedtaheri53@gmail.com">ارسال ایمیل</a>
+        <!-- پایین صفحه: دکمه ورود و لینک‌ها -->
+        <div class="bottom-section">
+            <a href="index.html" class="enter-main-btn" onclick="grantAccess()">ورود به درگاه</a>
+            <div class="contact-footer">
+                <a href="https://eitaa.com/pazashke" target="_blank">ارتباط در ایتا</a>
+                <a href="mailto:saiedtaheri53@gmail.com">ارسال ایمیل</a>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -142,7 +125,7 @@
         saveDoorSettings();
     }
 
-    // بارگذاری تنظیمات ذخیره‌شده قبلی در صورت وجود
+    // بارگذاری تنظیمات ذخیره‌شده
     window.onload = function() {
         if(localStorage.getItem('userLang')) document.getElementById('doorLang').value = localStorage.getItem('userLang');
         if(localStorage.getItem('sound')) document.getElementById('doorSound').value = localStorage.getItem('sound');
