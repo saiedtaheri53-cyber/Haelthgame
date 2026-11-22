@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+const savedLang = localStorage.getItem('userLang') || 'fa';
+const savedTheme = localStorage.getItem('userTheme') || 'light';
+if(savedTheme === 'dark') document.body.classList.add('dark');
+document.documentElement.setAttribute('lang', savedLang);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -160,6 +164,16 @@
 
     let current = parseInt(localStorage.getItem('game1_current')) || 0;
     let score = parseInt(localStorage.getItem('game1_score')) || 0;
+let goldenScore = parseInt(localStorage.getItem('game1_golden_score') || '0');
+goldenScore += 1;
+localStorage.setItem('game1_golden_score', goldenScore);
+
+// بروزرسانی صندوقچه کل درگاه
+let totalGolden = 0;
+for(let i=1; i<=100; i++) {
+    totalGolden += parseInt(localStorage.getItem(`game${i}_golden_score`) || '0');
+}
+localStorage.setItem('tibb_total_golden_treasury', totalGolden);
     let coins = parseInt(localStorage.getItem('game1_coins')) || 0;
     let goldenScore = parseInt(localStorage.getItem('game1_golden_score')) || 0;
 
