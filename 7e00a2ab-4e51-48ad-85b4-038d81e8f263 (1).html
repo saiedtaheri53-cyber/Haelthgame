@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ارکان اربعه - طب، علم سلامتی (نسخه امتیازدار)</title>
+    <style>
+        :root { --primary: #2c3e50; --accent: #27ae60; --gold: #f39c12; --light: #f4f7f6; }
+        body { font-family: Tahoma, sans-serif; background-color: var(--light); display: flex; justify-content: center; padding: 10px; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+        .header-stats { display: flex; justify-content: space-between; font-size: 0.85rem; color: #555; margin-bottom: 10px; background: #eef2f3; padding: 8px; border-radius: 8px; font-weight: bold; }
+        .q-num { font-size: 0.8rem; color: #777; text-align: center; margin-bottom: 5px; }
+        .question { font-size: 1.1rem; font-weight: bold; margin-bottom: 20px; line-height: 1.6; text-align: center; }
+        .btn { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; text-align: right; background: white; transition: 0.2s; font-size: 0.95rem; }
+        .btn:hover { background: #eef; }
+        .btn.correct { background: #d4edda !important; border-color: #27ae60; color: #155724; font-weight: bold; }
+        .btn.wrong { background: #f8d7da !important; border-color: #e74c3c; color: #721c24; }
+        .nav-btns { display: flex; justify-content: space-between; margin-top: 20px; gap: 5px; }
+        .nav-btn { flex: 1; padding: 10px; border: none; border-radius: 5px; cursor: pointer; background: var(--primary); color: white; }
+        .action-container { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 10px; }
+        .action-btn { padding: 8px; font-size: 0.8rem; cursor: pointer; border-radius: 5px; border: 1px solid #ccc; background: #fff; }
+        .contact-btn { padding: 8px; font-size: 0.8rem; cursor: pointer; border-radius: 5px; border: none; background: #3498db; color: white; text-align: center; text-decoration: none; display: block; }
+        .hint-box { margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 5px; font-size: 0.9rem; display: none; color: #856404; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div class="header-stats">
+        <span id="score-display">⭐ امتیاز: ۰</span>
+        <span id="coin-display">🪙 سکه طلایی: ۰</span>
+        <span id="golden-score-display">🌟 امتیاز طلایی: ۰</span>
+    </div>
+    <div id="q-num" class="q-num">سوال ۱ از ۱۰۰</div>
+    <div id="q-text" class="question">...</div>
+    <div id="options"></div>
+    
+    <div class="action-container">
+        <button class="action-btn" onclick="showHint()">راهنما</button>
+        <button class="action-btn" onclick="showAnswer()">پاسخ صحیح</button>
+        <button class="action-btn" onclick="restartQuiz()">شروع مجدد</button>
+        <button class="action-btn" onclick="goBack()">بازگشت به منو</button>
+    </div>
+    
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 5px;">
+        <a href="https://eitaa.com/pazashke" class="contact-btn">ارتباط (ایتا)</a>
+        <a href="mailto:saiedtaheri53@gmail.com" class="contact-btn" style="background:#e67e22">ارتباط (ایمیل)</a>
+    </div>
+    
+    <div id="hint-box" class="hint-box"></div>
+    <div class="nav-btns">
+        <button class="nav-btn" onclick="prevQ()">« قبلی</button>
+        <button class="nav-btn" onclick="nextQ()">بعدی »</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {w:"کدام عنصر از ارکان اربعه گرم و خشک است؟", options:["آتش", "هوا", "آب", "خاک"], answer:"آتش", h:"مزاج صفراوی است"},
+        {w:"کدام عنصر گرم و تر است؟", options:["هوا", "آتش", "آب", "خاک"], answer:"هوا", h:"خون با آن هم‌خوان است"},
+        {w:"کدام عنصر سرد و تر است؟", options:["آب", "هوا", "خاک", "آتش"], answer:"آب", h:"بلغم با آن هم‌خوان است"},
+        {w:"کدام عنصر سرد و خشک است؟", options:["خاک", "آب", "هوا", "آتش"], answer:"خاک", h:"سودا با آن هم‌خوان است"},
+        {w:"مزاج اصلی صفرا چیست؟", options:["گرم و خشک", "گرم و تر", "سرد و تر", "سرد و خشک"], answer:"گرم و خشک", h:"مثل آتش"},
+        {w:"مزاج اصلی خون (دم) چیست؟", options:["گرم و تر", "گرم و خشک", "سرد و تر", "سرد و خشک"], answer:"گرم و تر", h:"مثل هوا"},
+        {w:"مزاج اصلی بلغم چیست؟", options:["سرد و تر", "سرد و خشک", "گرم و تر", "گرم و خشک"], answer:"سرد و تر", h:"مثل آب"},
+        {w:"مزاج اصلی سودا چیست؟", options:["سرد و خشک", "سرد و تر", "گرم و تر", "گرم و خشک"], answer:"سرد و خشک", h:"مثل خاک"},
+        {w:"کدام رکن سبک‌ترین است؟", options:["آتش", "هوا", "آب", "خاک"], answer:"آتش", h:"به بالا میل می‌کند"},
+        {w:"کدام رکن سنگین‌ترین است؟", options:["خاک", "آب", "هوا", "آتش"], answer:"خاک", h:"به مرکز زمین میل دارد"},
+        {w:"کدام رکن خاصیت نفوذپذیری دارد؟", options:["هوا", "آتش", "خاک", "آب"], answer:"هوا", h:"همه جا را پر می‌کند"},
+        {w:"کدام رکن شکل‌پذیر است؟", options:["آب", "خاک", "آتش", "هوا"], answer:"آب", h:"ظرف را پر می‌کند"},
+        {w:"کدام رکن ثبات دارد؟", options:["خاک", "آتش", "هوا", "آب"], answer:"خاک", h:"تکیه‌گاه است"},
+        {w:"کدام خلط با بهار مرتبط است؟", options:["دم", "صفرا", "بلغم", "سودا"], answer:"دم", h:"فصل رویش"},
+        {w:"کدام خلط با تابستان مرتبط است؟", options:["صفرا", "دم", "بلغم", "سودا"], answer:"صفرا", h:"فصل گرما"},
+        {w:"کدام خلط با پاییز مرتبط است؟", options:["سودا", "دم", "صفرا", "بلغم"], answer:"سودا", h:"فصل خشک"},
+        {w:"کدام خلط با زمستان مرتبط است؟", options:["بلغم", "دم", "صفرا", "سودا"], answer:"بلغم", h:"فصل سرد"},
+        {w:"جایگاه اصلی صفرا در بدن کجاست؟", options:["کیسه صفرا", "طحال", "ریه", "استخوان"], answer:"کیسه صفرا", h:"ذخیره گوارشی"},
+        {w:"جایگاه اصلی سودا در بدن کجاست؟", options:["طحال", "کیسه صفرا", "کبد", "قلب"], answer:"طحال", h:"مرکز سردی"},
+        {w:"جایگاه اصلی بلغم در بدن کجاست؟", options:["معده و دستگاه گوارش", "کبد", "ریه", "مغز"], answer:"معده و دستگاه گوارش", h:"رطوبت بدن"},
+        {w:"کدام خلط مسئول انرژی و حرارت بدن است؟", options:["دم", "صفرا", "بلغم", "سودا"], answer:"دم", h:"مایع حیاتی"},
+        {w:"افراط در کدام رکن باعث لاغری می‌شود؟", options:["آتش", "آب", "خاک", "هوا"], answer:"آتش", h:"سوخت و ساز زیاد"},
+        {w:"افراط در کدام رکن باعث چاقی می‌شود؟", options:["آب", "آتش", "هوا", "خاک"], answer:"آب", h:"افزایش رطوبت"},
+        {w:"کدام رکن نماد تحرک است؟", options:["آتش", "آب", "خاک", "هوا"], answer:"آتش", h:"جنبش زیاد"},
+        {w:"کدام رکن نماد سکون است؟", options:["خاک", "آتش", "آب", "هوا"], answer:"خاک", h:"عدم حرکت"},
+        {w:"کدام خلط باعث تیرگی پوست می‌شود؟", options:["سودا", "صفرا", "دم", "بلغم"], answer:"سودا", h:"سردی خشک"},
+        {w:"کدام خلط باعث زردی پوست می‌شود؟", options:["صفرا", "دم", "بلغم", "سودا"], answer:"صفرا", h:"گرمای زیاد"},
+        {w:"کدام خلط باعث سفیدی و رنگ‌پریدگی می‌شود؟", options:["بلغم", "دم", "سودا", "صفرا"], answer:"بلغم", h:"سردی و رطوبت"},
+        {w:"کدام خلط باعث گلگونی و سرخی می‌شود؟", options:["دم", "صفرا", "بلغم", "سودا"], answer:"دم", h:"گرمای خون"},
+        {w:"کدام عنصر به خشکی معروف است؟", options:["آتش", "آب", "هوا", "بخار"], answer:"آتش", h:"رکن حار یابس"},
+        {w:"کدام عنصر به تری معروف است؟", options:["آب", "آتش", "خاک", "سنگ"], answer:"آب", h:"رکن بارد رطب"},
+        {w:"کدام خلط به 'سودا' معروف است؟", options:["رسوب خون", "کف خون", "آب بدن", "حرارت"], answer:"رسوب خون", h:"سرد و خشک"},
+        {w:"مزاج آتش چگونه است؟", options:["گرم و خشک", "گرم و تر", "سرد و تر", "سرد و خشک"], answer:"گرم و خشک", h:"بالاترین رکن"},
+        {w:"مزاج هوا چگونه است؟", options:["گرم و تر", "گرم و خشک", "سرد و تر", "سرد و خشک"], answer:"گرم و تر", h:"رکن دوم"},
+        {w:"مزاج آب چگونه است؟", options:["سرد و تر", "سرد و خشک", "گرم و تر", "گرم و خشک"], answer:"سرد و تر", h:"رکن سوم"},
+        {w:"مزاج خاک چگونه است؟", options:["سرد و خشک", "سرد و تر", "گرم و تر", "گرم و خشک"], answer:"سرد و خشک", h:"رکن چهارم"},
+        {w:"غذاهای گرم و خشک صفرا را...", options:["افزایش می‌دهند", "کاهش می‌دهند", "تعدیل می‌کنند", "خنثی می‌کنند"], answer:"افزایش می‌دهند", h:"تجمع مشابهت"},
+        {w:"غذاهای سرد و تر بلغم را...", options:["افزایش می‌دهند", "کاهش می‌دهند", "تعدیل می‌کنند", "خنثی می‌کنند"], answer:"افزایش می‌دهند", h:"تجمع مشابهت"},
+        {w:"سودا در کدام فصل بیشتر تولید می‌شود؟", options:["پاییز", "بهار", "تابستان", "زمستان"], answer:"پاییز", h:"فصل خشک"},
+        {w:"صفرا در کدام فصل بیشتر تولید می‌شود؟", options:["تابستان", "پاییز", "بهار", "زمستان"], answer:"تابستان", h:"فصل داغ"},
+        {w:"بلغم در کدام فصل بیشتر تولید می‌شود؟", options:["زمستان", "تابستان", "پاییز", "بهار"], answer:"زمستان", h:"فصل سرد"},
+        {w:"دم در کدام فصل به اوج می‌رسد؟", options:["بهار", "پاییز", "زمستان", "تابستان"], answer:"بهار", h:"فصل رویش"},
+        {w:"کدام خلط برای گوارش ضروری است؟", options:["صفرا", "سودا", "بلغم", "خون"], answer:"صفرا", h:"محرک معده"},
+        {w:"کدام عنصر پایه تمام موجودات زنده است؟", options:["آب", "آتش", "هوا", "خاک"], answer:"آب", h:"حیات"},
+        {w:"مزاج مغز چگونه است؟", options:["سرد و تر", "گرم و خشک", "گرم و تر", "سرد و خشک"], answer:"سرد و تر", h:"نیاز به رطوبت"},
+        {w:"مزاج قلب چگونه است؟", options:["گرم و خشک", "سرد و تر", "گرم و تر", "سرد و خشک"], answer:"گرم و خشک", h:"موتور بدن"},
+        {w:"مزاج کبد چگونه است؟", options:["گرم و تر", "سرد و خشک", "گرم و خشک", "سرد و تر"], answer:"گرم و تر", h:"کارخانه خون"},
+        {w:"مزاج استخوان چگونه است؟", options:["سرد و خشک", "گرم و تر", "سرد و تر", "گرم و خشک"], answer:"سرد و خشک", h:"سخت و پایدار"},
+        {w:"کدام خلط دشمن حافظه است؟", options:["بلغم", "دم", "صفرا", "سودا"], answer:"بلغم", h:"رطوبت زیاد"},
+        {w:"کدام خلط باعث عصبانیت می‌شود؟", options:["صفرا", "بلغم", "سودا", "دم"], answer:"صفرا", h:"گرما"},
+        {w:"کدام خلط باعث افسردگی می‌شود؟", options:["سودا", "دم", "صفرا", "بلغم"], answer:"سودا", h:"سردی و خشکی"},
+        {w:"کدام خلط باعث آرامش می‌شود؟", options:["دم", "صفرا", "سودا", "بلغم"], answer:"دم", h:"اعتدال"},
+        {w:"عنصر آتش در بدن به چه شکلی دیده می‌شود؟", options:["گرما و حرارت", "استخوان", "خون", "لعاب"], answer:"گرما و حرارت", h:"دمای بدن"},
+        {w:"عنصر هوا در بدن به چه شکلی دیده می‌شود؟", options:["ارواح و نفس", "استخوان", "گوشت", "لعاب"], answer:"ارواح و نفس", h:"دم و بازدم"},
+        {w:"عنصر آب در بدن به چه شکلی دیده می‌شود؟", options:["مایعات بدن", "استخوان", "پوست", "عضله"], answer:"مایعات بدن", h:"سیالات"},
+        {w:"عنصر خاک در بدن به چه شکلی دیده می‌شود؟", options:["اعضای جامد", "خون", "لعاب", "ارواح"], answer:"اعضای جامد", h:"بافت‌ها"},
+        {w:"آیا مزاج محیطی بر مزاج سرشتی اثر دارد؟", options:["بله", "خیر", "گاه گاهی", "اصلاً"], answer:"بله", h:"تأثیر اقلیم"},
+        {w:"مزاج 'سوداوی' چه رنگی است؟", options:["تیره", "قرمز", "زرد", "سفید"], answer:"تیره", h:"رنگ خاک"},
+        {w:"مزاج 'دموی' چه رنگی است؟", options:["قرمز", "زرد", "سفید", "تیره"], answer:"قرمز", h:"رنگ خون"},
+        {w:"مزاج 'صفراوی' چه رنگی است؟", options:["زرد", "قرمز", "تیره", "سفید"], answer:"زرد", h:"رنگ آتش"},
+        {w:"مزاج 'بلغمی' چه رنگی است؟", options:["سفید", "زرد", "قرمز", "تیره"], answer:"سفید", h:"رنگ آب"},
+        {w:"کدام خلط تند و تیز است؟", options:["صفرا", "بلغم", "سودا", "دم"], answer:"صفرا", h:"مثل فلفل"},
+        {w:"کدام خلط دیر هضم است؟", options:["سودا", "دم", "صفرا", "بلغم"], answer:"سودا", h:"سنگین"},
+        {w:"کدام خلط منجمد کننده است؟", options:["بلغم", "سودا", "صفرا", "دم"], answer:"بلغم", h:"سردی"},
+        {w:"عنصر هوا با کدام عضو در ارتباط است؟", options:["ریه", "معده", "کبد", "قلب"], answer:"ریه", h:"تنفس"},
+        {w:"خواب زیاد از علائم غلبه کدام خلط است؟", options:["بلغم", "صفرا", "سودا", "دم"], answer:"بلغم", h:"سردی"},
+        {w:"خواب کم از علائم غلبه کدام خلط است؟", options:["صفرا", "بلغم", "دم", "سودا"], answer:"صفرا", h:"گرما"},
+        {w:"کدام خلط باعث وسواس می‌شود؟", options:["سودا", "بلغم", "صفرا", "دم"], answer:"سودا", h:"تکرار"},
+        {w:"کدام خلط باعث شادی می‌شود؟", options:["دم", "صفرا", "سودا", "بلغم"], answer:"دم", h:"انبساط روح"},
+        {w:"کدام رکن عامل حیات است؟", options:["آب", "آتش", "خاک", "هوا"], answer:"آب", h:"هر موجودی از آب است"},
+        {w:"کدام رکن عامل ثبات است؟", options:["خاک", "آتش", "هوا", "آب"], answer:"خاک", h:"پایداری"},
+        {w:"کدام رکن عامل تغییر است؟", options:["آتش", "آب", "خاک", "هوا"], answer:"آتش", h:"تغییر حالت"},
+        {w:"کدام خلط 'سوزاننده' است؟", options:["صفرا", "سودا", "دم", "بلغم"], answer:"صفرا", h:"گرما"},
+        {w:"مزاج 'معتدل' به چه معناست؟", options:["تعادل ارکان", "غلبه خلط", "بیماری", "پیری"], answer:"تعادل ارکان", h:"سلامتی کامل"},
+        {w:"غلبه سودا باعث چه نوع بیماری می‌شود؟", options:["سرد و خشک", "گرم و تر", "سرد و تر", "گرم و خشک"], answer:"سرد و خشک", h:"تندی"},
+        {w:"غلبه دم باعث چه نوع بیماری می‌شود؟", options:["گرم و تر", "سرد و خشک", "سرد و تر", "گرم و خشک"], answer:"گرم و تر", h:"خون‌رسانی زیاد"},
+        {w:"غلبه صفرا باعث چه نوع بیماری می‌شود؟", options:["گرم و خشک", "سرد و تر", "سرد و خشک", "گرم و تر"], answer:"گرم و خشک", h:"التهاب"},
+        {w:"غلبه بلغم باعث چه نوع بیماری می‌شود؟", options:["سرد و تر", "گرم و خشک", "گرم و تر", "سرد و خشک"], answer:"سرد و تر", h:"سستی"},
+        {w:"کدام خلط برای مفاصل مفید است؟", options:["دم", "سودا", "صفرا", "بلغم"], answer:"دم", h:"غذا رسانی"},
+        {w:"کدام خلط برای مغز مضر است (در صورت غلبه)?", options:["سودا", "دم", "صفرا", "بلغم"], answer:"سودا", h:"سیاهی"},
+        {w:"آیا طعم غذا بر مزاج اثر دارد؟", options:["بله", "خیر", "گاه گاهی", "اصلاً"], answer:"بله", h:"طبیعت طعم‌ها"},
+        {w:"شیرینی چه مزاجی دارد؟", options:["گرم", "سرد", "خشک", "هیچکدام"], answer:"گرم", h:"شیرینی حار است"},
+        {w:"ترشی چه مزاجی دارد؟", options:["سرد", "گرم", "معتدل", "هیچکدام"], answer:"سرد", h:"ترشی بارد است"},
+        {w:"آیا استرس بر ارکان اربعه بدن اثر دارد؟", options:["بله", "خیر", "گاهی", "بستگی دارد"], answer:"بله", h:"روان و جسم"},
+        {w:"کدام عنصر به 'سودا' نزدیک‌تر است؟", options:["خاک", "آب", "هوا", "آتش"], answer:"خاک", h:"ثبات"},
+        {w:"کدام عنصر به 'صفرا' نزدیک‌تر است؟", options:["آتش", "هوا", "آب", "خاک"], answer:"آتش", h:"گرما"},
+        {w:"کدام عنصر به 'دم' نزدیک‌تر است؟", options:["هوا", "آتش", "آب", "خاک"], answer:"هوا", h:"لطافت"},
+        {w:"کدام عنصر به 'بلغم' نزدیک‌تر است؟", options:["آب", "خاک", "آتش", "هوا"], answer:"آب", h:"رطوبت"},
+        {w:"آیا پیری مزاج را تغییر می‌دهد؟", options:["بله (به سمت سردی)", "خیر", "بله (به سمت گرمی)", "تغییر نمی‌کند"], answer:"بله (به سمت سردی)", h:"کاهش حرارت غریزی"},
+        {w:"کودکی چه مزاجی دارد؟", options:["گرم و تر", "سرد و خشک", "سرد و تر", "گرم و خشک"], answer:"گرم و تر", h:"رشد و نمو"},
+        {w:"جوانی چه مزاجی دارد؟", options:["گرم و خشک", "سرد و تر", "گرم و تر", "سرد و خشک"], answer:"گرم و خشک", h:"اوج توان"},
+        {w:"میانسالی چه مزاجی دارد؟", options:["سرد و خشک", "گرم و تر", "گرم و خشک", "سرد و تر"], answer:"سرد و خشک", h:"خشکی"},
+        {w:"پیری چه مزاجی دارد؟", options:["سرد و تر", "گرم و خشک", "گرم و تر", "سرد و خشک"], answer:"سرد و تر", h:"انجماد"},
+        {w:"آیا خواب بر مزاج اثر دارد؟", options:["بله", "خیر", "گاهی", "بستگی دارد"], answer:"بله", h:"استراحت"},
+        {w:"کم خوابی باعث افزایش کدام مزاج می‌شود؟", options:["صفرا", "دم", "بلغم", "سودا"], answer:"صفرا", h:"حرارت"},
+        {w:"پرخوابی باعث افزایش کدام مزاج می‌شود؟", options:["بلغم", "سودا", "دم", "صفرا"], answer:"بلغم", h:"سردی"},
+        {w:"کدام رکن در همه جای جهان هست؟", options:["هوا", "آتش", "آب", "خاک"], answer:"هوا", h:"فراگیر"},
+        {w:"آیا ارکان اربعه در طب مدرن هم هست؟", options:["خیر (طب مدرن ساختار دیگری دارد)", "بله", "شبیه است", "طب سنتی همان مدرن است"], answer:"خیر (طب مدرن ساختار دیگری دارد)", h:"تفاوت دیدگاه"},
+        {w:"هدف طب سنتی چیست؟", options:["اعتدال ارکان", "فقط درمان", "فقط دارو", "تخریب مزاج"], answer:"اعتدال ارکان", h:"سلامت"},
+        {w:"کدام عنصر 'سوزنده' است؟", options:["آتش", "آب", "هوا", "خاک"], answer:"آتش", h:"حرارت شدید"}
+    ];
+
+    let current = parseInt(localStorage.getItem('game1_current')) || 0;
+    let score = parseInt(localStorage.getItem('game1_score')) || 0;
+    let coins = parseInt(localStorage.getItem('game1_coins')) || 0;
+    let goldenScore = parseInt(localStorage.getItem('game1_golden_score')) || 0;
+
+    const qNum = document.getElementById('q-num');
+    const qText = document.getElementById('q-text');
+    const opts = document.getElementById('options');
+    const hintBox = document.getElementById('hint-box');
+    const scoreDisplay = document.getElementById('score-display');
+    const coinDisplay = document.getElementById('coin-display');
+    const goldenScoreDisplay = document.getElementById('golden-score-display');
+
+    function updateStats() {
+        scoreDisplay.innerText = `⭐ امتیاز: ${score}`;
+        coinDisplay.innerText = `🪙 سکه طلایی: ${coins}`;
+        goldenScoreDisplay.innerText = `🌟 امتیاز طلایی: ${goldenScore}`;
+        localStorage.setItem('game1_score', score);
+        localStorage.setItem('game1_coins', coins);
+        localStorage.setItem('game1_golden_score', goldenScore);
+        localStorage.setItem('game1_current', current);
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function render() {
+        if(current >= questions.length) {
+            qNum.innerText = "پایان بازی!";
+            qText.innerHTML = `🎉 تبریک! شما ۱۰۰ مرحله را به پایان رساندید.<br>مجموع امتیاز: ${score}<br>سکه طلایی: ${coins}<br>امتیاز طلایی: ${goldenScore}`;
+            opts.innerHTML = '<button class="btn" style="background:#27ae60; color:white; text-align:center;" onclick="restartQuiz()">شروع مجدد بازی</button>';
+            hintBox.style.display = 'none';
+            return;
+        }
+
+        const q = questions[current];
+        qNum.innerText = `سوال ${current + 1} از ۱۰۰`;
+        qText.innerText = q.w;
+        hintBox.style.display = 'none';
+        opts.innerHTML = '';
+        
+        const shuffledOptions = shuffleArray([...q.options]);
+        
+        shuffledOptions.forEach(opt => {
+            const btn = document.createElement('div');
+            btn.className = 'btn';
+            btn.innerText = opt;
+            btn.onclick = () => {
+                const allBtns = opts.querySelectorAll('.btn');
+                allBtns.forEach(b => b.style.pointerEvents = 'none');
+                if(opt === q.answer) {
+                    btn.className = 'btn correct';
+                    score += 10;
+                    goldenScore += 1;
+                    if(Math.random() < 0.3) { coins++; alert('🎁 آفرین! یک سکه طلایی جایزه گرفتید!'); }
+                } else {
+                    btn.className = 'btn wrong';
+                    allBtns.forEach(b => { if(b.innerText === q.answer) b.className = 'btn correct'; });
+                }
+                updateStats();
+            };
+            opts.appendChild(btn);
+        });
+        updateStats();
+    }
+
+    function showHint() { hintBox.innerText = "راهنما: " + questions[current].h; hintBox.style.display = 'block'; }
+    function showAnswer() { 
+        const optsNodes = opts.querySelectorAll('.btn');
+        optsNodes.forEach(n => {
+            n.style.pointerEvents = 'none';
+            if(n.innerText === questions[current].answer) n.className = 'btn correct';
+        });
+    }
+    function restartQuiz() { current = 0; score = 0; coins = 0; goldenScore = 0; updateStats(); render(); }
+    function goBack() { window.location.href = 'index.html'; }
+    function nextQ() { if(current < questions.length) { current++; updateStats(); render(); } }
+    function prevQ() { if(current > 0) { current--; updateStats(); render(); } }
+    
+    render();
+</script>
+</body>
+</html>
